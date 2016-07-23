@@ -1,4 +1,4 @@
-name := """play2slick3"""
+name := """playR"""
 
 version := "1.0-SNAPSHOT"
 
