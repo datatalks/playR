@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 class ReportController extends Controller {
 
-  def index = Action.async { implicit request =>
+  def report = Action.async { implicit request =>
     UserService.listAllUsers map { users =>
       Ok(views.html.index(UserForm.form, users))
     }
