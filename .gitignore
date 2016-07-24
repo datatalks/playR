@@ -1,5 +1,6 @@
 logs
 target
+project
 /MarkDown/figure
 R.Rout
 README.md
@@ -10,3 +11,4 @@ LICENSE
 /.project
 /.settings
 /RUNNING_PID
+.DS_Store
