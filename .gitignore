@@ -1,6 +1,6 @@
 logs
 target
-project
+/project/target/config-classes
 /MarkDown/figure
 R.Rout
 README.md
