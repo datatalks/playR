@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.34",
   "com.typesafe.play" %% "play-slick" % "1.1.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.0",
-  "org.planet42" %% "laika-core" % "0.5.1"   // Scala from MD to HTML  https://github.com/planet42/Laika https://planet42.github.io/Laika/using-laika/markup.html
+  "org.planet42" %% "laika-core" % "0.5.1",  // Scala from MD to HTML  https://github.com/planet42/Laika https://planet42.github.io/Laika/using-laika/markup.html
+  "org.scala-lang" % "scala-compiler" % "2.11.7"  //  For >>> tools is not a member of package scala
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

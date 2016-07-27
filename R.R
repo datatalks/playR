@@ -3,7 +3,7 @@ Sys.setlocale(, "zh_CN.UTF-8")
 library(knitr)
 library(markdown)
 
-setwd("/Users/datatalks/DT/Dev/play2slick3/MarkDown")
+setwd("/Users/datatalks/DT/Dev/playR/MarkDown")
 
 # par(family='STKaiti')
 

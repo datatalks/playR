@@ -6,6 +6,9 @@ import service.UserService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+import play.api.Logger
+
+
 import play.api.libs.json._
 
 class TestController extends Controller {
@@ -99,9 +102,8 @@ class TestController extends Controller {
 
 
   def r2 = Action.async  { implicit request =>
-    import play.api.Logger
-    val loggg = Logger(this.getClass)
-    loggg.info("Attempting risky calculation.")
+
+    Logger.info("Application startup...")
 
 
     import scala.sys.process._
@@ -155,10 +157,8 @@ class TestController extends Controller {
     WS.url("http://localhost:88/preview1.html").get().map { response =>
 
       def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
-
-      val t = responseBody.toString
-      print(t)
-      Ok(responseBody)
+      val result = responseBody.toString
+      Ok(result).as("text/html")
     }
 
 

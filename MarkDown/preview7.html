@@ -1,26 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<form class="" action="http://localhost:9000/rpost" method="post">
+  <div class="">
 
-<title></title>
-
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
-  }
-};
-</script>
+    <textarea for="name" name="name" id="name"  >XXX</textarea>
 
 
+  </div>
+  <div class="">
+    <label for="password">密码：</label><input type="password" name="password" id="password">
+  </div>
+  <div>
+    <button type="submit" name="button">提交</button>
+    <button type="reset" name="button">重置</button>
+  </div>
+</form>
 
 
-
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com">http://rmarkdown.rstudio.com</a>.</p>
-
-<p>这儿有中文的测试！！！  XXXXXXYYYYYY！！！</p>

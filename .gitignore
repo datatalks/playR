@@ -2,6 +2,8 @@ logs
 target
 /project/target/config-classes
 /MarkDown/figure
+/MarkDown/RMD
+/MarkDown/Rshell
 R.Rout
 README.md
 LICENSE
@@ -12,3 +14,4 @@ LICENSE
 /.settings
 /RUNNING_PID
 .DS_Store
+*.Rout
