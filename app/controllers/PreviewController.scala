@@ -28,8 +28,12 @@ class PreviewController extends Controller {
         val Rmd = data.name
 
         val previewR = "PREVIEW$$$"  +  scala.util.Random.alphanumeric.take(10).mkString
+        val path = "MarkDown/RMD/"  +  previewR
 
-        scala.tools.nsc.io.File( "MarkDown/RMD/"  +  previewR + ".Rmd").writeAll(Rmd)
+        import scala.sys.process._
+        (s"mkdir $path").!
+
+        scala.tools.nsc.io.File( path  + "/" + previewR + ".Rmd").writeAll(Rmd)
 
         scala.io.Source.fromFile("previewR.R").getLines.
           foreach { line => scala.tools.nsc.io.File( "MarkDown/Rshell/"  + previewR + ".R").
@@ -38,12 +42,12 @@ class PreviewController extends Controller {
         import scala.sys.process._
         (s"R CMD BATCH MarkDown/Rshell/$previewR.R").!
 
-        println(s"http://localhost:88/RMD/$previewR.html")
+        println(s"http://localhost:88/RMD/$previewR/$previewR.html")
 
         import play.api.libs.ws._
         import play.api.Play.current
         import scala.concurrent.ExecutionContext.Implicits.global   //这个引入包的作用在于隐身转换能够找到相应的执行环境！
-        WS.url(s"http://localhost:88/RMD/$previewR.html").get().map {implicit response =>
+        WS.url(s"http://localhost:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
           def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).
                              fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
           Ok(responseBody).as("text/html")
