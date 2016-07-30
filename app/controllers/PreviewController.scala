@@ -43,14 +43,14 @@ class PreviewController extends Controller {
         import scala.sys.process._
         (s"R CMD BATCH MarkDown/Rshell/$previewR.R").!
 
-        println(s"http://http://123.57.162.246/:88/RMD/$previewR/$previewR.html")
+        println(s"http://123.57.162.246/:88/RMD/$previewR/$previewR.html")
 
-        Logger.info(s"http://http://123.57.162.246/:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
+        Logger.info(s"http://123.57.162.246/:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
 
         import play.api.libs.ws._
         import play.api.Play.current
         import scala.concurrent.ExecutionContext.Implicits.global   //这个引入包的作用在于隐身转换能够找到相应的执行环境！
-        WS.url(s"http://http://123.57.162.246/:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
+        WS.url(s"http://123.57.162.246/:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
           def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).
                              fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
           Ok(responseBody).as("text/html")
