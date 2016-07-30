@@ -1,6 +1,7 @@
 package controllers
 
 
+import play.api.Logger
 import play.api.mvc._
 import scala.concurrent._
 
@@ -20,7 +21,7 @@ class PreviewController extends Controller {
     )
   }
 
-  def rpost2() = Action.async { implicit request =>
+  def previewR() = Action.async { implicit request =>
     UForm.form.bindFromRequest.fold(
       // if any error in submitted data
       errorForm => Future.successful(Ok("error!!!")),
@@ -43,6 +44,8 @@ class PreviewController extends Controller {
         (s"R CMD BATCH MarkDown/Rshell/$previewR.R").!
 
         println(s"http://localhost:88/RMD/$previewR/$previewR.html")
+
+        Logger.info(s"http://localhost:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
 
         import play.api.libs.ws._
         import play.api.Play.current

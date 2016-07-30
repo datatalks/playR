@@ -1,0 +1,175 @@
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/datatalks/DT/Dev/playR/target/universal/stage/conf/logback.xml]
+18:03:53,706 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+18:03:53,707 |-INFO in ch.qos.logback.core.joran.action.ConversionRuleAction - registering conversion word coloredLevel with class [play.api.Logger$ColoredLevel]
+18:03:53,707 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+18:03:53,711 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+18:03:53,732 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,755 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [application.home_IS_UNDEFINED/logs/application.log]
+18:03:53,756 |-ERROR in ch.qos.logback.core.FileAppender[FILE] - Failed to create parent directories for [/Users/datatalks/DT/Dev/playR/target/universal/stage/application.home_IS_UNDEFINED/logs/application.log]
+18:03:53,756 |-ERROR in ch.qos.logback.core.FileAppender[FILE] - openFile(application.home_IS_UNDEFINED/logs/application.log,true) call failed. java.io.FileNotFoundException: application.home_IS_UNDEFINED/logs/application.log (No such file or directory)
+	at java.io.FileNotFoundException: application.home_IS_UNDEFINED/logs/application.log (No such file or directory)
+	at 	at java.io.FileOutputStream.open0(Native Method)
+	at 	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at 	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at 	at ch.qos.logback.core.recovery.ResilientFileOutputStream.<init>(ResilientFileOutputStream.java:28)
+	at 	at ch.qos.logback.core.FileAppender.openFile(FileAppender.java:148)
+	at 	at ch.qos.logback.core.FileAppender.start(FileAppender.java:108)
+	at 	at ch.qos.logback.core.joran.action.AppenderAction.end(AppenderAction.java:96)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.callEndAction(Interpreter.java:317)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:196)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:182)
+	at 	at ch.qos.logback.core.joran.spi.EventPlayer.play(EventPlayer.java:62)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:149)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:135)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:99)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:49)
+	at 	at ch.qos.logback.classic.util.ContextInitializer.configureByResource(ContextInitializer.java:77)
+	at 	at ch.qos.logback.classic.util.ContextInitializer.autoConfig(ContextInitializer.java:152)
+	at 	at org.slf4j.impl.StaticLoggerBinder.init(StaticLoggerBinder.java:85)
+	at 	at org.slf4j.impl.StaticLoggerBinder.<clinit>(StaticLoggerBinder.java:55)
+	at 	at org.slf4j.LoggerFactory.bind(LoggerFactory.java:141)
+	at 	at org.slf4j.LoggerFactory.performInitialization(LoggerFactory.java:120)
+	at 	at org.slf4j.LoggerFactory.getILoggerFactory(LoggerFactory.java:331)
+	at 	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:283)
+	at 	at play.api.Logger$.<init>(Logger.scala:177)
+	at 	at play.api.Logger$.<clinit>(Logger.scala)
+	at 	at play.api.inject.guice.GuiceApplicationBuilder.applicationModule(GuiceApplicationBuilder.scala:73)
+	at 	at play.api.inject.guice.GuiceBuilder.injector(GuiceInjectorBuilder.scala:126)
+	at 	at play.api.inject.guice.GuiceApplicationBuilder.build(GuiceApplicationBuilder.scala:93)
+	at 	at play.api.inject.guice.GuiceApplicationLoader.load(GuiceApplicationLoader.scala:21)
+	at 	at play.core.server.ProdServerStart$.start(ProdServerStart.scala:52)
+	at 	at play.core.server.ProdServerStart$.main(ProdServerStart.scala:27)
+	at 	at play.core.server.ProdServerStart.main(ProdServerStart.scala)
+18:03:53,756 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+18:03:53,758 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+18:03:53,759 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,761 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,763 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCFILE]
+18:03:53,763 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to ch.qos.logback.classic.AsyncAppender[ASYNCFILE]
+18:03:53,763 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Attaching appender named [FILE] to AsyncAppender.
+18:03:53,763 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Setting discardingThreshold to 51
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCSTDOUT]
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT]
+18:03:53,764 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Attaching appender named [STDOUT] to AsyncAppender.
+18:03:53,764 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Setting discardingThreshold to 51
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [play] to INFO
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [application] to DEBUG
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebean.config.PropertyMapLoader] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.core.XmlConfigLoader] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.lib.BackgroundThread] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.gargoylesoftware.htmlunit.javascript] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to WARN
+18:03:53,765 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCFILE] to Logger[ROOT]
+18:03:53,765 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCSTDOUT] to Logger[ROOT]
+18:03:53,765 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+18:03:53,766 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@28975c28 - Registering current configuration as safe fallback point
+
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+18:03:53,601 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/datatalks/DT/Dev/playR/target/universal/stage/conf/logback.xml]
+18:03:53,706 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+18:03:53,707 |-INFO in ch.qos.logback.core.joran.action.ConversionRuleAction - registering conversion word coloredLevel with class [play.api.Logger$ColoredLevel]
+18:03:53,707 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+18:03:53,711 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+18:03:53,732 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,755 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [application.home_IS_UNDEFINED/logs/application.log]
+18:03:53,756 |-ERROR in ch.qos.logback.core.FileAppender[FILE] - Failed to create parent directories for [/Users/datatalks/DT/Dev/playR/target/universal/stage/application.home_IS_UNDEFINED/logs/application.log]
+18:03:53,756 |-ERROR in ch.qos.logback.core.FileAppender[FILE] - openFile(application.home_IS_UNDEFINED/logs/application.log,true) call failed. java.io.FileNotFoundException: application.home_IS_UNDEFINED/logs/application.log (No such file or directory)
+	at java.io.FileNotFoundException: application.home_IS_UNDEFINED/logs/application.log (No such file or directory)
+	at 	at java.io.FileOutputStream.open0(Native Method)
+	at 	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at 	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at 	at ch.qos.logback.core.recovery.ResilientFileOutputStream.<init>(ResilientFileOutputStream.java:28)
+	at 	at ch.qos.logback.core.FileAppender.openFile(FileAppender.java:148)
+	at 	at ch.qos.logback.core.FileAppender.start(FileAppender.java:108)
+	at 	at ch.qos.logback.core.joran.action.AppenderAction.end(AppenderAction.java:96)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.callEndAction(Interpreter.java:317)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:196)
+	at 	at ch.qos.logback.core.joran.spi.Interpreter.endElement(Interpreter.java:182)
+	at 	at ch.qos.logback.core.joran.spi.EventPlayer.play(EventPlayer.java:62)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:149)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:135)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:99)
+	at 	at ch.qos.logback.core.joran.GenericConfigurator.doConfigure(GenericConfigurator.java:49)
+	at 	at ch.qos.logback.classic.util.ContextInitializer.configureByResource(ContextInitializer.java:77)
+	at 	at ch.qos.logback.classic.util.ContextInitializer.autoConfig(ContextInitializer.java:152)
+	at 	at org.slf4j.impl.StaticLoggerBinder.init(StaticLoggerBinder.java:85)
+	at 	at org.slf4j.impl.StaticLoggerBinder.<clinit>(StaticLoggerBinder.java:55)
+	at 	at org.slf4j.LoggerFactory.bind(LoggerFactory.java:141)
+	at 	at org.slf4j.LoggerFactory.performInitialization(LoggerFactory.java:120)
+	at 	at org.slf4j.LoggerFactory.getILoggerFactory(LoggerFactory.java:331)
+	at 	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:283)
+	at 	at play.api.Logger$.<init>(Logger.scala:177)
+	at 	at play.api.Logger$.<clinit>(Logger.scala)
+	at 	at play.api.inject.guice.GuiceApplicationBuilder.applicationModule(GuiceApplicationBuilder.scala:73)
+	at 	at play.api.inject.guice.GuiceBuilder.injector(GuiceInjectorBuilder.scala:126)
+	at 	at play.api.inject.guice.GuiceApplicationBuilder.build(GuiceApplicationBuilder.scala:93)
+	at 	at play.api.inject.guice.GuiceApplicationLoader.load(GuiceApplicationLoader.scala:21)
+	at 	at play.core.server.ProdServerStart$.start(ProdServerStart.scala:52)
+	at 	at play.core.server.ProdServerStart$.main(ProdServerStart.scala:27)
+	at 	at play.core.server.ProdServerStart.main(ProdServerStart.scala)
+18:03:53,756 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+18:03:53,758 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+18:03:53,759 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,761 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,763 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCFILE]
+18:03:53,763 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to ch.qos.logback.classic.AsyncAppender[ASYNCFILE]
+18:03:53,763 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Attaching appender named [FILE] to AsyncAppender.
+18:03:53,763 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Setting discardingThreshold to 51
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCSTDOUT]
+18:03:53,764 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT]
+18:03:53,764 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Attaching appender named [STDOUT] to AsyncAppender.
+18:03:53,764 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Setting discardingThreshold to 51
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [play] to INFO
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [application] to DEBUG
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebean.config.PropertyMapLoader] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.core.XmlConfigLoader] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.lib.BackgroundThread] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.gargoylesoftware.htmlunit.javascript] to OFF
+18:03:53,764 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to WARN
+18:03:53,765 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCFILE] to Logger[ROOT]
+18:03:53,765 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCSTDOUT] to Logger[ROOT]
+18:03:53,765 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+18:03:53,766 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@28975c28 - Registering current configuration as safe fallback point
+18:03:53,784 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Worker thread will flush remaining events before exiting. 
+18:03:53,784 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Queue flush finished successfully within timeout.
+18:03:53,784 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Worker thread will flush remaining events before exiting. 
+18:03:53,784 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Queue flush finished successfully within timeout.
+18:03:53,787 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+18:03:53,787 |-INFO in ch.qos.logback.core.joran.action.ConversionRuleAction - registering conversion word coloredLevel with class [play.api.Logger$ColoredLevel]
+18:03:53,787 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+18:03:53,787 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+18:03:53,787 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,788 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [/Users/datatalks/DT/Dev/playR/target/universal/stage/logs/application.log]
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCFILE]
+18:03:53,788 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to ch.qos.logback.classic.AsyncAppender[ASYNCFILE]
+18:03:53,788 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Attaching appender named [FILE] to AsyncAppender.
+18:03:53,790 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCFILE] - Setting discardingThreshold to 51
+18:03:53,790 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.classic.AsyncAppender]
+18:03:53,790 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [ASYNCSTDOUT]
+18:03:53,790 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT]
+18:03:53,790 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Attaching appender named [STDOUT] to AsyncAppender.
+18:03:53,790 |-INFO in ch.qos.logback.classic.AsyncAppender[ASYNCSTDOUT] - Setting discardingThreshold to 51
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [play] to INFO
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [application] to DEBUG
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebean.config.PropertyMapLoader] to OFF
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.core.XmlConfigLoader] to OFF
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.avaje.ebeaninternal.server.lib.BackgroundThread] to OFF
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.gargoylesoftware.htmlunit.javascript] to OFF
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to WARN
+18:03:53,791 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCFILE] to Logger[ROOT]
+18:03:53,791 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [ASYNCSTDOUT] to Logger[ROOT]
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+18:03:53,791 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@2bfc268b - Registering current configuration as safe fallback point
+
+[[33mwarn[0m] application - Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.
+[[37minfo[0m] play.api.Play - Application started (Prod)
+[[37minfo[0m] p.c.s.NettyServer - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
