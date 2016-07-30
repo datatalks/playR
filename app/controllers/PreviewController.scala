@@ -28,7 +28,7 @@ class PreviewController extends Controller {
       data => {
         val Rmd = data.name
 
-        val previewR = "PREVIEW$$$"  +  scala.util.Random.alphanumeric.take(10).mkString
+        val previewR = "PREVIEW888"  +  scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/RMD/"  +  previewR
 
         import scala.sys.process._
