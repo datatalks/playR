@@ -3,7 +3,7 @@ Sys.setlocale(, "zh_CN.UTF-8")
 library(knitr)
 library(markdown)
 
-setwd("/home/playR/MarkDown/RMD/$fileR")
+setwd("$dirR/MarkDown/RMD/$fileR")
 
 
 knit("$fileR.Rmd")
