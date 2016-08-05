@@ -6,14 +6,10 @@ import play.api.mvc._
 import scala.concurrent._
 import model.{UForm,UFormData}
 
-import env.env_server
-import env.env_xiaofan
+import env.env
 
 
 class PreviewController extends Controller {
-
-
-
 
   def rpost() = Action.async { implicit request =>
     UForm.form.bindFromRequest.fold(
@@ -41,7 +37,7 @@ class PreviewController extends Controller {
 
         scala.tools.nsc.io.File( path  + "/" + previewR + ".Rmd").writeAll(Rmd)
 
-        val dir = if(System.getenv("HOME") == "/root"){env_server.dir} else { env_xiaofan.dir }
+        val dir = env.dir
 
         scala.io.Source.fromFile("previewR.R").getLines.
           foreach { line => scala.tools.nsc.io.File( "MarkDown/Rshell/"  + previewR + ".R").
@@ -50,7 +46,7 @@ class PreviewController extends Controller {
         import scala.sys.process._
         (s"R CMD BATCH MarkDown/Rshell/$previewR.R").!
 
-        val host = if(System.getenv("HOME") == "/root"){env_server.host} else { env_xiaofan.host }
+        val host = env.host
 
         println(s"http://$host:88/RMD/$previewR/$previewR.html")
 
