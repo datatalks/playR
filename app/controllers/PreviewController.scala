@@ -1,15 +1,15 @@
 package controllers
 
+import javax.inject.Inject
 
 import play.api.Logger
+import play.api.libs.ws.WSClient
 import play.api.mvc._
 import scala.concurrent._
-import model.{UForm,UFormData}
-
+import model.UForm
 import env.env
 
-
-class PreviewController extends Controller {
+class PreviewController @Inject() (ws:WSClient) extends Controller {
 
   def rpost() = Action.async { implicit request =>
     UForm.form.bindFromRequest.fold(
@@ -52,10 +52,9 @@ class PreviewController extends Controller {
 
         Logger.info(s"http://$host:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
 
-        import play.api.libs.ws._
-        import play.api.Play.current
+
         import scala.concurrent.ExecutionContext.Implicits.global   //这个引入包的作用在于隐身转换能够找到相应的执行环境！
-        WS.url(s"http://$host:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
+        ws.url(s"http://$host:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
           def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).
                              fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
           Ok(responseBody).as("text/html")

@@ -13,7 +13,6 @@ GET     /xiaofan3                   controllers.TestController.xiaofan3
 GET     /xiaofan4                   controllers.TestController.xiaofan4
 GET     /xiaofan5                   controllers.TestController.xiaofan5
 GET     /xiaofan6                   controllers.TestController.xiaofan6
-
 GET     /json1                      controllers.TestController.json1
 GET     /json2                      controllers.TestController.json2
 
@@ -23,6 +22,31 @@ GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 
 POST    /rpost                      controllers.PreviewController.previewR
+
+POST    /reportR                    controllers.ReportController.addRmd
+
+
+
+
+
+GET     /restrict1                  @controllers.RestrictController.restrictOne
+GET     /restrict2                  @controllers.RestrictController.restrictTwo
+GET     /restrict3                  @controllers.RestrictController.restrictThree
+GET     /restrict4                  @controllers.RestrictController.restrictFour
+
+GET     /rhp_roleHolderPresent      @controllers.SubjectPresentController.loggedIn
+GET     /rhp_roleHolderNotPresent   @controllers.SubjectPresentController.notLoggedIn
+GET     /rhnp_roleHolderPresent     @controllers.SubjectNotPresentController.loggedIn
+GET     /rhnp_roleHolderNotPresent  @controllers.SubjectNotPresentController.notLoggedIn
+
+GET     /setsessions                controllers.TestController.setsessions
+GET     /getsessions                controllers.TestController.getsessions
+GET     /rmsessions                 controllers.TestController.rmsessions
+
+
+POST    /localidentityadd                        controllers.IdentityController.AddIdentity
+POST    /localidentityIdentityLogin              controllers.IdentityController.LoginIdentity
+GET     /localidentityIdentityLogout             controllers.IdentityController.LogoutIdentity
 
 
 # Map static resources from the /public folder to the /assets URL path
