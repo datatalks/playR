@@ -34,13 +34,13 @@ class TestController   @Inject() (userDAO: UserDAO, ws:WSClient) extends Control
   }
 
   def xiaofan1 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      Ok(users.toString())
+    userDAO.listAllUsersforTestig map { users =>
+      Ok(users.mkString)
     }
   }
 
   def xiaofan2 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
+    userDAO.listAllUsersforTestig map { users =>
       Ok(users.toString)
     }
   }

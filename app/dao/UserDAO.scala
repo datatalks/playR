@@ -34,6 +34,11 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(users.result)
   }
 
+  def listAllUsersforTestig: Future[Seq[String]] = {
+    db.run(users.map(_.email).result)
+  }
+
+
   private class UserTableDef(tag: Tag) extends Table[User](tag, "user") {
 
     def id = column[Long]("id", O.PrimaryKey,O.AutoInc)

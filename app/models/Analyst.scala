@@ -1,7 +1,6 @@
 package models
 
 import be.objectify.deadbolt.scala.models.Subject
-import models.SecurityRole
 
 /**
  *
