@@ -43,10 +43,16 @@ GET     /setsessions                controllers.TestController.setsessions
 GET     /getsessions                controllers.TestController.getsessions
 GET     /rmsessions                 controllers.TestController.rmsessions
 
+GET     /innerJoin1                  controllers.TestController.innerJoin1
+GET     /innerJoin2                  controllers.TestController.innerJoin2
+GET     /innerJoin3                  controllers.TestController.innerJoin3
 
 POST    /localidentityadd                        controllers.IdentityController.AddIdentity
 POST    /localidentityIdentityLogin              controllers.IdentityController.LoginIdentity
 GET     /localidentityIdentityLogout             controllers.IdentityController.LogoutIdentity
+
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path

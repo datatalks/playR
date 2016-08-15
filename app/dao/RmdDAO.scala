@@ -14,7 +14,7 @@ import scala.concurrent.Future
 class RmdDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
   import driver.api._
 
-  private val rmds = TableQuery[RmdTableDef]
+  val rmds = TableQuery[RmdTableDef]
 
 
   def addRmd(rmd: Rmd): Future[String] = {
@@ -37,7 +37,7 @@ class RmdDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
   }
 
 
-  private class RmdTableDef(tag: Tag) extends Table[Rmd](tag, "rmd") {
+  class RmdTableDef(tag: Tag) extends Table[Rmd](tag, "rmd") {
 
     def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
     def owner = column[String]("owner")

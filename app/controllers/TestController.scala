@@ -1,5 +1,6 @@
 package controllers
 
+
 import javax.inject.Inject
 
 import models.{UserFormData, User}
@@ -7,16 +8,20 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import dao.UserDAO
+import dao.{JoinDAO, UserDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 import play.api.Logger
 
 
+
 import play.api.libs.json._
 
-class TestController   @Inject() (userDAO: UserDAO, ws:WSClient) extends Controller {
+import scala.util.Try
+
+class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
 
   val UserForm = Form(
     mapping(
@@ -27,11 +32,42 @@ class TestController   @Inject() (userDAO: UserDAO, ws:WSClient) extends Control
     )(UserFormData.apply)(UserFormData.unapply)
   )
 
+
   def index = Action.async { implicit request =>
     userDAO.listAllUsers map { users =>
       Ok(views.html.index(UserForm, users))
     }
   }
+
+
+  def innerJoin1 =  Action.async { implicit request =>
+
+    val res = joinDAO.join1
+    for( i <- res) println("XXXXX  is" + i)
+    Future.successful(Ok(res.toString))
+  }
+
+  def innerJoin2 =  Action.async { implicit request =>
+    val res = joinDAO.join2
+    for( i <- res) println(i)
+
+    println("the res is " + res.toString)
+
+    val result: Try[Seq[(String, String)]] = Await.ready(res, Duration.Inf).value.get
+    Future.successful(Ok(result.toString))
+  }
+
+
+  //  对于表关联中使用异步Future得到的结果，通过两个map实现了异步结果的HTTP response!
+  //  备注，对于常见的 Future 类型的结果返回错误如下：
+  // Cannot write an instance of Seq[(String, String)] to HTTP response. Try to define a Writeable[Seq[(String, String)]]
+  def innerJoin3 =  Action.async { implicit request =>
+      joinDAO.join3 map { res =>
+        val t = ";"
+        Ok(   res.map( x => x._1 + t + x._2).mkString   )
+      }
+  }
+
 
   def xiaofan1 = Action.async { implicit request =>
     userDAO.listAllUsersforTestig map { users =>

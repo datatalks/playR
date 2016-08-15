@@ -2,19 +2,17 @@ package dao
 
 import javax.inject.Inject
 
-import com.github.tototoshi.slick.MySQLJodaSupport._
 import models.User
-import play.api.Logger
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
-
 import scala.concurrent.Future
 
 class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
   import driver.api._
 
   private val users = TableQuery[UserTableDef]
+
 
   def addUser(user: User): Future[String] = {
     db.run(users += user).map(res => "User successfully added").recover {

@@ -2,19 +2,18 @@ package dao
 
 import scala.concurrent.Future
 import javax.inject.Inject
-import models.Identity
+import models.{Identity}
 
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
-import org.joda.time.DateTime
 import com.github.tototoshi.slick.MySQLJodaSupport._
 
 class IdentityDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
   import driver.api._
 
-  private val identitys = TableQuery[IdentityTableDef]
+  val identitys = TableQuery[IdentityTableDef]
 
 
   def addIdentity(identity: Identity): Future[String] = {
@@ -40,7 +39,7 @@ class IdentityDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
 
 
-  private class IdentityTableDef(tag: Tag) extends Table[Identity](tag, "identity") {
+  class IdentityTableDef(tag: Tag) extends Table[Identity](tag, "identity") {
 
     def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
     def password = column[String]("password")
