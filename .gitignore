@@ -15,5 +15,5 @@ LICENSE
 /RUNNING_PID
 .DS_Store
 *.Rout
-conf/logback.xml
-conf/logback2.xml
+/conf/logback.xml
+/conf/logback2.xml
