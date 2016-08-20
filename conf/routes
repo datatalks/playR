@@ -7,6 +7,12 @@ GET     /                           controllers.ApplicationController.index
 POST    /add                        controllers.ApplicationController.addUser
 GET     /delete/:id                 controllers.ApplicationController.deleteUser(id : Long)
 
+
+POST    /                           controllers.WeixinController.signature
+
+
+
+
 GET     /xiaofan1                   controllers.TestController.xiaofan1
 GET     /xiaofan2                   controllers.TestController.xiaofan2
 GET     /xiaofan3                   controllers.TestController.xiaofan3
@@ -24,9 +30,6 @@ GET     /r4                         controllers.TestController.r4
 POST    /rpost                      controllers.PreviewController.previewR
 
 POST    /reportR                    controllers.ReportController.addRmd
-
-
-
 
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
@@ -50,8 +53,6 @@ GET     /innerJoin3                  controllers.TestController.innerJoin3
 POST    /localidentityadd                        controllers.IdentityController.AddIdentity
 POST    /localidentityIdentityLogin              controllers.IdentityController.LoginIdentity
 GET     /localidentityIdentityLogout             controllers.IdentityController.LogoutIdentity
-
-
 
 
 
