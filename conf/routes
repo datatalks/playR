@@ -2,13 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+# 原来的案例以及相应的接口路由
 GET     /                           controllers.ApplicationController.index
 POST    /add                        controllers.ApplicationController.addUser
 GET     /delete/:id                 controllers.ApplicationController.deleteUser(id : Long)
 
 
-POST    /                           controllers.WeixinController.signature
+GET    /weixin                      controllers.WeixinController.checkToken(signature:String,timestamp:String,nonce:String,echostr:String)
 
 
 

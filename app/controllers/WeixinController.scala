@@ -1,5 +1,6 @@
 package controllers
 
+import play.Logger
 import play.api.mvc._
 
 
@@ -18,6 +19,11 @@ class WeixinController extends Controller {
     }
   }
 
+
+  def checkToken(signature: String, timestamp: String, nonce: String, echostr: String) = Action {
+    Logger.info("receive weixin server pamameter signature=" + signature + ",timestamp=" + timestamp + ",nonce=" + nonce + ",echostr=" + echostr)
+      Ok(echostr)
+  }
 
 }
 
