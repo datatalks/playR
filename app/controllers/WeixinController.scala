@@ -41,7 +41,7 @@ class WeixinController extends Controller {
         <FromUserName>{weixin}</FromUserName>
         <CreateTime>{CreateTime}</CreateTime>
         <MsgType>{MsgType}</MsgType>
-        <Content><![CDATA[你XXXXXX好]]></Content>
+        <Content>{Content}</Content>
       </xml>
     ))
   }
