@@ -35,7 +35,7 @@ $(function () {
     var editor = editormd("editor", {
         height: 300,
         watch : false,
-        path : "../public/bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+        path : "/assets/bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
         toolbarIcons : function() {
             return [
                 "undo", "redo", "|",
