@@ -26,6 +26,8 @@ class WeixinController extends Controller {
     }
   }
 
+
+
   def xmlreponse = Action.async(parse.xml) { implicit request =>
     println( "Forget the request header, the request body is: " + request.body)
     val weixin = (request.body \\ "ToUserName" headOption).map(_.text).getOrElse("X")
