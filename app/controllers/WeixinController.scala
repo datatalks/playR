@@ -7,6 +7,8 @@ import scala.concurrent.Future
 
 class WeixinController extends Controller {
 
+  implicit val myCustomCharset = Codec.javaSupported("iso-8859-1")
+
   def checkToken(signature: String, timestamp: String, nonce: String, echostr: String) = Action.async { implicit request =>
     Logger.info("receive weixin server pamameter signature=" + signature + ",timestamp=" + timestamp + ",nonce=" + nonce + ",echostr=" + echostr)
     Future.successful(Ok(echostr))
@@ -92,6 +94,8 @@ class WeixinController extends Controller {
     }
   }
     def xmlreponse3 = Action.async(parse.xml) { implicit request =>
+      val charset = request.headers.get("Content-Type").toString
+      println("zifuji is :" + charset)
       println( "Forget the request header, the request body is: " + request.body)
       Logger.info("request charset is -[" + (if (request.charset == None) request.charset else request.charset.get) + "]")
       val weixin = (request.body \\ "ToUserName" headOption).map(_.text).getOrElse("")
