@@ -1,5 +1,5 @@
 $(function () {
-    var toast = function (){
+    var toast = (function (){
         var $toast = $('#toast');
         var $toastCnt = $toast.find('.weui_toast_content');
         var timer = null;
@@ -12,7 +12,7 @@ $(function () {
             clearTimeout(timer);
 
             $toast.show();
-            $(toastCnt).text(content);
+            $toastCnt.text(content);
 
             timer = setTimeout(function (){
                 $toast.hide();
@@ -20,12 +20,12 @@ $(function () {
 
                 instancer = false;
             }, 2000);
-        }
+        };
 
         return {
             show: show
         }
-    };
+    })();
 
     $('.weui_tab').on('click', '.weui_tabbar_item', function () {
         $('.weui_tab .weui_tab_bd').removeClass('show enter').addClass('hide leave');
@@ -97,18 +97,15 @@ $(function () {
         }
 
         $.post(postUrl, {
-            'owner': '',
+            'owner': 'ab',
             'reportR': editor.getMarkdown()
         }, function (response) {
             if (isPreveiw) {
                 toast.show(response.message, function () {
-                    $toast.hide();
-                    location.href = response.data.url;
+                    location.href = response.data;
                 });
             } else {
-                toast.show(response.message, function () {
-                    $toast.hide();
-                });
+                toast.show(response.message);
             }
         });
     });

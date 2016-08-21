@@ -6,8 +6,9 @@ import play.api.Logger
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import scala.concurrent._
-import model.RForm
+import models.{RForm, RFormData}
 import env.env
+import play.api.libs.json._
 
 class PreviewController @Inject() (ws:WSClient) extends Controller {
 
@@ -16,7 +17,7 @@ class PreviewController @Inject() (ws:WSClient) extends Controller {
       // if any error in submitted data
       errorForm => Future.successful(Ok("error!!!")),
       data => {
-        val newU = data.rmd
+        val newU = data.reportR
         Future.successful(Ok(newU))
       }
     )
@@ -27,7 +28,7 @@ class PreviewController @Inject() (ws:WSClient) extends Controller {
       // if any error in submitted data
       errorForm => Future.successful(Ok("error!!!")),
       data => {
-        val Rmd = data.rmd
+        val Rmd = data.reportR
 
         val previewR = "PREVIEW888"  +  scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/RMD/"  +  previewR
@@ -47,18 +48,33 @@ class PreviewController @Inject() (ws:WSClient) extends Controller {
         (s"R CMD BATCH MarkDown/Rshell/$previewR.R").!
 
         val host = env.host
+       //  println(s"http://$host:88/RMD/$previewR/$previewR.html")
 
-        println(s"http://$host:88/RMD/$previewR/$previewR.html")
+        val url = "http://" + host + ":88/RMD/" + previewR + "/" +previewR + ".html"
 
-        Logger.info(s"http://$host:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
+        println("url is" + url)
 
+        case class JasonResult(data: String, message: String)
 
-        import scala.concurrent.ExecutionContext.Implicits.global   //这个引入包的作用在于隐身转换能够找到相应的执行环境！
-        ws.url(s"http://$host:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
-          def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).
-                             fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
-          Ok(responseBody).as("text/html")
+        implicit val JasonResultWrites = new Writes[JasonResult] {
+          def writes(jasonResult: JasonResult) = Json.obj(
+            "data" -> jasonResult.data,
+            "message" -> jasonResult.message
+          )
         }
+
+        val res = JasonResult(url,"预览成功!")
+
+        val json = Json.toJson(res)
+
+        Future.successful(Ok(json))
+
+//        Logger.info(s"http://$host:88/RMD/$previewR/$previewR.html"  +  "   ++   this is the log testing")
+//        import scala.concurrent.ExecutionContext.Implicits.global   //这个引入包的作用在于隐身转换能够找到相应的执行环境！
+//        ws.url(s"http://$host:88/RMD/$previewR/$previewR.html").get().map {implicit response =>
+//          def responseBody = response.header(CONTENT_TYPE).filter(_.toLowerCase.contains("charset")).
+//                             fold(new String(response.body.getBytes("ISO-8859-1") , "UTF-8"))(_ => response.body)
+//          Ok(responseBody).as("text/html")}
       }
     )
   }
