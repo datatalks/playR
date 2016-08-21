@@ -102,7 +102,7 @@ $(function () {
         }, function (response) {
             if (isPreveiw) {
                 toast.show(response.message, function () {
-                    location.href = response.data;
+                    $this.before('<p>已生成预览地址为:<a target="_blank" href="'+response.data+'">详情点击!</a></p>')
                 });
             } else {
                 toast.show(response.message);

@@ -62,7 +62,6 @@ class PreviewController @Inject() (ws:WSClient) extends Controller {
             "message" -> jasonResult.message
           )
         }
-
         val res = JasonResult(url,"预览成功!")
 
         val json = Json.toJson(res)
