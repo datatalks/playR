@@ -8,6 +8,7 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 <link rel="stylesheet" href="../public/stylesheets/weui.min.css"/>
+<link rel="stylesheet" href="../public/bower_components/editor.md/css/editormd.min.css"/>
 <link rel="stylesheet" href="../public/stylesheets/style.css"/>
 </head>
 <body>
@@ -27,6 +28,11 @@
                         <a href="javascript:;" class="weui_btn weui_btn_primary" id="showDialog1">新建报告</a>
                     </div>
                 </div>
+                <div class="weui_tab_bd">
+                    <div class="editormd" id="editor">
+                        <textarea>### Hello world!</textarea>
+                    </div>
+                </div>
                 <div class="weui_tabbar">
                     <a href="javascript:;" class="weui_tabbar_item weui_bar_item_on">
                         <div class="weui_tabbar_icon">
@@ -44,5 +50,8 @@
             </div>
         </div>
     </div>
+    <script src="../public/javascripts/zepto.min.js"></script>
+    <script src="../public/bower_components/editor.md/editormd.min.js"></script>
+    <script src="../public/javascripts/index.js"></script>
 </body>
 </html>
