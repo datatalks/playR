@@ -27,7 +27,7 @@ GET     /r2                         controllers.TestController.r2
 GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 
-POST    /rpost                      controllers.PreviewController.previewR
+POST    /previewR                   controllers.PreviewController.previewR
 
 POST    /reportR                    controllers.ReportController.addRmd
 

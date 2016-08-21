@@ -6,28 +6,28 @@ import play.api.Logger
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import scala.concurrent._
-import model.UForm
+import model.RForm
 import env.env
 
 class PreviewController @Inject() (ws:WSClient) extends Controller {
 
   def rpost() = Action.async { implicit request =>
-    UForm.form.bindFromRequest.fold(
+    RForm.form.bindFromRequest.fold(
       // if any error in submitted data
       errorForm => Future.successful(Ok("error!!!")),
       data => {
-        val newU = data.name + data.password
+        val newU = data.rmd
         Future.successful(Ok(newU))
       }
     )
   }
 
   def previewR() = Action.async { implicit request =>
-    UForm.form.bindFromRequest.fold(
+    RForm.form.bindFromRequest.fold(
       // if any error in submitted data
       errorForm => Future.successful(Ok("error!!!")),
       data => {
-        val Rmd = data.name
+        val Rmd = data.rmd
 
         val previewR = "PREVIEW888"  +  scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/RMD/"  +  previewR

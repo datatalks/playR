@@ -6,13 +6,12 @@ import play.api.data.Forms._
 
 
 
-object UForm {
+object RForm {
   val form = Form(
     mapping(
-      "name" -> nonEmptyText,
-      "password" -> nonEmptyText
-    )(UFormData.apply)(UFormData.unapply)
+      "rmd" -> nonEmptyText
+    )(RFormData.apply)(RFormData.unapply)
   )
 }
 
-case class UFormData(name: String, password: String)
+case class RFormData(rmd: String)
