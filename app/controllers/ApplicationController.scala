@@ -5,7 +5,7 @@ import javax.inject.Inject
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import dao.UserDAO
+import services.UserDAO
 import models.User,models.UserFormData
 
 import scala.concurrent.ExecutionContext.Implicits.global

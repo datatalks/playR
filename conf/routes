@@ -9,7 +9,7 @@ GET     /delete/:id                 controllers.ApplicationController.deleteUser
 
 
 GET    /weixin                      controllers.WeixinController.checkToken(signature:String,timestamp:String,nonce:String,echostr:String)
-POST   /weixin                      controllers.WeixinController.xmlreponse3
+POST   /weixin                      controllers.WeixinController.xmlreponse
 
 
 

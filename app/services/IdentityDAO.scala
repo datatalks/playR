@@ -1,4 +1,4 @@
-package dao
+package services
 
 import scala.concurrent.Future
 import javax.inject.Inject

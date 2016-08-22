@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import dao.RmdDAO
+import services.RmdDAO
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import play.api.libs.json._

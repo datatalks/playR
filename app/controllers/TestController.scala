@@ -8,7 +8,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import dao.{JoinDAO, UserDAO}
+import services.{JoinDAO, UserDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
