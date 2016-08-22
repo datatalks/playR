@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
   "org.planet42" %% "laika-core" % "0.5.1",  // Scala from MD to HTML  https://github.com/planet42/Laika https://planet42.github.io/Laika/using-laika/markup.html
   "org.scala-lang" % "scala-compiler" % "2.11.7",  //  For >>> tools is not a member of package scala
   "com.github.tototoshi" % "slick-joda-mapper_2.11" % "2.1.0",
-  "be.objectify" %% "deadbolt-scala" % "2.5.0"
+  "be.objectify" %% "deadbolt-scala" % "2.5.0",
+  "com.github.stuxuhai" % "jpinyin" % "1.1.7"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

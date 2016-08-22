@@ -21,13 +21,14 @@ GET     /xiaofan5                   controllers.TestController.xiaofan5
 GET     /xiaofan6                   controllers.TestController.xiaofan6
 GET     /json1                      controllers.TestController.json1
 GET     /json2                      controllers.TestController.json2
+GET     /json3                      controllers.TestController.json3
 
 GET     /r1                         controllers.TestController.r1
 GET     /r2                         controllers.TestController.r2
 GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 
-POST    /previewR                   controllers.PreviewController.previewR
+POST    /previewR                   controllers.PreviewController.previewRR
 
 POST    /reportR                    controllers.ReportController.addRmd
 

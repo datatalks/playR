@@ -33,6 +33,10 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
   )
 
 
+
+
+
+
   def index = Action.async { implicit request =>
     userDAO.listAllUsers map { users =>
       Ok(views.html.index(UserForm, users))
@@ -125,12 +129,50 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
         "lastName" -> user.lastName,
         "email888" -> user.email)
     }
-
     userDAO.listAllUsers map { users =>
       Ok(Json.toJson(users))
-    }
+    }}}
+
+  def json3 = Action {
+    val name = "我是李爬爬"
+    val json1: JsValue = Json.obj(
+      "name" -> name,
+      "location" -> Json.obj("lat" -> 51.235685, "long" -> -1.309197),
+      "residents" -> Json.arr(
+        Json.obj(
+          "name" -> "Fiver",
+          "age" -> 4,
+          "role" -> JsNull
+        ),
+        Json.obj(
+          "name" -> "Bigwig",
+          "age" -> 6,
+          "role" -> "Owsla"
+        )
+      )
+    )
+    val url = "http://XXXX"
+    val json2: JsValue = Json.obj(
+      "data" -> url,
+      "message" -> "提交成功咯~~~"
+    )
+
+    val json3: JsValue = Json.obj(
+      "data" -> Json.arr(
+        Json.obj(
+          "title" -> "报告名称",
+          "date" -> "生成报告日期",
+          "url" -> "生成报告地址"
+        )
+      ),
+      "message" -> "提交成功咯~~~"
+    )
+
+
+    Ok(json3)
   }
-  }
+
+
 
   def r1 = Action.async { implicit request =>
     import scala.sys.process._
