@@ -3,13 +3,13 @@ package services
 
 object XmlFeedback{
 
-  def textFeedback(openid:String, weixin:String, CreateTime:String)
+  def textFeedback(openid:String, weixin:String, createTime:String, content: String)
       = <xml>
             <ToUserName>{openid}</ToUserName>
             <FromUserName>{weixin}</FromUserName>
-            <CreateTime>{CreateTime}</CreateTime>
+            <CreateTime>{createTime}</CreateTime>
             <MsgType>text</MsgType>
-            <Content><![CDATA[thanks for the message!!!]]></Content>
+            <Content>{content}</Content>
         </xml>
 
   def voiceFeedback(openid:String, weixin:String, CreateTime:String, Recognition: String )

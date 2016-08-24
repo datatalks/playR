@@ -1,8 +1,7 @@
 package controllers
 
-
 import javax.inject.Inject
-
+import com.github.stuxuhai.jpinyin.{PinyinFormat, PinyinHelper}
 import models.{UserFormData, User}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -12,16 +11,34 @@ import services.{JoinDAO, UserDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-
 import play.api.Logger
-
-
-
 import play.api.libs.json._
-
 import scala.util.Try
 
+
+
 class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
+
+
+  def pinyin()= Action.async { implicit request =>
+    val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)
+    val res2 = res1.replaceAll(",",  "")
+    val res3 = res1.split(",")
+
+    Future.successful(  Ok( res1 )  )
+  }
+
+  def pinyinn()= Action.async { implicit request =>
+    val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", "$", PinyinFormat.WITHOUT_TONE)
+    val res2 = res1.replaceAll(",",  "")
+    val res3 = res1.split(",")
+
+    Future.successful(  Ok( res1 )  )
+  }
+
+
+
+
 
   val UserForm = Form(
     mapping(
@@ -31,10 +48,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
       "email" -> email
     )(UserFormData.apply)(UserFormData.unapply)
   )
-
-
-
-
 
 
   def index = Action.async { implicit request =>
@@ -287,6 +300,7 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
   def rmsessions () = Action.async { implicit request =>
     Future.successful(  Ok("Bye").withNewSession )
   }
+
 
 
 }
