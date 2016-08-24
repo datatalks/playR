@@ -16,7 +16,7 @@ object XmlVoice{
 //                println(pairs.mkString)
                 pairs.length}
 
-  val subject = "注册/充值/投资/提现/赎回/客户/沉淀资金".split("/")
+  val subject = "注册/充值/投资/提现/赎回/客户/沉淀资金/转化率/营销/理财产品/绿能宝".split("/")
 
   val index =  for( i <- 0 until subject.length ) yield (i)
 
@@ -36,7 +36,7 @@ object XmlVoice{
                                                   val resultTuple = tempTuple._1._1  zip  tempTuple._1._2 zip tempTuple._2
                                                   val result = resultTuple.toList.maxBy(_._2)
     val response = ("根据您的发音,其同#"  + result._1._2 +  "#的相似指数为"
-                     + result._2.toString + ".故,我们将为你呈现#" + result._1._1 + "#相关的数据内容......")
+                     + result._2.toString + ".故,我们将为你呈现#" + result._1._1 + "#相关的数据报告......")
 
     val response2ISO_8859_1  = new String(response.getBytes("UTF-8") , "ISO-8859-1")
     val feedback = if( result._2 == 0) "Sorry, I didn't follow u,  Pls. Speak Again!" else response2ISO_8859_1

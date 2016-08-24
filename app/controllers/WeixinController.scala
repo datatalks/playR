@@ -31,15 +31,15 @@ class WeixinController extends Controller {
       MsgType match{
         case "text"   => { Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, "on the developing...")))}
         case "voice"  => {
-          print( "voice source" +  Recognition)
-          print( "voice UTF8" +  Recognition2UTF8)
-          val input2pinyin = XmlVoice.chinese2pinyin(Recognition2UTF8)
+          Logger.info( "voice source" +  Recognition)
+          Logger.info( "voice UTF8" +  Recognition2UTF8)
 
-          val result = XmlVoice.subject2similarity( XmlVoice.chinese2pinyin(Recognition2UTF8))
+          val input2pinyin = XmlVoice.chinese2pinyin(Recognition2UTF8)
+          val result = XmlVoice.subject2similarity( input2pinyin )
 
           val temp = XmlVoice.subject2similarity(Recognition2UTF8)
           Logger.info(stringOf(temp))
-          println("控制面板打印出来的结果是: " + temp)
+          Logger.info("控制面板打印出来的结果是: " + temp)
           Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, result)))}
           //Future.successful(Ok(XmlFeedback.voiceFeedback(openid, weixin, CreateTime,Recognition) ))}
         case  _       => { Future.successful(Ok(XmlFeedback.othersFeedback(openid, weixin, CreateTime)))}
