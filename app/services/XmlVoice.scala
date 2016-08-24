@@ -37,7 +37,9 @@ object XmlVoice{
                                                   val result = resultTuple.toList.maxBy(_._2)
     val response = ("根据您的发音,其同#"  + result._1._2 +  "#的相似指数为"
                      + result._2.toString + ".故,我们将为你呈现#" + result._1._1 + "#相关的数据内容......")
-    val feedback = if( result._2 == 0) "Sorry, I didn't follow u,  Pls. Speak your Demand Again!" else response
+
+    val response2ISO_8859_1  = new String(response.getBytes("UTF-8") , "ISO-8859-1")
+    val feedback = if( result._2 == 0) "Sorry, I didn't follow u,  Pls. Speak Again!" else response2ISO_8859_1
     feedback}
 
   def subject2similarity2(input2pinyin:String) = { val sims = for(s <- subject2pinyin._2) yield List( s, similarity(input2pinyin,s))

@@ -29,7 +29,7 @@ class WeixinController extends Controller {
       val Recognition2UTF8 = new String(Recognition.getBytes("ISO-8859-1") , "UTF-8")
 
       MsgType match{
-        case "text"   => { Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, "文本消息的解析还在开发当中...")))}
+        case "text"   => { Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, "on the developing...")))}
         case "voice"  => {
           print( "voice source" +  Recognition)
           print( "voice UTF8" +  Recognition2UTF8)
