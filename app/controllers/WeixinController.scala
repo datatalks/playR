@@ -31,12 +31,13 @@ class WeixinController extends Controller {
       MsgType match{
         case "text"   => { Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, "文本消息的解析还在开发当中...")))}
         case "voice"  => {
+          print( "voice source" +  Recognition)
+          print( "voice UTF8" +  Recognition2UTF8)
+          val input2pinyin = XmlVoice.chinese2pinyin(Recognition2UTF8)
 
-          val input2pinyin = XmlVoice.chinese2pinyin(Recognition)
+          val result = XmlVoice.subject2similarity( XmlVoice.chinese2pinyin(Recognition2UTF8))
 
-          val result = XmlVoice.subject2similarity( XmlVoice.chinese2pinyin(Recognition))
-
-          val temp = XmlVoice.subject2similarity(input2pinyin)
+          val temp = XmlVoice.subject2similarity(Recognition2UTF8)
           Logger.info(stringOf(temp))
           println("控制面板打印出来的结果是: " + temp)
           Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, result)))}
