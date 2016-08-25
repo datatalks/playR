@@ -33,7 +33,7 @@ POST    /previewR                   controllers.PreviewController.previewR
 
 POST    /reportR                    controllers.ReportController.addRmd
 POST    /listOwnerRmd               controllers.ReportController.listOwnerRmd
-GET     /getOwnerRmd               controllers.ReportController.getOwnerRmd
+GET     /getOwnerRmd/:owner         controllers.ReportController.getOwnerRmd(owner:String)
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo

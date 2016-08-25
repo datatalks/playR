@@ -41,9 +41,9 @@ class ReportController   @Inject() (rmdDAO: RmdDAO) extends Controller {
       })
   }
 
-  def getOwnerRmd() = Action.async { implicit request =>
+  def getOwnerRmd(owner : String) = Action.async { implicit request =>
     implicit val rmdFormat = Json.format[Rmd]
-    rmdDAO.getOwnerRmds("xiaofan").map(
+    rmdDAO.getOwnerRmds(owner).map(
       res => {
         val temp = res.toList
         if (temp.length == 0) {
