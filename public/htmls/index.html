@@ -83,10 +83,10 @@ title:""
         {{#each data}}
         <div class="weui_media_box weui_media_text">
             <h4 class="weui_media_title">{{@index}}、{{title}}</h4>
-            <p class="weui_media_desc">报表的分析人员:{{owner}} | reportR:{{reportR}}</p>
+            <p class="weui_media_desc">报表的分析人员:{{owner}} | 报告名称:{{reportName}}</p>
             <p class="weui_media_desc">报告执行类型:{{execute_type}} | 报告的下次执行时间:{{dateFormate forward_execute_time}}</p>
             <p class="weui_media_desc">报告执行的监测时间秒:{{circle_execute_interval_seconds}} | 报告的修改时间:{{dateFormate modify_time}}</p>
-            <p class="weui_media_desc">报告的URL地址:{{url}}</p>
+            <p class="weui_media_desc">报告的URL地址:{{reportUrl}}</p>
         </div>
         {{/each}}
     </script>
