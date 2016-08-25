@@ -81,7 +81,7 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
   def innerJoin3 =  Action.async { implicit request =>
       joinDAO.join3 map { res =>
         val t = ";"
-        Ok(   res.map( x => x._1 + t + x._2).mkString   )
+        Ok(   res.map( x => x._1 + t + x._2 ).mkString   )
       }
   }
 
