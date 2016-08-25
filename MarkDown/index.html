@@ -16,21 +16,17 @@
         <div class="tabbar">
             <div class="weui_tab">
                 <div class="weui_tab_bd">
-                    <div class="weui_media_box weui_media_text">
-                        <h4 class="weui_media_title">报表12312312名称</h4>
-                        <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                    </div>
-                    <div class="weui_media_box weui_media_text">
-                        <h4 class="weui_media_title">报表12312312名称</h4>
-                        <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
-                    </div>
                     <div class="bd spacing">
-                        <a href="javascript:;" class="weui_btn weui_btn_primary" id="showDialog1">新建报告</a>
+                        <a href="javascript:;" class="weui_btn weui_btn_primary" id="newReport">新建报告</a>
                     </div>
                 </div>
                 <div class="weui_tab_bd hide">
                     <div class="editormd" id="editor">
-                        <textarea></textarea>
+                        <textarea>
+                            ---
+                                title: "报告标题报告标题报告标题报告标题"
+                            ---
+                        </textarea>
                     </div>
                     <div class="bd spacing">
                         <a href="javascript:;" class="weui_btn weui_btn_primary" id="previewBtn">报告预览</a>
@@ -63,7 +59,14 @@
             </div>
         </div>
     </div>
+    <script id="entry-template" type="text/x-handlebars-template">
+        <div class="weui_media_box weui_media_text">
+            <h4 class="weui_media_title">{{}}</h4>
+            <p class="weui_media_desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</p>
+        </div>
+    </script>
     <script src="../public/javascripts/zepto.min.js"></script>
+    <script src="../public/bower_components/handlebars/handlebars.min.js"></script>
     <script src="../public/bower_components/editor.md/editormd.min.js"></script>
     <script src="../public/javascripts/index.js"></script>
 </body>

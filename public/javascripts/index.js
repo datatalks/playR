@@ -35,7 +35,7 @@ $(function () {
     var editor = editormd("editor", {
         height: 300,
         watch : false,
-        path : "/assets/bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+        path : "../bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
         toolbarIcons : function() {
             return [
                 "undo", "redo", "|",
@@ -72,6 +72,51 @@ $(function () {
                 rmarkdown : "Rmd"
             }
         }
+    });
+
+
+//     // 初始化列表
+//     var responses = {
+//     "data": [
+//         {
+//             "id": 2,
+//             "owner": "xiaofan",
+//             "reportR": "reportR",
+//             "execute_type": "execute_type",
+//             "forward_execute_time": 1472054400000,
+//             "circle_execute_interval_seconds": 123,
+//             "modify_time": 1472090966000,
+//             "url": "www.playR"
+//         },
+//         {
+//             "id": 2,
+//             "owner": "aaa",
+//             "reportR": "reportR",
+//             "execute_type": "execute_type",
+//             "forward_execute_time": 1472054400000,
+//             "circle_execute_interval_seconds": 123,
+//             "modify_time": 1472090966000,
+//             "url": "www.playR"
+//         }
+//     ],
+//     "message": "XXXXXX"
+// };
+    $('#loadingToast').show();
+    $.get('/getOwnerRmd/xiaofan', function(responses, status, xhr){
+        $('#loadingToast').hide();
+        Handlebars.registerHelper('dateFormate', function(time) {
+            return moment(time).format('ll');
+        });
+        var listTpl = Handlebars.compile($("#list-template").html());
+        var listCnt = listTpl(responses);
+
+        $('.list_bd').html(listCnt);
+    });
+
+
+    // 新建按钮
+    $('.weui_tab_bd').on('click', '#newReport', function () {
+        $('.weui_tabbar .weui_tabbar_item').eq(1).trigger('click');
     });
 
     // 保存&预览

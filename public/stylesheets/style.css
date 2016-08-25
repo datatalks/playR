@@ -5,6 +5,8 @@ body{overflow-x:hidden;background-color:#fbf9fe}
 .hd{padding:2em 0}
 .hide{visibility:hidden;}
 .show{visibility:visible;}
+.list_bd{min-height: 9em;}
+.list_bd .weui_toast{top:1em;}
 .rmarkdown{position: relative;top:3px;height:16px;background: url(../images/rmarkdown.png) no-repeat;}
 .page_title{text-align:center;font-size:34px;color:#3cc51f;font-weight:400;margin:0 15%}
 .page_desc{text-align:center;color:#888;font-size:14px}
