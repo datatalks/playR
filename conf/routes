@@ -29,10 +29,11 @@ GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 GET     /pinyin                     controllers.TestController.pinyin
 
-POST    /previewR                   controllers.PreviewController.previewRR
+POST    /previewR                   controllers.PreviewController.previewR
 
 POST    /reportR                    controllers.ReportController.addRmd
-
+POST    /listOwnerRmd               controllers.ReportController.listOwnerRmd
+GET     /getOwnerRmd               controllers.ReportController.getOwnerRmd
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo

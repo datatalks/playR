@@ -3,7 +3,8 @@ package services
 import javax.inject.Inject
 
 import com.github.tototoshi.slick.MySQLJodaSupport._
-import models.Rmd
+import models.{Rmd}
+import org.joda.time.DateTime
 import play.api.Logger
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -32,6 +33,11 @@ class RmdDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
     db.run(rmds.filter(_.id === id).result.headOption)
   }
 
+  def getOwnerRmds(owner: String): Future[Option[Rmd]] = {
+    val query = rmds.filter(_.owner === owner)
+      db.run(query.result.headOption) }
+
+
   def listAll: Future[Seq[Rmd]] = {
     db.run(rmds.result)
   }
@@ -46,8 +52,9 @@ class RmdDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
     def forward_execute_time = column[org.joda.time.DateTime]("forward_execute_time")
     def circle_execute_interval_seconds = column[Int]("circle_execute_interval_seconds")
     def modify_time = column[org.joda.time.DateTime]("modify_time")
+    def url = column[String]("url")
 
     override def * =
-      (id, owner, reportR, execute_type, forward_execute_time,circle_execute_interval_seconds,modify_time) <> (Rmd.tupled, Rmd.unapply _)
+      (id, owner, reportR, execute_type, forward_execute_time,circle_execute_interval_seconds,modify_time,url) <> (Rmd.tupled, Rmd.unapply _)
   }
 }
