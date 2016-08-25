@@ -43,6 +43,28 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
   }
 
   def getOwnerRmd(owner : String) = Action.async { implicit request =>
+    implicit val reportFormat = Json.format[Report]
+    rmdDAO.getOwnerRmd(owner).map(
+      res => {
+        val temp = res.toList
+        if (temp.length == 0) {
+          val json: JsValue = Json.obj(
+            "data" -> "null",
+            "message" -> "XXXXXX")
+          Ok(json)
+        }
+        else {
+          val jsonArrayOfRmds = Json.toJson(temp)
+          val json: JsValue = Json.obj(
+            "data" -> jsonArrayOfRmds,
+            "message" -> "XXXXXX")
+          Ok(json)
+        }
+      })
+  }
+
+
+  def getOwnerRmds(owner : String) = Action.async { implicit request =>
     implicit val rmdFormat = Json.format[Report]
     rmdDAO.getOwnerRmds(owner).map(
       res => {
@@ -62,6 +84,8 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
         }
       })
   }
+
+
 
   def listOwnerRmd() = Action.async { implicit request =>
     val body: AnyContent = request.body

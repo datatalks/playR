@@ -33,9 +33,14 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).result.headOption)
   }
 
+  def getOwnerRmd(owner: String): Future[Seq[Report]] = {
+    val query = reports.filter(_.owner === owner)
+      db.run(query.result) }
+
+
   def getOwnerRmds(owner: String): Future[Option[Report]] = {
     val query = reports.filter(_.owner === owner)
-      db.run(query.result.headOption) }
+    db.run(query.result.headOption)}
 
 
   def listAll: Future[Seq[Report]] = {
