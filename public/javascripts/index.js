@@ -142,8 +142,9 @@ $(function () {
         }
 
         $.post(postUrl, {
-            'owner': 'ab',
-            'reportR': editor.getMarkdown()
+            'owner': 'test',
+            'reportName': '我的报告',
+            'reportContent': editor.getMarkdown()
         }, function (response) {
             if (isPreveiw) {
                 toast.show(response.message, function () {
