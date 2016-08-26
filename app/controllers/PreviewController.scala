@@ -14,12 +14,12 @@ class PreviewController @Inject() (ws:WSClient) extends Controller {
     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
     mapBody.map {
             data => {
-              val Rmd = data("reportR").mkString
+              val ReportContent = data("reportContent").mkString
               val previewR = "PREVIEW888"  +  scala.util.Random.alphanumeric.take(10).mkString
               val path = "MarkDown/RMD/"  +  previewR
               import scala.sys.process._
               (s"mkdir $path").!
-              scala.tools.nsc.io.File( path  + "/" + previewR + ".Rmd").writeAll(Rmd)
+              scala.tools.nsc.io.File( path  + "/" + previewR + ".Rmd").writeAll(ReportContent)
               val dir = env.dir
               scala.io.Source.fromFile("previewR.R").getLines.
                        foreach { line => scala.tools.nsc.io.File( "MarkDown/Rshell/"  + previewR + ".R").

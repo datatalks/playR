@@ -11,28 +11,28 @@ object XmlVoiceInput2 {
         "news_subject" -> "注册",
         "news_title" -> "关于注册的分析模板",
         "news_Description" -> "注册分析的思路与方法",
-        "news_PicUrl" -> "http://www.itisbi.com/static/image/common/logo.png",
+        "news_PicUrl" -> "http://playr.data-talks.com/assets/pic4weixin/register.jpg",
         "news_Url" -> "http://playr.data-talks.com/assets/htmls/index.html"
       ),
       Json.obj(
         "news_subject" -> "充值",
         "news_title" -> "关于充值的分析模板",
         "news_Description" -> "充值分析的思路与方法",
-        "news_PicUrl" -> "http://www.itisbi.com/static/image/common/logo.png",
+        "news_PicUrl" -> "http://playr.data-talks.com/assets/pic4weixin/deposit.jpg",
         "news_Url" -> "http://playr.data-talks.com/assets/htmls/index.html"
       ),
       Json.obj(
         "news_subject" -> "投资",
         "news_title" -> "关于投资的分析模板",
         "news_Description" -> "投资分析的思路与方法",
-        "news_PicUrl" -> "http://www.itisbi.com/static/image/common/logo.png",
+        "news_PicUrl" -> "http://playr.data-talks.com/assets/pic4weixin/invest.jpg",
         "news_Url" -> "http://playr.data-talks.com/assets/htmls/index.html"
       ),
       Json.obj(
         "news_subject" -> "提现",
         "news_title" -> "关于提现的分析模板",
         "news_Description" -> "提现分析的思路与方法",
-        "news_PicUrl" -> "http://www.itisbi.com/static/image/common/logo.png",
+        "news_PicUrl" -> "http://playr.data-talks.com/assets/pic4weixin/withdraw.jpg",
         "news_Url" -> "http://playr.data-talks.com/assets/htmls/index.html"
       )
     )
@@ -75,7 +75,7 @@ object XmlVoiceInput2 {
     val result = tempTuple.toList.maxBy(_._1)
 
     val response = (  result._1._1._1._1._2,result._1._1._1._1._1, result._1._1._1._2, result._1._1._2, result._1._2 , result._2  )
-    val response2Error = ( "未找到相应的主题模板", 0,  "暂未设置您提到的问题", "请直接根据以下链接进行自助分析", "http://www.itisbi.com/static/image/common/logo.png" , "http://playr.data-talks.com/assets/htmls/index.html" )
+    val response2Error = ( "未找到相应的主题模板", 0,  "暂未设置您提到的问题", "请直接根据以下链接进行自助分析", "http://playr.data-talks.com/assets/pic4weixin/DoitYourself.jpg" , "http://playr.data-talks.com/assets/htmls/index.html" )
     val feedback = if( response._2 == 0) response2Error else response  // 字符集满足本地测试使用!!!
     val feedback2ISO_8859_1 = (new String(feedback._1.getBytes("UTF-8") , "ISO-8859-1"), feedback._2, new String(feedback._3.getBytes("UTF-8") , "ISO-8859-1"), new String(feedback._4.getBytes("UTF-8") , "ISO-8859-1"), feedback._5, feedback._6)
 
