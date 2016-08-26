@@ -79,7 +79,7 @@ object XmlVoiceInput2 {
     val feedback = if( response._2 == 0) response2Error else response  // 字符集满足本地测试使用!!!
     val feedback2ISO_8859_1 = (new String(feedback._1.getBytes("UTF-8") , "ISO-8859-1"), feedback._2, new String(feedback._3.getBytes("UTF-8") , "ISO-8859-1"), new String(feedback._4.getBytes("UTF-8") , "ISO-8859-1"), feedback._5, feedback._6)
 
-    Logger.info("feedback2ISO_8859_1 ===========" + feedback2ISO_8859_1)
+//    Logger.info("feedback2ISO_8859_1 ===========" + feedback2ISO_8859_1)
     feedback2ISO_8859_1
   }
 }

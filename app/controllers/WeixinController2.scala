@@ -17,8 +17,8 @@ class WeixinController2 extends Controller {
 
     def xmlreponse = Action.async(parse.xml) { implicit request =>
 //      println( "Forget the request header, the request body is: " + request.body)
-//      val transcode = new String(request.body.toString.getBytes("ISO-8859-1") , "UTF-8")
-//      print("UTF-8的信息如下:" + transcode)
+      val transcode = new String(request.body.toString.getBytes("ISO-8859-1") , "UTF-8")
+      print("UTF-8的信息如下:" + transcode)
       val weixin = (request.body \\ "ToUserName" headOption).map(_.text).getOrElse("X")
       val openid = (request.body \\ "FromUserName" headOption).map(_.text).getOrElse("X")
       val CreateTime = (request.body \\ "CreateTime" headOption).map(_.text).getOrElse("X")
@@ -38,7 +38,7 @@ class WeixinController2 extends Controller {
 
 //          val temp = XmlVoiceInput2.subject2similarity(Recognition)
 //          Logger.info( "  "  +   stringOf(temp))
-          Logger.info("result ========== " + result)
+//          Logger.info("result ========== " + result)
           Future.successful(Ok( XmlFeedback.newsFeedback(openid, weixin, CreateTime, result._3 , result._4 , result._5 , result._6  ) ))}
           //Future.successful(Ok(XmlFeedback.voiceFeedback(openid, weixin, CreateTime,Recognition) ))}
         case  _       => { Future.successful(Ok(XmlFeedback.othersFeedback(openid, weixin, CreateTime)))}
