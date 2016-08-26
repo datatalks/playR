@@ -102,7 +102,7 @@ $(function () {
 //     "message": "XXXXXX"
 // };
     $('#loadingToast').show();
-    $.get('/getOwnerRmd/xiaofan', function(responses, status, xhr){
+    $.get('/getOwnerReport/xiaofan', function(responses, status, xhr){
         $('#loadingToast').hide();
         Handlebars.registerHelper('dateFormate', function(time) {
             return moment(time).format('ll');

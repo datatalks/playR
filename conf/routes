@@ -31,9 +31,10 @@ GET     /pinyin                     controllers.TestController.pinyin
 
 POST    /previewR                   controllers.PreviewController.previewR
 
-POST    /reportR                    controllers.ReportController.addRmd
-POST    /listOwnerRmd               controllers.ReportController.listOwnerRmd
-GET     /getOwnerRmd/:owner         controllers.ReportController.getOwnerRmd(owner:String)
+POST    /reportR                        controllers.ReportController.addReport
+POST    /listOwnerReport                controllers.ReportController.listOwnerReport
+GET     /getOwnerReport/:owner          controllers.ReportController.getOwnerReport(owner:String)
+GET     /getOwnerminiReport/:owner      controllers.ReportController.getOwnerminiReport(owner:String)
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo

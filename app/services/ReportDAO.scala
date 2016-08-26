@@ -18,7 +18,7 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   val reports = TableQuery[ReportTableDef]
 
 
-  def addRmd(report : Report): Future[String] = {
+  def addReport(report : Report): Future[String] = {
     Logger.info(s"logTest: 您输入的 RMD 内容是  $report")
     db.run(reports += report).map(res => "Rmd successfully added").recover {
       case ex: Exception => ex.getCause.getMessage
@@ -33,14 +33,14 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).result.headOption)
   }
 
-  def getOwnerRmd(owner: String): Future[Seq[Report]] = {
+  def getOwnerReport(owner: String): Future[Seq[Report]] = {
     val query = reports.filter(_.owner === owner)
       db.run(query.result) }
 
 
-  def getOwnerRmds(owner: String): Future[Option[Report]] = {
-    val query = reports.filter(_.owner === owner)
-    db.run(query.result.headOption)}
+  def getOwnerminiReport(owner: String): Future[Seq[(Int, String, String, String,DateTime, Int, String)]] = {
+    val query = reports.filter(_.owner === owner).map(data =>  (data.id ,data.owner, data.reportName, data.execute_type, data.forward_execute_time, data.circle_execute_interval_seconds, data.reportUrl ))
+    db.run(query.result)}
 
 
   def listAll: Future[Seq[Report]] = {
