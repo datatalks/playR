@@ -9,7 +9,6 @@ import play.api.data.Forms._
 import play.api.mvc._
 import services.ReportDAO
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import play.api.libs.json._
 
 import scala.concurrent.Future

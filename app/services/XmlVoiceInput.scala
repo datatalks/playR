@@ -3,7 +3,7 @@ package services
 import com.github.stuxuhai.jpinyin._
 
 
-object XmlVoice{
+object XmlVoiceInput{
   def chinese2pinyin(chars : String ) = PinyinHelper.convertToPinyinString(chars, ",", PinyinFormat.WITHOUT_TONE)
 
   def similarity(x:String , y: String) :Int  ={
@@ -18,7 +18,7 @@ object XmlVoice{
 
   val subject = "注册/充值/投资/提现/赎回/客户/沉淀资金/转化率/营销/理财产品/绿能宝".split("/")
 
-  val index =  for( i <- 0 until subject.length ) yield (i)
+//  val index =  for( i <- 0 until subject.length ) yield (i)
 
   val pinyins = for(s <- subject) yield (chinese2pinyin(s))
 

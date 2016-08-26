@@ -2,13 +2,11 @@ package controllers
 
 import play.Logger
 import play.api.mvc._
+import services.{XmlFeedback, XmlVoiceInput2}
 import scala.concurrent.Future
-import services.XmlFeedback
-import services.XmlVoiceInput
-
 import scala.runtime.ScalaRunTime._
 
-class WeixinController extends Controller {
+class WeixinController2 extends Controller {
 
   implicit val myCustomCharset = Codec.javaSupported("iso-8859-1")
 
@@ -34,13 +32,13 @@ class WeixinController extends Controller {
           Logger.info( "voice source" +  Recognition)
           Logger.info( "voice UTF8" +  Recognition2UTF8)
           // 根据服务器和本地的区别,针对性的选择 Recognition(本地),和Recognition2UTF8(服务器)两个版本的变量
-          val input2pinyin = XmlVoiceInput.chinese2pinyin(Recognition)
-          val result = XmlVoiceInput.subject2similarity( input2pinyin )
+          val input2pinyin = XmlVoiceInput2.chinese2pinyin(Recognition)
+          val result = XmlVoiceInput2.subject2similarity( input2pinyin )
 
-          val temp = XmlVoiceInput.subject2similarity(Recognition2UTF8)
+          val temp = XmlVoiceInput2.subject2similarity(Recognition)
           Logger.info(stringOf(temp))
           Logger.info("控制面板打印出来的结果是: " + temp)
-          Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, result)))}
+          Future.successful(Ok( XmlFeedback.newsFeedback(openid, weixin, CreateTime, result._3 , result._4 , result._5 , result._6  ) ))}
           //Future.successful(Ok(XmlFeedback.voiceFeedback(openid, weixin, CreateTime,Recognition) ))}
         case  _       => { Future.successful(Ok(XmlFeedback.othersFeedback(openid, weixin, CreateTime)))}
       }
