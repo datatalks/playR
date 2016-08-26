@@ -73,12 +73,13 @@ object XmlVoiceInput2 {
     val sims = for (s <- subject2pinyin._2) yield similarity(input2pinyin, s)
     val tempTuple = (sims zip news_subject zip news_title zip news_Description zip news_PicUrl zip news_Url)
     val result = tempTuple.toList.maxBy(_._1)
-    Logger.info(result.toString())
+
     val response = (  result._1._1._1._1._2,result._1._1._1._1._1, result._1._1._1._2, result._1._1._2, result._1._2 , result._2  )
     val response2Error = ( "未找到相应的主题模板", 0,  "暂未设置您提到的问题", "请直接根据以下链接进行自助分析", "http://www.itisbi.com/static/image/common/logo.png" , "http://playr.data-talks.com/assets/htmls/index.html" )
     val feedback = if( response._2 == 0) response2Error else response  // 字符集满足本地测试使用!!!
-    val feedback2ISO88591 = (new String(feedback._1.getBytes("ISO-8859-1") , "UTF-8"), feedback._2, new String(feedback._3.getBytes("ISO-8859-1") , "UTF-8"), new String(feedback._4.getBytes("ISO-8859-1") , "UTF-8"), feedback._5, feedback._6)
-    feedback2ISO88591
+    val feedback2ISO_8859_1 = (new String(feedback._1.getBytes("ISO-8859-1") , "UTF-8"), feedback._2, new String(feedback._3.getBytes("ISO-8859-1") , "UTF-8"), new String(feedback._4.getBytes("ISO-8859-1") , "UTF-8"), feedback._5, feedback._6)
 
+    Logger.info("feedback2ISO_8859_1 :::::::::::" + feedback2ISO_8859_1)
+    feedback2ISO_8859_1
   }
 }

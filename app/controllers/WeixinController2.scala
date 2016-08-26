@@ -35,9 +35,9 @@ class WeixinController2 extends Controller {
           val input2pinyin = XmlVoiceInput2.chinese2pinyin(Recognition)
           val result = XmlVoiceInput2.subject2similarity( input2pinyin )
 
-          val temp = XmlVoiceInput2.subject2similarity(Recognition)
-          Logger.info(stringOf(temp))
-          Logger.info("控制面板打印出来的结果是: " + temp)
+//          val temp = XmlVoiceInput2.subject2similarity(Recognition)
+//          Logger.info( "  "  +   stringOf(temp))
+          Logger.info("result ========== " + result)
           Future.successful(Ok( XmlFeedback.newsFeedback(openid, weixin, CreateTime, result._3 , result._4 , result._5 , result._6  ) ))}
           //Future.successful(Ok(XmlFeedback.voiceFeedback(openid, weixin, CreateTime,Recognition) ))}
         case  _       => { Future.successful(Ok(XmlFeedback.othersFeedback(openid, weixin, CreateTime)))}
