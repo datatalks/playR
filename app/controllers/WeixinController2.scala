@@ -29,10 +29,11 @@ class WeixinController2 extends Controller {
       MsgType match{
         case "text"   => { Future.successful(Ok(XmlFeedback.textFeedback(openid, weixin, CreateTime, "on the developing...")))}
         case "voice"  => {
-          Logger.info( "voice source" +  Recognition)
-          Logger.info( "voice UTF8" +  Recognition2UTF8)
+//          Logger.info( "voice source" +  Recognition)
+//          Logger.info( "voice UTF8" +  Recognition2UTF8)
           // 根据服务器和本地的区别,针对性的选择 Recognition(本地),和Recognition2UTF8(服务器)两个版本的变量
           val input2pinyin = XmlVoiceInput2.chinese2pinyin(Recognition2UTF8)
+          Logger.info("input2pinyin =========: " + input2pinyin)
           val result = XmlVoiceInput2.subject2similarity( input2pinyin )
 
 //          val temp = XmlVoiceInput2.subject2similarity(Recognition)
