@@ -2,10 +2,9 @@ package modules
 
 import javax.inject.{Named, Inject}
 
-import
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.google.inject.AbstractModule
-import com.oracle.deploy.update.Updater
+import play.Logger
 import play.libs.akka.AkkaGuiceSupport
 
 import scala.concurrent.ExecutionContext
@@ -20,7 +19,7 @@ class JobModule extends AbstractModule with AkkaGuiceSupport {
 class Scheduler @Inject() (val system: ActorSystem, @Named("scheduler-actor") val schedulerActor: ActorRef)(implicit ec: ExecutionContext)
 {
   system.scheduler.schedule(
-    0.microseconds, 1.minutes, schedulerActor, "update")
+    0.microseconds, 3.seconds, schedulerActor, "update")
   system.scheduler.schedule(
     30.minutes, 30.days, schedulerActor, "clean")
 }

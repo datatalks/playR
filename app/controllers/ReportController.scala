@@ -14,10 +14,10 @@ import play.api.libs.json._
 import scala.concurrent.Future
 
 
-class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
+class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
   val RmdForm = Form(
     mapping(
-      "owner" -> nonEmptyText,
+      "owner_nickName" -> nonEmptyText,
       "reportName" -> nonEmptyText,
       "reportContent" -> nonEmptyText
     )(ReportFormData.apply)(ReportFormData.unapply))
@@ -27,7 +27,7 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
       // if any error in submitted data
       errorForm => Future.successful(Ok("ERROR 8!!!")),
       data => {
-        val newRmd = Report(0, data.owner, data.reportName, data.reportContent, "execute_type", new DateTime(), 123, new DateTime(), "www.playR")
+        val newReport = Report(0, data.owner_nickName, data.reportName, data.reportContent, "execute_type", new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), "reportUrl","RANDOM",1)
         case class JasonResult(data: String, message: String)
         implicit val JasonResultWrites = new Writes[JasonResult] {
           def writes(jasonResult: JasonResult) = Json.obj(
@@ -37,13 +37,13 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
         }
         val res = JasonResult(data.reportName, "保存成功!")
         val json = Json.toJson(res)
-        rmdDAO.addReport(newRmd).map(res => Ok(json))
+        reportDAO.addReport(newReport).map(res => Ok(json))
       })
   }
 
   def getOwnerReport(owner : String) = Action.async { implicit request =>
     implicit val reportFormat = Json.format[Report]
-    rmdDAO.getOwnerReport(owner).map(
+    reportDAO.getOwnerReport(owner).map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
@@ -64,7 +64,7 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
 
   def getOwnerminiReport(owner : String) = Action.async { implicit request =>
     implicit val rmdFormat = Json.format[Report]
-    rmdDAO.getOwnerminiReport(owner).map(
+    reportDAO.getOwnerminiReport(owner).map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
@@ -73,14 +73,14 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
           Ok(json)
         }
         else {
-          implicit val writer = new Writes[(Int, String, String, String, DateTime, Int, String)] {
-            def writes(t: (Int, String, String, String,DateTime, Int, String)): JsValue = {
+          implicit val writer = new Writes[(Int, String, String, String, DateTime, DateTime, String)] {
+            def writes(t: (Int, String, String, String,DateTime, DateTime, String)): JsValue = {
               Json.obj( "id" -> t._1,
                         "owner" -> t._2,
                         "reportName" -> t._3,
                         "execute_type" -> t._4,
-                        "forward_execute_time" -> t._5,
-                        "circle_execute_interval_seconds" -> t._6,
+                        "once2circle_last_executed_time" -> t._5,
+                        "modify_time" -> t._6,
                         "reportUrl" -> t._7)}}
           val jsonArrayOfRmds = Json.toJson(res)
           val json: JsValue = Json.obj(
@@ -100,7 +100,7 @@ class ReportController   @Inject() (rmdDAO: ReportDAO) extends Controller {
     mapBody.map {
       data => {
         val owner = data("owner").mkString
-        rmdDAO.getOwnerReport(owner).map(
+        reportDAO.getOwnerReport(owner).map(
           res => {
             val temp = res.toList
             if (temp.length == 0) {

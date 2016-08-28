@@ -29,7 +29,8 @@ GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 GET     /pinyin                     controllers.TestController.pinyin
 
-POST    /previewR                   controllers.PreviewController.previewR
+POST    /previewR                   controllers.Preview2Controller.previewR
+GET     /previewR/:html             controllers.Preview2Controller.previewRhtml(html:String)
 
 POST    /reportR                        controllers.ReportController.addReport
 POST    /listOwnerReport                controllers.ReportController.listOwnerReport

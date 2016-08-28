@@ -34,12 +34,12 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   }
 
   def getOwnerReport(owner: String): Future[Seq[Report]] = {
-    val query = reports.filter(_.owner === owner)
+    val query = reports.filter(_.owner_nickName === owner)
       db.run(query.result) }
 
 
-  def getOwnerminiReport(owner: String): Future[Seq[(Int, String, String, String,DateTime, Int, String)]] = {
-    val query = reports.filter(_.owner === owner).map(data =>  (data.id ,data.owner, data.reportName, data.execute_type, data.forward_execute_time, data.circle_execute_interval_seconds, data.reportUrl ))
+  def getOwnerminiReport(owner: String): Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]] = {
+    val query = reports.filter(_.owner_nickName === owner).map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl ))
     db.run(query.result)}
 
 
@@ -51,16 +51,26 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   class ReportTableDef(tag: Tag) extends Table[Report](tag, "report") {
 
     def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
-    def owner = column[String]("owner")
+    def owner_nickName = column[String]("owner_nickName")
     def reportName = column[String]("reportName")
     def reportContent = column[String]("reportContent")
+
     def execute_type = column[String]("execute_type")
-    def forward_execute_time = column[org.joda.time.DateTime]("forward_execute_time")
+
+    def once_scheduled_execute_time = column[org.joda.time.DateTime]("once_scheduled_execute_time")
     def circle_execute_interval_seconds = column[Int]("circle_execute_interval_seconds")
+    def circle_next_scheduled_execute_time = column[org.joda.time.DateTime]("circle_next_scheduled_execute_time")
+
+    def once2circle_last_executed_time = column[org.joda.time.DateTime]("once2circle_last_executed_time")
     def modify_time = column[org.joda.time.DateTime]("modify_time")
     def reportUrl = column[String]("reportUrl")
+    def random = column[String]("random")
+    def status = column[Int]("status")
 
     override def * =
-      (id, owner, reportName,reportContent, execute_type, forward_execute_time,circle_execute_interval_seconds,modify_time,reportUrl) <> (Report.tupled, Report.unapply _)
+      (id, owner_nickName, reportName,reportContent, execute_type, once_scheduled_execute_time,
+        circle_execute_interval_seconds, circle_next_scheduled_execute_time,
+        once2circle_last_executed_time,
+        modify_time,reportUrl, random, status) <> (Report.tupled, Report.unapply _)
   }
 }

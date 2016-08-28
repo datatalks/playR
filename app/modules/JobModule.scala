@@ -2,8 +2,7 @@ package modules
 
 
 import com.google.inject.AbstractModule
-import play.api.libs.concurrent.AkkaGuiceSupport   //   该 package 同  import play.libs.akka.AkkaGuiceSupport   冲突！！！
-
+import play.api.libs.concurrent.AkkaGuiceSupport   //   该 package 同import play.libs.akka.AkkaGuiceSupport冲突！！！
 
 
 class JobModule extends AbstractModule with AkkaGuiceSupport {

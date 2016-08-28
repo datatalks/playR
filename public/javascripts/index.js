@@ -142,7 +142,7 @@ $(function () {
         }
 
         $.post(postUrl, {
-            'owner': 'test',
+            'owner_nickName': 'test',
             'reportName': '我的报告',
             'reportContent': editor.getMarkdown()
         }, function (response) {

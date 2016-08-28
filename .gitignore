@@ -1,9 +1,7 @@
 logs
 target
+MarkDown
 /project/target/config-classes
-/MarkDown/figure
-/MarkDown/RMD
-/MarkDown/Rshell
 R.Rout
 README.md
 LICENSE
