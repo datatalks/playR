@@ -30,9 +30,10 @@ GET     /r4                         controllers.TestController.r4
 GET     /pinyin                     controllers.TestController.pinyin
 
 POST    /previewR                   controllers.Preview2Controller.previewR
-GET     /previewR/:html             controllers.Preview2Controller.previewRhtml(html:String)
+GET     /previewR/:fileName         controllers.Preview2Controller.previewRhtml(fileName:String)
 
 POST    /reportR                        controllers.ReportController.addReport
+GET     /reportR/:fileName              controllers.ReportController.reportRhtml(fileName: String)
 POST    /listOwnerReport                controllers.ReportController.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.ReportController.getOwnerReport(owner:String)
 GET     /getOwnerminiReport/:owner      controllers.ReportController.getOwnerminiReport(owner:String)

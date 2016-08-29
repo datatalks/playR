@@ -16,7 +16,7 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
     mapBody.map {
       data => {
         val ReportContent = data("reportContent").mkString
-        val fileName = "PREVIEW888" + scala.util.Random.alphanumeric.take(10).mkString
+        val fileName = "PREVIEW_" + scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/previewR/RMD/" + fileName
         import scala.sys.process._
         (s"mkdir $path").!
