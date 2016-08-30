@@ -1,15 +1,15 @@
 接口列表：
 1、登录接口
    url:   /login
-   params: {username: '', password: ''}
+   params: {owner_nickName: '', password: ''}
    method: POST
    response: {data:null,msg:'登录成功'}
 
 2、获取用户
-   url:   /user
+   url:   /owner
    params: 无
    method: GET
-   response: {data:{username:'李小凡', userId: 123123},msg:'获取成功'}
+   response: {data:{owner_nickName:'非中文账户名称', userId: 123123},msg:'获取成功'}
 
 3、用户退出
    url: /logout
@@ -19,7 +19,7 @@
 
 4、报告列表（用户名自己session里面取）
    url：  /reports/list
-   params: {pageNo: 1, pageSize: 10}
+   params: {pageNo: 1, pageSize: 10}     //   分页的技术,我暂时还需要研究一下!!!
    method: GET,
    response:
    {
@@ -31,12 +31,31 @@
       msg: '请求成功'
     }
 5、保存报告
-    url:   /sava
-    params: {rmd: ''}
+    url:   /save
+    params: {owner_nickName: '', reportContent:''}
     method: POST
     response: {data:null,msg:'保存成功'}
 6、预览报告
     url:   /preview
-    params: {rmd: ''}
+    params: {owner_nickName: '', reportContent:''}
     method: POST
     response: {data:null,msg:'预览成功'}
+
+
+    带完善的接口
+    ====
+    更新报告reportContent接口
+    设定报告更新类型接口(将来一次性运行,还是将来间隔固定时间循环更新运行)
+
+
+    管理员创建用户接口
+    用户修改密码接口
+    用户权限和角色的接口暂时不用考虑把!
+
+
+
+
+
+
+
+
