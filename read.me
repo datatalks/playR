@@ -1,0 +1,42 @@
+接口列表：
+1、登录接口
+   url:   /login
+   params: {username: '', password: ''}
+   method: POST
+   response: {data:null,msg:'登录成功'}
+
+2、获取用户
+   url:   /user
+   params: 无
+   method: GET
+   response: {data:{username:'李小凡', userId: 123123},msg:'获取成功'}
+
+3、用户退出
+   url: /logout
+   params: 无
+   method: GET,
+   response: {data:null,msg:'退出成功'}
+
+4、报告列表（用户名自己session里面取）
+   url：  /reports/list
+   params: {pageNo: 1, pageSize: 10}
+   method: GET,
+   response:
+   {
+      data:[{
+
+         },{
+
+      }],
+      msg: '请求成功'
+    }
+5、保存报告
+    url:   /sava
+    params: {rmd: ''}
+    method: POST
+    response: {data:null,msg:'保存成功'}
+6、预览报告
+    url:   /preview
+    params: {rmd: ''}
+    method: POST
+    response: {data:null,msg:'预览成功'}
