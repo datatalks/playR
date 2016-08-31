@@ -116,7 +116,7 @@ $(function () {
 
     // 新建按钮
     $('.weui_tab_bd').on('click', '#newReport', function () {
-        $('.weui_tabbar .weui_tabbar_item').eq(1).trigger('click');
+        $('.weui_tabbar .weui_tabbar_item').eq(0).trigger('click');
     });
 
     // 保存&预览
