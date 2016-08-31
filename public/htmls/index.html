@@ -16,32 +16,6 @@
         <div class="tabbar">
             <div class="weui_tab">
                 <div class="weui_tab_bd">
-                    <div class="list_bd">
-                        <div id="loadingToast" class="weui_loading_toast">
-                            <div class="weui_toast">
-                                <div class="weui_loading">
-                                    <div class="weui_loading_leaf weui_loading_leaf_0"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_1"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_2"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_3"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_4"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_5"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_6"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_7"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_8"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_9"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_10"></div>
-                                    <div class="weui_loading_leaf weui_loading_leaf_11"></div>
-                                </div>
-                                <p class="weui_toast_content">数据加载中</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bd spacing">
-                        <a href="javascript:;" class="weui_btn weui_btn_primary" id="showDialog1">新建报告</a>
-                    </div>
-                </div>
-                <div class="weui_tab_bd hide">
                     <div class="editormd" id="editor">
                         <textarea>---
 title:""
@@ -51,6 +25,32 @@ title:""
                     <div class="bd spacing">
                         <a href="javascript:;" class="weui_btn weui_btn_primary" id="previewBtn">报告预览</a>
                         <a href="javascript:;" class="weui_btn weui_btn weui_btn_warn" id="saveBtn">保存报告</a>
+                    </div>
+                    <div class="weui_tab_bd hide">
+                        <div class="list_bd">
+                            <div id="loadingToast" class="weui_loading_toast">
+                                <div class="weui_toast">
+                                    <div class="weui_loading">
+                                        <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+                                        <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+                                    </div>
+                                    <p class="weui_toast_content">数据加载中</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bd spacing">
+                            <a href="javascript:;" class="weui_btn weui_btn_primary" id="showDialog1">新建报告</a>
+                        </div>
                     </div>
                     <!--BEGIN toast-->
                     <div id="toast" style="display: none;">
@@ -65,15 +65,15 @@ title:""
                 <div class="weui_tabbar">
                     <a href="javascript:;" class="weui_tabbar_item weui_bar_item_on">
                         <div class="weui_tabbar_icon">
-                            <img src="../images/icon_nav_cell.png" alt="">
-                        </div>
-                        <p class="weui_tabbar_label">列表</p>
-                    </a>
-                    <a href="javascript:;" class="weui_tabbar_item">
-                        <div class="weui_tabbar_icon">
                             <img src="../images/icon_nav_article.png" alt="">
                         </div>
                         <p class="weui_tabbar_label">报表</p>
+                    </a>
+                    <a href="javascript:;" class="weui_tabbar_item">
+                        <div class="weui_tabbar_icon">
+                            <img src="../images/icon_nav_cell.png" alt="">
+                        </div>
+                        <p class="weui_tabbar_label">列表</p>
                     </a>
                 </div>
             </div>
