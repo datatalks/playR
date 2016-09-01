@@ -28,15 +28,17 @@ GET     /r2                         controllers.TestController.r2
 GET     /r3                         controllers.TestController.r3
 GET     /r4                         controllers.TestController.r4
 GET     /pinyin                     controllers.TestController.pinyin
+GET     /getsessionvalue            controllers.TestController.getsessionvalue
 
-POST    /previewR                   controllers.Preview2Controller.previewR
+
+POST    /preview                   controllers.Preview2Controller.preview
 GET     /previewR/:fileName         controllers.Preview2Controller.previewRhtml(fileName:String)
 
-POST    /reportR                        controllers.ReportController.addReport
+POST    /report/add                     controllers.Report2Controller.addReport
 GET     /reportR/:fileName              controllers.ReportController.reportRhtml(fileName: String)
 POST    /listOwnerReport                controllers.ReportController.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.ReportController.getOwnerReport(owner:String)
-GET     /getOwnerminiReport/:owner      controllers.ReportController.getOwnerminiReport(owner:String)
+GET     /report/list                    controllers.Report2Controller.listReport
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo
@@ -56,10 +58,11 @@ GET     /innerJoin1                  controllers.TestController.innerJoin1
 GET     /innerJoin2                  controllers.TestController.innerJoin2
 GET     /innerJoin3                  controllers.TestController.innerJoin3
 
-POST    /localidentityadd                        controllers.IdentityController.AddIdentity
-POST    /localidentityIdentityLogin              controllers.IdentityController.LoginIdentity
-GET     /localidentityIdentityLogout             controllers.IdentityController.LogoutIdentity
 
+POST    /addowner                    controllers.OwnerController.AddOwner
+POST    /login                       controllers.OwnerController.LoginOwner
+GET     /logout                      controllers.OwnerController.LogoutOwner
+GET     /listowner                   controllers.OwnerController.ListOwner
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -1,34 +1,27 @@
 package controllers
 
-
 import javax.inject.Inject
-import models.{ReportFormData, Report}
+
+import models.{Report}
 import org.joda.time.DateTime
 import play.Logger
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.libs.json._
 import play.api.mvc._
 import services.ReportDAO
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json._
 import scala.concurrent.Future
 
 
-class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
-  val RmdForm = Form(
-    mapping(
-      "owner_nickName" -> nonEmptyText,
-      "reportName" -> nonEmptyText,
-      "reportContent" -> nonEmptyText
-    )(ReportFormData.apply)(ReportFormData.unapply))
-
+class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
 
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
     mapBody.map {
       data => {
-        val owner_nickName = data("owner_nickName").mkString
+        val owner_nickName = session_owner_nickName
         val reportName = data("reportName").mkString
         val reportContent = data("reportContent").mkString
 
@@ -36,15 +29,9 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
           new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), "reportUrl",
           scala.util.Random.alphanumeric.take(10).mkString,1)
 
-        case class JasonResult(data: String, message: String)
-        implicit val JasonResultWrites = new Writes[JasonResult] {
-          def writes(jasonResult: JasonResult) = Json.obj(
-            "data" -> jasonResult.data,
-            "message" -> jasonResult.message
-          )
-        }
-        val res = JasonResult(reportName, "保存成功!")
-        val json = Json.toJson(res)
+        val json: JsValue = Json.obj(
+          "data" -> "null",
+          "message" -> "保存成功")
         reportDAO.addReport(newReport).map(res => Ok(json))
 
       }
@@ -52,11 +39,13 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
   }
 
 
+
   def reportRhtml(fileName: String) = Action.async { implicit request =>
 
     println("request=====" + request.toString )
     println("request.headers======" + request.headers.toString)
     println("request.body=======" + request.body.toString )
+
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
     Logger.info(fileName + ".html has been responsed!!!")
     Future.successful(Ok(htmlContent).as(HTML))
@@ -85,14 +74,15 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
   }
 
 
-  def getOwnerminiReport(owner : String) = Action.async { implicit request =>
+  def listReport() = Action.async { implicit request =>
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
     implicit val rmdFormat = Json.format[Report]
-    reportDAO.getOwnerminiReport(owner).map(
+    reportDAO.getOwnerminiReport(session_owner_nickName).map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
             "data" -> "null",
-            "message" -> "XXXXXX")
+            "message" -> "请求成功")
           Ok(json)
         }
         else {
@@ -108,7 +98,7 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
           val jsonArrayOfRmds = Json.toJson(res)
           val json: JsValue = Json.obj(
             "data" -> jsonArrayOfRmds,
-            "message" -> "XXXXXX")
+            "message" -> "请求成功")
           Ok(json)
         }
       })

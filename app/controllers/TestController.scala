@@ -19,12 +19,11 @@ import scala.util.Try
 
 class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
 
-
   def pinyin()= Action.async { implicit request =>
+
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)
     val res2 = res1.replaceAll(",",  "")
     val res3 = res1.split(",")
-
     Future.successful(  Ok( res1 )  )
   }
 
@@ -32,11 +31,14 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", "$", PinyinFormat.WITHOUT_TONE)
     val res2 = res1.replaceAll(",",  "")
     val res3 = res1.split(",")
-
     Future.successful(  Ok( res1 )  )
   }
 
-
+  def getsessionvalue() = Action.async { implicit request =>
+    val session = request.session.get("owner_nickName").mkString
+    println("session ===" + session)
+    Future.successful(  Ok("session ===" + session )  )
+  }
 
 
 

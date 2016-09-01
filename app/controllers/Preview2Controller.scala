@@ -10,7 +10,7 @@ import scala.concurrent._
 
 class Preview2Controller @Inject() (ws:WSClient) extends Controller {
 
-  def previewR() = Action.async { implicit request =>
+  def preview() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
     mapBody.map {
@@ -31,8 +31,10 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
         val host = env.host
         val url = "http://" + host + "/previewR" + "/" + fileName
         println("url is" + url)
+
+        val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
         val json: JsValue = Json.obj(
-          "data" -> url,
+          "data" -> htmlContent,
           "message" -> "预览成功!"
         )
         Future.successful(Ok(json))
@@ -45,6 +47,8 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
     Logger.info(fileName + ".html has been responsed!!!")
     Future.successful(Ok(htmlContent).as(HTML))
+
+
   }
 
 

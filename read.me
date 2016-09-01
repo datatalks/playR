@@ -6,10 +6,10 @@
    response: {data:null,msg:'登录成功'}
 
 2、获取用户
-   url:   /owner
+   url:   /listowner
    params: 无
    method: GET
-   response: {data:{owner_nickName:'非中文账户名称', userId: 123123},msg:'获取成功'}
+   response: {data:{owner_nickName:'非中文账户名称', ownerid: 123123},msg:'获取成功'}
 
 3、用户退出
    url: /logout
@@ -17,8 +17,24 @@
    method: GET,
    response: {data:null,msg:'退出成功'}
 
+   备注:  owner 的表结构如下:
+   create table `owner` (
+     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     `owner_nickName` TEXT NOT NULL,
+     `owner_realName` TEXT NOT NULL,
+     `password` TEXT NOT NULL,
+     `mobile` BIGINT NOT NULL,
+     `email` TEXT NOT NULL,
+     `memo` TEXT NOT NULL,
+     `status` Boolean NOT NULL,
+     `time` Datetime NOT NULL
+   )
+
+
+==========================================================================
+
 4、报告列表（用户名自己session里面取）
-   url：  /reports/list
+   url：  /report/list
    params: {pageNo: 1, pageSize: 10}     //   分页的技术,我暂时还需要研究一下!!!
    method: GET,
    response:
@@ -31,15 +47,24 @@
       msg: '请求成功'
     }
 5、保存报告
-    url:   /save
-    params: {reportContent:''}
+    url:   /report/add
+    params: {reportName: '',  reportContent:''}    //  增加了一个字段 reportName
     method: POST
     response: {data:null,msg:'保存成功'}
+
+     关于用户名称为空时,目前也是能顾保存的!!!!!!  后续待优化!
+
+
 6、预览报告
     url:   /preview
     params: {reportContent:''}
     method: POST
     response: {data:null,msg:'预览成功'}
+
+
+
+
+
 
 
     带完善的接口
