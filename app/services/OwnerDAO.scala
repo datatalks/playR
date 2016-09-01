@@ -1,5 +1,7 @@
 package services
 
+import org.joda.time.DateTime
+
 import scala.concurrent.Future
 import javax.inject.Inject
 import models.Owner
@@ -26,8 +28,13 @@ class OwnerDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       db.run(owners.filter(_.id === id).delete)
   }
 
-  def getOwner(owner_nickName: String): Future[Option[Owner]] = {
-      db.run(owners.filter(_.owner_nickName === owner_nickName).result.headOption)
+  def exists(owner_nickName : String) : Future[Boolean] =
+    db.run(owners.filter(_.owner_nickName === owner_nickName).exists.result)
+
+  def getcurrentOwner(owner_nickName: String): Future[Seq[(Int, String, String)]] = {
+    val query = owners.filter(_.owner_nickName === owner_nickName).
+      map(data => (data.id, data.owner_nickName, data.owner_realName))
+    db.run(query.result)
   }
 
   def checkOwner(owner_nickName: String, password:String): Future[Option[Owner]] = {

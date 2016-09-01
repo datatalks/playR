@@ -62,7 +62,7 @@ GET     /innerJoin3                  controllers.TestController.innerJoin3
 POST    /addowner                    controllers.OwnerController.AddOwner
 POST    /login                       controllers.OwnerController.LoginOwner
 GET     /logout                      controllers.OwnerController.LogoutOwner
-GET     /listowner                   controllers.OwnerController.ListOwner
+GET     /currentowner                controllers.OwnerController.getcurrentOwner
 
 
 # Map static resources from the /public folder to the /assets URL path

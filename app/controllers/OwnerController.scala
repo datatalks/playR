@@ -20,10 +20,9 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
       data => {
         val owner_nickName = data("owner_nickName").mkString
         val password = data("password").mkString
-
-        ownerDAO.getOwner(owner_nickName).flatMap  {
-          case Some(_)  =>  Future.successful( Ok(" 该用户名，已经被占用咯，请使用别的用户名的吧！！！"))
-          case None => {
+        ownerDAO.exists(owner_nickName).flatMap  {
+          case false  =>  Future.successful( Ok(" 该用户名，已经被占用咯，请使用别的用户名的吧！！！"))
+          case true => {
             val newIdentity = { Owner(0,  owner_nickName,  "owner_realName", password,12345678999L,"email", "memo", true, new DateTime()) }
             println("new Owner is " + owner_nickName)
             ownerDAO.addOwner(newIdentity).map(res => Ok(" new Owner info added successfully!!!") )}}
@@ -60,21 +59,23 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
   }
 
 
-  def ListOwner() =   Action.async {implicit request =>
-    implicit val ownerFormat = Json.format[Owner]
-    ownerDAO.listOwner.map(
+  def getcurrentOwner() =   Action.async {implicit request =>
+    // implicit val ownerFormat = Json.format[Owner]
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    ownerDAO.getcurrentOwner(session_owner_nickName).map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
             "data" -> "null",
-            "message" -> "success")
+            "message" -> "获取成功")
           Ok(json)
         }
         else {
-          implicit val writer = new Writes[(String, Int)] {
-            def writes(t: (String , Int)): JsValue = {
-              Json.obj( "owner_nickName" -> t._1,
-                        "ownerid" -> t._2)}}
+          implicit val writer = new Writes[(Int, String, String)] {
+            def writes(t: (Int, String, String)): JsValue = {
+              Json.obj( "ownerid" -> t._1,
+                        "owner_nickName" -> t._2,
+                        "owner_realName" -> t._3 )}}
           val jsonArrayOfRmds = Json.toJson(res)
           val json: JsValue = Json.obj(
             "data" -> jsonArrayOfRmds,
