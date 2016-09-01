@@ -13,5 +13,6 @@ create table `owner` (
   `time` Datetime NOT NULL
 )
 
+
 # --- !Downs
 drop table `identity`
