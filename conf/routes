@@ -31,7 +31,8 @@ GET     /pinyin                     controllers.TestController.pinyin
 GET     /getsessionvalue            controllers.TestController.getsessionvalue
 
 
-POST    /preview                   controllers.Preview2Controller.preview
+POST    /preview                    controllers.Preview2Controller.preview
+POST    /previewR                   controllers.Preview2Controller.previewR
 GET     /previewR/:fileName         controllers.Preview2Controller.previewRhtml(fileName:String)
 
 POST    /report/add                     controllers.Report2Controller.addReport

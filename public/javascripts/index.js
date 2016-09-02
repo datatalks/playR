@@ -134,7 +134,7 @@ $(function () {
 
         // 保存
         if(curId === 'saveBtn') {
-            postUrl = '/reportR';
+            postUrl = '/report/add';
         }
 
         if (postUrl === '' || editor.getMarkdown() === '') {
