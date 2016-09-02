@@ -60,7 +60,6 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
 
 
   def getcurrentOwner() =   Action.async {implicit request =>
-    // implicit val ownerFormat = Json.format[Owner]
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     ownerDAO.getcurrentOwner(session_owner_nickName).map(
       res => {

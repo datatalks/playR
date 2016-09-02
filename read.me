@@ -9,7 +9,7 @@
    url:   /currentowner
    params: 无
    method: GET
-   response: {data:{owner_nickName:'非中文账户名称', ownerid: 123123},msg:'获取成功'}
+   response: {data:{ data.id, data.owner_nickName, data.owner_realName },msg:'获取成功'}
 
 3、用户退出
    url: /logout
@@ -33,9 +33,9 @@
 
 ==========================================================================
 
-4、报告列表（用户名自己session里面取）
+4、报告列表（用户名自己session里面取）, 如果未登录,则返回的数据是null
    url：  /report/list
-   params: {pageNo: 1, pageSize: 10}     //   分页的技术,我暂时还需要研究一下!!!
+   params: {pageNo: 1, pageSize: 10}     //   已经成功的咯! pageNo=2&pageSize=2
    method: GET,
    response:
    {
@@ -46,6 +46,8 @@
       }],
       msg: '请求成功'
     }
+
+
 5、保存报告
     url:   /report/add
     params: {reportName: '',  reportContent:''}    //  增加了一个字段 reportName

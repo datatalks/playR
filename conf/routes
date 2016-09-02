@@ -38,7 +38,7 @@ POST    /report/add                     controllers.Report2Controller.addReport
 GET     /reportR/:fileName              controllers.ReportController.reportRhtml(fileName: String)
 POST    /listOwnerReport                controllers.ReportController.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.ReportController.getOwnerReport(owner:String)
-GET     /report/list                    controllers.Report2Controller.listReport
+GET     /report/list                    controllers.Report2Controller.listReport(pageNo:Int, pageSize:Int)
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo

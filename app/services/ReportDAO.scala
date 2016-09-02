@@ -17,7 +17,6 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
   val reports = TableQuery[ReportTableDef]
 
-
   def addReport(report : Report): Future[String] = {
     Logger.info(s"logTest: 您输入的 RMD 内容是  $report")
     db.run(reports += report).map(res => "Rmd successfully added").recover {
@@ -37,9 +36,10 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     val query = reports.filter(_.owner_nickName === owner)
       db.run(query.result) }
 
-
-  def getOwnerminiReport(owner: String): Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]] = {
-    val query = reports.filter(_.owner_nickName === owner).map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl ))
+  def getOwnerminiReport(owner: String, pageNo:Int, pageSize:Int): Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]] = {
+    val query = reports.filter(_.owner_nickName === owner).sortBy(data => (data.id.asc)).
+                        map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl )).
+                        drop(pageNo * pageSize).take(pageSize)
     db.run(query.result)}
 
 

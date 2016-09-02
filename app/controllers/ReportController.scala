@@ -87,7 +87,7 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
 
   def getOwnerminiReport(owner : String) = Action.async { implicit request =>
     implicit val rmdFormat = Json.format[Report]
-    reportDAO.getOwnerminiReport(owner).map(
+    reportDAO.getOwnerReport(owner).map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
@@ -119,7 +119,6 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
   def listOwnerReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
-    implicit val rmdFormat = Json.format[Report]
     mapBody.map {
       data => {
         val owner = data("owner").mkString
@@ -133,9 +132,10 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
               Ok(json)
             }
             else {
-              val jsonArrayOfRmds = Json.toJson(temp)
+              implicit val reportFormat = Json.format[Report]
+              val jsonArrayOfReports = Json.toJson(temp)
               val json: JsValue = Json.obj(
-                "data" -> jsonArrayOfRmds,
+                "data" -> jsonArrayOfReports,
                 "message" -> "XXXXXX")
               Ok(json)
             }
