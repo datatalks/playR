@@ -32,8 +32,11 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
         val url = "http://" + host + "/previewR" + "/" + fileName
         println("url is" + url)
         val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
+       //  将 String 类型变成 XML  数据格式进行处理!!!
+        val htmlContentBody = scala.xml.XML.loadString(htmlContent) \ "body"
+        val result =  htmlContentBody.mkString
         val json: JsValue = Json.obj(
-          "data" -> htmlContent,
+          "data" -> result,
           "message" -> "预览成功!"
         )
         Future.successful(Ok(json))
@@ -43,10 +46,8 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
 
   def previewRhtml(fileName: String) = Action.async { implicit request =>
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
-    val htmlContentBody = scala.xml.XML.loadString(htmlContent) \ "body"
-    val result =  htmlContentBody.mkString
     Logger.info(fileName + ".html has been responsed!!!")
-    Future.successful(Ok(result).as(HTML))
+    Future.successful(Ok(htmlContent).as(HTML))
   }
 
   def previewR() = Action.async { implicit request =>
