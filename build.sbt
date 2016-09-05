@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" % "slick-joda-mapper_2.11" % "2.1.0",
   "be.objectify" %% "deadbolt-scala" % "2.5.0",
   "com.github.stuxuhai" % "jpinyin" % "1.1.7",
-  "com.typesafe.netty" % "netty-reactive-streams-http" % "1.0.6"
+  "com.typesafe.netty" % "netty-reactive-streams-http" % "1.0.6",
+  "org.jsoup" % "jsoup" % "1.7.2"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
