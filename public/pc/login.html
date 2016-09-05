@@ -26,28 +26,24 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body ng-app="login">
 
-    <div class="container">
+    <div class="container" ng-controller="loginCtrl as $ctrl">
 
-      <h2 class="form-signin-heading text-center">Sign in with your Account</h2>
+      <h2 class="form-signin-heading text-center">用户登录</h2>
 
       <div class="card card-signin">
         <img class="img-circle profile-img" src="../images/avatar.png" alt="">
-        <form class="form-signin">
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-
-          <div class="checkbox">
-            <a class="pull-right">Need help?</a>
-            <label>
-              <input type="checkbox" value="remember-me"> Stay signed in
-            </label>
-          </div>
-
+        <form class="form-signin" ng-submit="$ctrl.save()">
+          <p>
+            <label for="inputEmail" class="sr-only">用户名</label>
+            <input type="text" id="inputEmail" class="form-control" ng-model="$ctrl.owner_nickName" placeholder="用户名" required autofocus>
+          </p>
+          <p>
+            <label for="inputPassword" class="sr-only">密码</label>
+            <input type="password" id="inputPassword" class="form-control" ng-model="$ctrl.password" placeholder="密码" required>
+          </p>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
         </form>
       </div>
 
@@ -56,6 +52,10 @@
       </p>
 
     </div> <!-- /container -->
-
+    <script src="../javascripts/jquery-1.12.4.min.js"></script>
+    <script src="../javascripts/bootstrap.min.js"></script>
+    <script src="../javascripts/angular-1.5.8.min.js"></script>
+    <script src="../javascripts/angular_1_router.js"></script>
+    <script src="../javascripts/login.js"></script>
   </body>
 </html>
