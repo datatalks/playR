@@ -43,8 +43,10 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
 
   def previewRhtml(fileName: String) = Action.async { implicit request =>
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
+    val htmlContentBody = scala.xml.XML.loadString(htmlContent) \ "body"
+    val result =  htmlContentBody.mkString
     Logger.info(fileName + ".html has been responsed!!!")
-    Future.successful(Ok(htmlContent).as(HTML))
+    Future.successful(Ok(result).as(HTML))
   }
 
   def previewR() = Action.async { implicit request =>
