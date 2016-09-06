@@ -16,7 +16,7 @@
           }
       }).then(function (responses) {
         if (responses.data.data != 'null'){
-          location.href = './';
+          location.href = './index.html';
         } else {
           ctrl.errMsg = responses.data.message;
         }
