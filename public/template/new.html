@@ -1,6 +1,13 @@
 <h1 class="page-header">New</h1>
 <div ng-controller="newCtrl as $ctrl">
-
+  <div class="alert alert-warning alert-dismissible" role="alert" ng-show="$ctrl.alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{$ctrl.rule}}</strong> {{$ctrl.errMsg}}
+  </div>
+  <div class="alert alert-success alert-dismissible" role="alert" ng-show="$ctrl.success">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{$ctrl.successMsg}}</strong>
+  </div>
   <div class="editormd" id="editor">
       <textarea>---
 title:""
@@ -8,7 +15,8 @@ title:""
 </textarea>
   </div>
   <div class="new-opt-btns pull-right">
-    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.preview(evt)">{{$ctrl.state ? '预 览' : '取消预览'}}</button>
-    <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.save()">保 存</button>
+    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.preview($event)" data-loading-text="预览中，请稍候..." ng-show="$ctrl.state">预 览</button>
+    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.closePreview($event)" ng-show="!$ctrl.state">关闭预览</button>
+    <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.save($event)" data-loading-text="保存中，请稍候...">保 存</button>
   </div>
 </div>

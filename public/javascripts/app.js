@@ -1,4 +1,4 @@
-angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
+// angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
 
 (function(angular) {
   'use strict';
@@ -11,7 +11,7 @@ angular.element(document.getElementsByTagName('head')).append(angular.element('<
   .value('$routerRootComponent', 'app')
 
   .run(function($http) {
-    $http.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+    $http.defaults.headers.post = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
   })
 
   .component('app', {
@@ -47,10 +47,11 @@ angular.element(document.getElementsByTagName('head')).append(angular.element('<
   .component('new', {
     templateUrl: '../template/new.html'
   })
-  .controller('newCtrl', ['$http', function NewCtrl($http) {
+  .controller('newCtrl', ['newService', function NewCtrl($newService) {
     var ctrl = this;
 
-    this.state = 1; // 未预览
+    ctrl.alert = 0;
+    ctrl.state = 1; // 未预览
 
     var editor = editormd("editor", {
         height: 500,
@@ -119,31 +120,110 @@ angular.element(document.getElementsByTagName('head')).append(angular.element('<
     });
 
     //预览
-    this.preview = function () {
+    this.preview = function (evt) {
+      var $curBtn = $(evt.target);
+      var $preview = $('.editormd-preview');
+      var $codeMirror = $('.CodeMirror');
+      var reportContent = editor.getMarkdown();
+
       var $preview = editor.preview;
-      var $codeMirror = editor.codeMirror[0];
+      var $codeMirror = editor.codeMirror;
+      var $previewContainer = editor.previewContainer;
 
-      console.log(typeof editor.preview)
+      ctrl.success = 0;
+      ctrl.alert = 0;
 
-      if (this.state) {
+      $curBtn.button('loading');
+      $newService.preview(reportContent).then(function (response){
+        $curBtn.button('reset');
+
+        ctrl.state = 0;
+        ctrl.success = 1;
+        ctrl.successMsg = '预览成功！';
+
         $preview.show();
+        $codeMirror.css("border-right", "1px solid #ddd").width(editor.editor.width() / 2);
 
-        $codeMirror.css("border-right", "1px solid #ddd").width(editor.width() / 2);
-        $('.editormd-preview .editormd-preview-container').html(editor.getHTML());
+        $previewContainer.html(response.data.data);
+      }, function (e) {
+        ctrl.state = 1;
+        ctrl.alert = 1;
+        ctrl.rule = e.status;
+        ctrl.errMsg = e.statusText;
 
-        this.state = 0;
-      } else {
-        $preview.hide();
-        $codeMirror.css("border-right", "none").width(this.editor.width());
+        $curBtn.button('reset');
+      });
+    }
 
-        this.state = 1;
-      }
+    // 关闭预览
+    this.closePreview = function () {
+      var $preview = editor.preview;
+      var $codeMirror = editor.codeMirror;
+      var $previewContainer = editor.previewContainer;
 
+      ctrl.success = 0;
+      ctrl.alert = 0;
+      ctrl.state = 1;
+
+      $preview.hide();
+      $codeMirror.css("border-right", "none").width(editor.editor.width())
+
+      $previewContainer.empty();
     }
 
     // 保存
-    this.save = function () {
-      $('.editormd-preview').show();
+    this.save = function (evt) {
+      var $curBtn = $(evt.target);
+      var reportName = (function () {
+        var arr = editor.getMarkdown().match(/title:"([\S\s*]+)"/);
+
+        return arr != null ? arr[1]: '';
+      })();
+      var reportContent = editor.getMarkdown();
+
+      ctrl.alert = 0;
+      ctrl.success = 0;
+
+      if (!reportName) {
+        ctrl.alert = 1;
+        ctrl.rule = '报告名称不能为空!';
+        ctrl.errMsg = '请在title的双引号内输入您的报告名';
+        return;
+      }
+
+      $curBtn.button('loading');
+      $newService.add(reportName, reportContent).then(function (response){
+        $curBtn.button('reset');
+        ctrl.success = 1;
+        ctrl.successMsg = '保存成功！';
+      }, function (e) {
+        ctrl.alert = 1;
+        ctrl.rule = e.status;
+        ctrl.errMsg = e.statusText;
+        $curBtn.button('reset');
+      });
+    }
+  }])
+  .service('newService', ['$http', function NewService($http) {
+    this.add = function (reportName, reportContent){
+      return $http({
+        method: 'post',
+        url: '/report/add',
+        data: {
+          reportName: reportName,
+          reportContent: reportContent
+        }
+      });
+    };
+
+    this.preview = function (reportContent){
+      return $http({
+        method: 'post',
+        url: '/preview',
+        data: {
+          reportContent: reportContent
+        }
+      });
     }
   }]);
 
