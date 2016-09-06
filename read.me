@@ -36,15 +36,27 @@
 
 4、报告列表（用户名自己session里面取）, 如果未登录,则返回的数据是null
    url：  /report/list
-   params: {pageNo: 1, pageSize: 10}     //   已经成功的咯! pageNo=2&pageSize=2
+   params: {pageNo: 1, pageSize: 20}     //   已经成功的咯! pageNo=2&pageSize=2
    method: GET,
    response:
    {
       data:[{
-
-         },{
-
+          "id": 23,
+          "owner": "",
+          "reportName": "小凡的报告",
+          "execute_type": "execute_type",
+          "once2circle_last_executed_time": 1472701943000,
+          "modify_time": 1472701943000,
+          "reportUrl": "reportUrl"
+      },{
+        ...
       }],
+      page:{
+        currentPageNo: 1,
+        pageSize: 20,  // 传的参数
+        totalCount: 65,  // 数据总条数
+        totalPageCount: 4  // 页数
+      }
       msg: '请求成功'
     }
 

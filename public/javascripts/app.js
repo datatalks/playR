@@ -205,24 +205,48 @@
     }
   }]);
 
-  angular.module('reports', [])
+  angular.module('reports', ['ui.xg.pager'])
   .component('reports', {
     templateUrl: '../template/reports.html'
   })
-  .controller('reportsCtrl', ['$http', function ReportsCtrl($http) {
+  .controller('reportsCtrl', ['reportsService', function ReportsCtrl($reportsService) {
     var ctrl = this;
 
     ctrl.list = [];
 
-    $http({
-        method: 'get',
-        url: '/report/list'
-    }).then(function (responses) {
-      if (responses.data.data.length > 0){
-        ctrl.list = responses.data.data;
-      }
-    });
+    ctrl.pages = {
+      pageSize: 20,
+      pageNo: 1
+    }
 
+    var getList = function () {
+      $reportsService.getList(ctrl.pages.pageNo, ctrl.pages.pageSize).then(function (responses) {
+        ctrl.list = responses.data.data;
+
+        ctrl.pages.pageSize = responses.data.page.pageSize;
+        ctrl.pages.pageNo = responses.data.page.currentPageNo || 1;
+        ctrl.pages.totalCount = responses.data.page.totalCount;
+      })
+    };
+    getList();
+
+    ctrl.pageChanged = function () {
+        ctrl.pages.pageNo = ctrl.pages.pageNo;
+        getList();
+    }
+
+  }])
+  .service('reportsService', ['$http', function ($http){
+    this.getList = function (pageNo, pageSize){
+      return $http({
+          method: 'get',
+          url: '/report/list',
+          params: {
+            pageNo: pageNo,
+            pageSize: pageSize
+          }
+      });
+    }
   }]);
 
   angular.module('help', [])
