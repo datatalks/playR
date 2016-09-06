@@ -15,7 +15,6 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
 
   def AddOwner() = Action.async { implicit request =>
     val body: AnyContent = request.body
-    val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
     val jsonBody: Option[JsValue] = body.asJson
     jsonBody.map {
       data => {

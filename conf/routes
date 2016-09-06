@@ -7,7 +7,6 @@ GET     /                           controllers.ApplicationController.index
 POST    /add                        controllers.ApplicationController.addUser
 GET     /delete/:id                 controllers.ApplicationController.deleteUser(id : Long)
 
-
 GET    /weixin                      controllers.WeixinController.checkToken(signature:String,timestamp:String,nonce:String,echostr:String)
 POST   /weixin                      controllers.WeixinController2.xmlreponse
 POST   /weixin2                     controllers.WeixinController2.xmlreponse
