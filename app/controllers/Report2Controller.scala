@@ -17,13 +17,13 @@ class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
 
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
-    val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
+    val jsonBody: Option[JsValue] = body.asJson
     val session_owner_nickName = request.session.get("owner_nickName").mkString
-    mapBody.map {
+    jsonBody.map {
       data => {
         val owner_nickName = session_owner_nickName
-        val reportName = data("reportName").mkString
-        val reportContent = data("reportContent").mkString
+        val reportName = (data \ "reportName").as[String]
+        val reportContent = (data \ "reportContent").as[String]
 
         val newReport = Report(0, owner_nickName, reportName, reportContent, "execute_type",
           new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), "reportUrl",

@@ -13,10 +13,10 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
 
   def preview() = Action.async { implicit request =>
     val body: AnyContent = request.body
-    val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
-    mapBody.map {
+    val jsonBody: Option[JsValue] = body.asJson
+    jsonBody.map {
       data => {
-        val ReportContent = data("reportContent").mkString
+        val ReportContent = (data \ "reportContent").as[String]
         val fileName = "PREVIEW_" + scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/previewR/RMD/" + fileName
         import scala.sys.process._
@@ -52,10 +52,10 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
 
   def previewR() = Action.async { implicit request =>
     val body: AnyContent = request.body
-    val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
-    mapBody.map {
+    val jsonBody: Option[JsValue] = body.asJson
+    jsonBody.map {
       data => {
-        val ReportContent = data("reportContent").mkString
+        val ReportContent = (data \ "reportContent").as[String]
         val fileName = scala.util.Random.alphanumeric.take(10).mkString
         val path = "MarkDown/previewR/RMD/" + fileName
         import scala.sys.process._
