@@ -15,7 +15,6 @@
             password: this.password
           }
       }).then(function (responses) {
-        debugger;
         if (responses.data.data != 'null'){
           location.href = './';
         } else {
