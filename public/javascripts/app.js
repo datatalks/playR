@@ -70,12 +70,10 @@
             return editormd.toolbarModes['simple']; // full, simple, mini
         },
         toolbarIconsClass : {
-            rmarkdown : "rmarkdown",  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
-            rpreveiw: "fa-eye-slash"
+            rmarkdown : "rmarkdown"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
         },
         toolbarIconTexts : {
-            rmarkdown : "R",  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
-            rpreveiw: "预览"
+            rmarkdown : "R"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
         },
         toolbarHandlers : {
             rmarkdown : function(cm, icon, cursor, selection) {
@@ -90,31 +88,11 @@
                 if(selection === "") {
                     cm.setCursor(cursor.line + 1, cursor.ch);
                 }
-            },
-            rpreveiw: function () {
-              var $preview = $(this.preview);
-              var $codeMirror = $(this.codeMirror);
-
-              console.log(this.activeIcon[0].className);
-              if (this.activeIcon[0].className == 'fa fa-eye-slash'){
-                $preview.show();
-                $codeMirror.css("border-right", "1px solid #ddd").width(this.editor.width() / 2);
-                $preview.find('.editormd-preview-container').html(editor.getHTML());
-
-                this.activeIcon.removeClass('fa-eye-slash').addClass('fa-eye');
-              } else {
-                console.log($codeMirror);
-                this.activeIcon.removeClass('fa-eye').addClass('fa-eye-slash');
-                $preview.hide();
-
-                $codeMirror.css("border-right", "none").width(this.editor.width());
-              }
             }
         },
         lang : {
             toolbar : {
-                rmarkdown : "Rmd",
-                rmarkdown : "Rpreview"
+                rmarkdown : "Rmd"
             }
         }
     });
