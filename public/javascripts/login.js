@@ -15,13 +15,14 @@
             password: this.password
           }
       }).then(function (responses) {
-        if (responses.data.data.msg == '登录成功'){
-          location.href = './index.html';
+        debugger;
+        if (responses.data.data != 'null'){
+          location.href = './';
         } else {
-          ctrl.errMsg = '用户名或密码错误，请重新输入！'
+          ctrl.errMsg = responses.data.message;
         }
-      }, function () {
-        ctrl.errMsg = '用户名或密码错误，请重新输入！'
+      }, function (e) {
+        ctrl.errMsg = e.status + " " + e.statusText;
       });
     }
   }]);
