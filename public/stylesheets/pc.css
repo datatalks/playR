@@ -112,3 +112,17 @@ body {
 .navbar-default .navbar-nav>li.active>a {
   color: #337ab7;
 }
+
+.rmarkdown {
+  position: relative;
+  top: 3px;
+  height: 16px;
+  background: url(../images/rmarkdown.png) no-repeat;
+}
+
+.new-opt-btns {
+  position: relative;
+  top: -509px;
+  right: 6px;
+  z-index: 100;
+}

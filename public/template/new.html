@@ -1,4 +1,14 @@
 <h1 class="page-header">New</h1>
-<div class="row" ng-controller="newCtrl as $ctrl">
-  
+<div ng-controller="newCtrl as $ctrl">
+
+  <div class="editormd" id="editor">
+      <textarea>---
+title:""
+---
+</textarea>
+  </div>
+  <div class="new-opt-btns pull-right">
+    <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.preview(evt)">{{$ctrl.state ? '预 览' : '取消预览'}}</button>
+    <button type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.save()">保 存</button>
+  </div>
 </div>

@@ -13,13 +13,16 @@
           data: {
             owner_nickName: this.owner_nickName,
             password: this.password
-          }
+          },
+          headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
       }).then(function (responses) {
         if (responses.data.data.msg == '登录成功'){
           location.href = './index.html';
+        } else {
+          ctrl.errMsg = '用户名或密码错误，请重新输入！'
         }
       }, function () {
-        location.href = './login.html';
+        ctrl.errMsg = '用户名或密码错误，请重新输入！'
       });
     }
   }]);

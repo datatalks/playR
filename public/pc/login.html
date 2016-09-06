@@ -37,11 +37,14 @@
         <form class="form-signin" ng-submit="$ctrl.save()">
           <p>
             <label for="inputEmail" class="sr-only">用户名</label>
-            <input type="text" id="inputEmail" class="form-control" ng-model="$ctrl.owner_nickName" placeholder="用户名" required autofocus>
+            <input type="text" id="owner_nickName" class="form-control" ng-model="$ctrl.owner_nickName" placeholder="用户名" required autofocus>
           </p>
           <p>
             <label for="inputPassword" class="sr-only">密码</label>
-            <input type="password" id="inputPassword" class="form-control" ng-model="$ctrl.password" placeholder="密码" required>
+            <input type="password" id="password" class="form-control" ng-model="$ctrl.password" placeholder="密码" required>
+          </p>
+          <p class="has-error">
+            <span class="help-block">{{$ctrl.errMsg}}</span>
           </p>
           <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
         </form>
