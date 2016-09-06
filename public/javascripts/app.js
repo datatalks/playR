@@ -10,9 +10,9 @@
 
   .value('$routerRootComponent', 'app')
 
-  .run(function($http) {
-    $http.defaults.headers.post = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
-  })
+  // .run(function($http) {
+  //   $http.defaults.headers.post = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
+  // })
 
   .component('app', {
     templateUrl: '../template/app.html',
