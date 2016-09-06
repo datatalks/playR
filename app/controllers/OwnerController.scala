@@ -16,10 +16,11 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
   def AddOwner() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
-    mapBody.map {
+    val jsonBody: Option[JsValue] = body.asJson
+    jsonBody.map {
       data => {
-        val owner_nickName = data("owner_nickName").mkString
-        val password = data("password").mkString
+        val owner_nickName = (data \ "owner_nickName").as[String]
+        val password = (data \ "password").as[String]
         ownerDAO.exists(owner_nickName).flatMap  {
           case false  =>  Future.successful( Ok(" 该用户名，已经被占用咯，请使用别的用户名的吧！！！"))
           case true => {
@@ -33,19 +34,24 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
    //  直接通过表单提交过来的数据，同数据库中查询得到的数据进行比对，正确则跳转到相应的页面且设定相应的session！
    def LoginOwner() =  Action.async {implicit request =>
      val body: AnyContent = request.body
-     val mapBody: Option[Map[String, Seq[String]]] = body.asFormUrlEncoded
-     mapBody.map {
+     val jsonBody: Option[JsValue] = body.asJson
+     println("XXXXXXX is "+ body.toString)
+     jsonBody.map {
              data => {
-               val owner_nickName = data("owner_nickName").mkString
-               val password = data("password").mkString
+               val owner_nickName = (data \ "owner_nickName").as[String]
+               val password =  (data \ "password").as[String]
 
                ownerDAO.checkOwner(owner_nickName, password).flatMap  {
-                 case None  =>  Future.successful( Ok("账号，或用户名错误！！！"))
-                 case Some(_) => {
-                   val json: JsValue = Json.obj(
+                 case None  =>
+                   val json1: JsValue = Json.obj(
                      "data" -> "null",
+                     "message" -> "账号，或用户名错误！")
+                   Future.successful( Ok(json1))
+                 case Some(_) => {
+                   val json2: JsValue = Json.obj(
+                     "data" -> owner_nickName,
                      "message" -> "登陆成功")
-                   Future.successful( Ok(json).
+                   Future.successful( Ok(json2).
                      withSession(request.session + ("owner_nickName" -> owner_nickName) + ("roles" -> "测试的角色!")   )  )}}
              }
            }.getOrElse(Future.successful(Ok("Error8!!!")))
