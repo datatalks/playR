@@ -40,7 +40,8 @@
     });
   }])
   .component('index', {
-      templateUrl: '../template/index.html'
+      template: ''
+      // templateUrl: '../template/index.html'
   });
 
   angular.module('new', [])
