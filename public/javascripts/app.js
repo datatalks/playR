@@ -48,7 +48,7 @@
   .component('new', {
     templateUrl: '../template/new.html'
   })
-  .controller('newCtrl', ['newService', function NewCtrl($newService) {
+  .controller('newCtrl', ['newService', '$timeout', '$rootRouter', function NewCtrl($newService, $timeout, $rootRouter) {
     var ctrl = this;
 
     ctrl.alert = 0;
@@ -174,7 +174,11 @@
       $newService.add(reportName, reportContent).then(function (response){
         $curBtn.button('reset');
         ctrl.success = 1;
-        ctrl.successMsg = '保存成功！';
+        ctrl.successMsg = '保存成功！正跳转至列表页...';
+
+        $timeout(function () {
+          $rootRouter.navigate(['Reports']);
+        }, 3000);
       }, function (e) {
         ctrl.alert = 1;
         ctrl.rule = e.status;
