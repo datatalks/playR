@@ -32,15 +32,19 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).result.headOption)
   }
 
-  def getOwnerReport(owner: String): Future[Seq[Report]] = {
+  def getOwnerReport (owner: String): Future[Seq[Report]] = {
     val query = reports.filter(_.owner_nickName === owner)
-      db.run(query.result) }
-
-  def getOwnerminiReport(owner: String, pageNo:Int, pageSize:Int): Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]] = {
-    val query = reports.filter(_.owner_nickName === owner).sortBy(data => (data.id.asc)).
-                        map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl )).
-                        drop(pageNo * pageSize).take(pageSize)
     db.run(query.result)}
+
+
+  def getOwnerminiReport(owner: String, pageNo:Int, pageSize:Int): (Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]],Future[Int]) = {
+    val query = reports.filter(_.owner_nickName === owner).sortBy(data => (data.id.asc)).
+      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl )).
+      drop(pageNo * pageSize).take(pageSize)
+    val result =  db.run(query.result)
+    val count = db.run(reports.filter(_.owner_nickName === owner).length.result)
+    (result,count)
+  }
 
 
   def listAll: Future[Seq[Report]] = {

@@ -40,6 +40,8 @@ POST    /listOwnerReport                controllers.ReportController.listOwnerRe
 GET     /getOwnerReport/:owner          controllers.ReportController.getOwnerReport(owner:String)
 GET     /report/list                    controllers.Report2Controller.listReport(pageNo:Int, pageSize:Int)
 
+
+
 GET     /restrict1                  @controllers.RestrictController.restrictOne
 GET     /restrict2                  @controllers.RestrictController.restrictTwo
 GET     /restrict3                  @controllers.RestrictController.restrictThree

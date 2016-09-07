@@ -8,12 +8,46 @@ import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
 import services.ReportDAO
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.Duration
 
 
 class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
+
+  def listReport(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._1.map(
+      res => {
+        if (res.length == 0) {
+          val json: JsValue = Json.obj(
+            "data" -> "null",
+            "message" -> "请求成功")
+          Ok(json)
+        }
+        else {
+          println(res.length)
+          val rows  = Await.result(reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._2, Duration.Inf)
+          implicit val writer = new Writes[(Int, String, String, String, DateTime, DateTime, String)] {
+            def writes(t: (Int, String, String, String,DateTime, DateTime, String)): JsValue = {
+              Json.obj( "id" -> t._1,
+                "owner" -> t._2,
+                "reportName" -> t._3,
+                "execute_type" -> t._4,
+                "once2circle_last_executed_time" -> t._5,
+                "modify_time" -> t._6,
+                "reportUrl" -> t._7)}}
+          val jsonArrayOfRmds = Json.toJson(res)
+          val json: JsValue = Json.obj(
+            "data" -> jsonArrayOfRmds,
+            "page" -> Json.obj("currentPageNo" -> pageNo, "pageSize" -> pageSize, "totalCount" -> rows.toString, "totalPageCount" -> math.ceil(rows.toFloat/pageSize).toInt ),
+            "message" -> "请求成功")
+          Ok(json)
+
+        }
+      })
+  }
+
 
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
@@ -72,37 +106,6 @@ class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
         }
       })
   }
-
-
-  def listReport(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
-    val session_owner_nickName = request.session.get("owner_nickName").mkString
-    reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize).map(
-      res => {
-        if (res.length == 0) {
-          val json: JsValue = Json.obj(
-            "data" -> "null",
-            "message" -> "请求成功")
-          Ok(json)
-        }
-        else {
-          implicit val writer = new Writes[(Int, String, String, String, DateTime, DateTime, String)] {
-            def writes(t: (Int, String, String, String,DateTime, DateTime, String)): JsValue = {
-              Json.obj( "id" -> t._1,
-                        "owner" -> t._2,
-                        "reportName" -> t._3,
-                        "execute_type" -> t._4,
-                        "once2circle_last_executed_time" -> t._5,
-                        "modify_time" -> t._6,
-                        "reportUrl" -> t._7)}}
-          val jsonArrayOfRmds = Json.toJson(res)
-          val json: JsValue = Json.obj(
-            "data" -> jsonArrayOfRmds,
-            "message" -> "请求成功")
-          Ok(json)
-        }
-      })
-  }
-
 
 
   def listOwnerReport() = Action.async { implicit request =>

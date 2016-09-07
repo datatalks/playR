@@ -16,7 +16,6 @@ import play.api.libs.json._
 import scala.util.Try
 
 
-
 class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
 
   def pinyin()= Action.async { implicit request =>
@@ -26,6 +25,9 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     val res3 = res1.split(",")
     Future.successful(  Ok( res1 )  )
   }
+
+
+
 
   def pinyinn()= Action.async { implicit request =>
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", "$", PinyinFormat.WITHOUT_TONE)
@@ -50,6 +52,10 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
       "email" -> email
     )(UserFormData.apply)(UserFormData.unapply)
   )
+
+
+
+
 
 
   def index = Action.async { implicit request =>
