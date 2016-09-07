@@ -23,12 +23,18 @@
       {path: '/help', name: 'Help', component: 'help' }
     ]
   })
-  .controller('appCtrl', ['$http', '$location', function AppCtrl($http, $location) {
+  .controller('appCtrl', ['$http', '$location', '$rootRouter', function AppCtrl($http, $location, $rootRouter) {
     var ctrl = this;
 
     this.isActive = function (path) {
       return $location.$$path == path;
     };
+
+    this.foldornot = false;
+    this.toggleSidebar = function (){
+      console.log(this.foldornot)
+      this.foldornot = !this.foldornot;
+    }
 
     $http({
         method: 'get',
@@ -81,13 +87,22 @@
 
                 //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
                 //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
+                var start = cursor.line === 1 &&  cursor.ch === 7;
+
+                if (start){
+                  cm.setCursor(cursor.line + 2, 0);
+                }
 
                 // 替换选中文本，如果没有选中文本，则直接插入
-                cm.replaceSelection("```{r}" + selection + "\r\n\r\n```");
+                cm.replaceSelection("\r\n```{r}" + selection + "\r\n\r\n```");
 
                 // 如果当前没有选中的文本，将光标移到要输入的位置
                 if(selection === "") {
-                    cm.setCursor(cursor.line + 1, cursor.ch);
+                  if (start){
+                    cm.setCursor(cursor.line + 4, cursor.ch);
+                  }else {
+                    cm.setCursor(cursor.line + 2, cursor.ch);
+                  }
                 }
             }
         },
@@ -95,6 +110,9 @@
             toolbar : {
                 rmarkdown : "Rmd"
             }
+        },
+        onload : function() {
+          this.setCursor({line:1, ch:7});
         }
     });
 

@@ -36,7 +36,7 @@ body {
 @media (min-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 51px;
+    top: 50px;
     bottom: 0;
     left: 0;
     z-index: 1000;
@@ -44,7 +44,7 @@ body {
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
+    background-color: #293038;
     border-right: 1px solid #eee;
   }
 }
@@ -56,8 +56,13 @@ body {
   margin-left: -20px;
 }
 .nav-sidebar > li > a {
+  color: #fff;
   padding-right: 20px;
-  padding-left: 20px;
+  padding-left: 0;
+  overflow: hidden;
+}
+.nav-sidebar > li > a:hover {
+  background-color: #293038;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
@@ -109,10 +114,71 @@ body {
     height: auto;
 }
 
-.navbar-default .navbar-nav>li.active>a {
-  color: #337ab7;
+.sidebarW50 {
+  width: 50px;
+}
+.mainMl50 {
+  width: 93%;
+  margin-left: 70px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
+.navbar-default {
+  background: #09C;
+}
+.navbar-default .navbar-brand {
+  padding-right: 47px;
+  color: #fff;
+}
+.navbar-default .navbar-brand:hover {
+  color: #fff;
+  background-color: #008fbf;
+}
+.navbar-default .navbar-nav>li>a{
+  color: #fff;
+}
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li.active>a,
+.navbar-default .navbar-nav>li.active>a:focus,
+.navbar-default .navbar-nav>li.active>a:hover {
+  color: #fff;
+  background-color: #008fbf;
+}
+
+.sidebar-fold {
+  margin: -20px -20px 0;
+  height: 40px;
+  background: #394555;
+  color: #aeb9c2;
+  text-align: center;
+  line-height: 40px;
+  color: #aeb9c2;
+  font-size: 14px;
+  user-select: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+.sidebar-fold i {
+  transform: rotate(-90deg);
+}
+.nav-sidebar a:hover .nav-icon{
+  color: #fff;
+}
+.nav-sidebar > .active .nav-icon{
+  color: #fff;
+}
+.nav-sidebar .nav-icon {
+  width: 50px;
+  text-align: center;
+  font-size: 18px;
+  float: left;
+  color: #aeb9c2;
+}
+.nav-sidebar .nav-title {
+  float:left;
+}
 .rmarkdown {
   position: relative;
   top: 3px;
