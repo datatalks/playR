@@ -14,7 +14,6 @@ import scala.concurrent.duration.Duration
 
 
 class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
-
   def listReport(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._1.map(
@@ -26,7 +25,6 @@ class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
           Ok(json)
         }
         else {
-          println(res.length)
           val rows  = Await.result(reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._2, Duration.Inf)
           implicit val writer = new Writes[(Int, String, String, String, DateTime, DateTime, String)] {
             def writes(t: (Int, String, String, String,DateTime, DateTime, String)): JsValue = {
@@ -43,7 +41,6 @@ class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
             "page" -> Json.obj("currentPageNo" -> pageNo, "pageSize" -> pageSize, "totalCount" -> rows.toString, "totalPageCount" -> math.ceil(rows.toFloat/pageSize).toInt ),
             "message" -> "请求成功")
           Ok(json)
-
         }
       })
   }
