@@ -6,13 +6,13 @@ import models.{Owner}
 import org.joda.time.DateTime
 import play.api.libs.json.{Writes, JsValue, Json}
 import play.api.mvc._
+import security.Cipher
 import services.OwnerDAO
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
-
   def AddOwner() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
@@ -23,7 +23,7 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
         ownerDAO.exists(owner_nickName).flatMap  {
           case false  =>  Future.successful( Ok(" 该用户名，已经被占用咯，请使用别的用户名的吧！！！"))
           case true => {
-            val newIdentity = { Owner(0,  owner_nickName,  "owner_realName", password,12345678999L,"email", "memo", true, new DateTime()) }
+            val newIdentity = { Owner(0,  owner_nickName,  "owner_realName", Cipher(password).encryptWith("playR"),12345678999L,"email", "memo", true, new DateTime()) }
             println("new Owner is " + owner_nickName)
             ownerDAO.addOwner(newIdentity).map(res => Ok(" new Owner info added successfully!!!") )}}
       }
@@ -39,7 +39,6 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
              data => {
                val owner_nickName = (data \ "owner_nickName").as[String]
                val password =  (data \ "password").as[String]
-
                ownerDAO.checkOwner(owner_nickName, password).flatMap  {
                  case None  =>
                    val json1: JsValue = Json.obj(
@@ -50,8 +49,8 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
                    val json2: JsValue = Json.obj(
                      "data" -> owner_nickName,
                      "message" -> "登陆成功")
-                   Future.successful( Ok(json2).
-                     withSession(request.session + ("owner_nickName" -> owner_nickName) + ("roles" -> "测试的角色!")   )  )}}
+                 Future.successful( Ok(json2).
+                     withSession(request.session + ("owner_nickName" -> Cipher(owner_nickName).encryptWith("playR")) + ("roles" -> Cipher("accessOK").encryptWith("playR"))   )  )}}
              }
            }.getOrElse(Future.successful(Ok("Error8!!!")))
    }

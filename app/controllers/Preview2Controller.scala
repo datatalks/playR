@@ -1,18 +1,18 @@
 package controllers
 
 import javax.inject.Inject
+import be.objectify.deadbolt.scala.ActionBuilders
 import env.env
 import org.jsoup.Jsoup
 import play.Logger
 import play.api.libs.json._
-import play.api.libs.ws.WSClient
 import play.api.mvc._
 import scala.concurrent._
 
-class Preview2Controller @Inject() (ws:WSClient) extends Controller {
+class Preview2Controller @Inject() (actionBuilder: ActionBuilders) extends Controller {
 
-  def preview() = Action.async { implicit request =>
-    val body: AnyContent = request.body
+  def preview() = actionBuilder.RestrictAction("accessOK").defaultHandler() { implicit authRequest =>
+    val body: AnyContent = authRequest.body
     val jsonBody: Option[JsValue] = body.asJson
     jsonBody.map {
       data => {
@@ -24,9 +24,8 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
         scala.tools.nsc.io.File(path + "/" + fileName + ".Rmd").writeAll(ReportContent)
         val dir = env.dir
         scala.io.Source.fromFile("previewR.R").getLines.
-          foreach { line => scala.tools.nsc.io.File("MarkDown/previewR/Rshell/" + fileName + ".R").
-            appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))
-          }
+          foreach {line => scala.tools.nsc.io.File("MarkDown/previewR/Rshell/" + fileName + ".R").
+            appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))}
         import scala.sys.process._
         (s"R CMD BATCH MarkDown/previewR/Rshell/$fileName.R").!
         val host = env.host
@@ -44,14 +43,14 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
     }.getOrElse(Future.successful(Ok("Error!!!")))
   }
 
-  def previewRhtml(fileName: String) = Action.async { implicit request =>
+  def previewRhtml(fileName: String) = actionBuilder.RestrictAction("accessOK").defaultHandler() { implicit authRequest =>
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
     Logger.info(fileName + ".html has been responsed!!!")
     Future.successful(Ok(htmlContent).as(HTML))
   }
 
-  def previewR() = Action.async { implicit request =>
-    val body: AnyContent = request.body
+  def previewR() = actionBuilder.RestrictAction("accessOK").defaultHandler() { implicit authRequest =>
+    val body: AnyContent = authRequest.body
     val jsonBody: Option[JsValue] = body.asJson
     jsonBody.map {
       data => {
@@ -64,23 +63,19 @@ class Preview2Controller @Inject() (ws:WSClient) extends Controller {
         val dir = env.dir
         scala.io.Source.fromFile("previewR.R").getLines.
           foreach { line => scala.tools.nsc.io.File("MarkDown/previewR/Rshell/" + fileName + ".R").
-            appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))
-          }
+            appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))}
         import scala.sys.process._
         (s"R CMD BATCH MarkDown/previewR/Rshell/$fileName.R").!
         val host = env.host
         val url = "http://" + host + "/previewR/" + fileName
         println("url is" + url)
-
         val json: JsValue = Json.obj(
           "data" -> url,
-          "message" -> "预览成功!"
-        )
+          "message" -> "预览成功!")
         Future.successful(Ok(json))
       }
     }.getOrElse(Future.successful(Ok("Error!!!")))
   }
-
 
 }
 

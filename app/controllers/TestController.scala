@@ -7,6 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
+import security.Cipher
 import services.{JoinDAO, UserDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -19,15 +20,11 @@ import scala.util.Try
 class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
 
   def pinyin()= Action.async { implicit request =>
-
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)
     val res2 = res1.replaceAll(",",  "")
     val res3 = res1.split(",")
     Future.successful(  Ok( res1 )  )
   }
-
-
-
 
   def pinyinn()= Action.async { implicit request =>
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", "$", PinyinFormat.WITHOUT_TONE)
@@ -42,8 +39,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     Future.successful(  Ok("session ===" + session )  )
   }
 
-
-
   val UserForm = Form(
     mapping(
       "firstName" -> nonEmptyText,
@@ -52,11 +47,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
       "email" -> email
     )(UserFormData.apply)(UserFormData.unapply)
   )
-
-
-
-
-
 
   def index = Action.async { implicit request =>
     userDAO.listAllUsers map { users =>
@@ -204,22 +194,15 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     //Seq( "/opt/local/libexec/gnubin/sed",  "-i",  r , "XXX.txt").!
     //Seq( "/opt/local/libexec/gnubin/sed",  "-i",  "$a XX777X", "/Users/datatalks/Desktop/xiaofan.txt").!
     //Seq( "/opt/local/libexec/gnubin/sed",  "-i",  r, "/Users/datatalks/Desktop/xiaofanR.txt").!
-
-
     "R CMD BATCH R.R".!
     println("R.R Script run successfully！！！")
     println("succeeded!!!")
-
     Future.successful(Ok("This is the Test!!!" + r))
-
   }
 
 
   def r2 = Action.async { implicit request =>
-
     Logger.info("Application startup...")
-
-
     import scala.sys.process._
     "R CMD BATCH R.R".!
     println("preview1.md Created successfully！！！")
@@ -245,7 +228,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
 
 
   def r3 = Action.async {
-
     import scala.sys.process._
     "R CMD BATCH R.R".!
     println("preview1.md Created successfully！！！")
@@ -254,8 +236,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     ws.url("http://localhost:88/preview1.html").get().map { response =>
       Ok(new String(response.body.getBytes("ISO-8859-1"), response.header(CONTENT_ENCODING).getOrElse("UTF-8"))).as(HTML)
     }
-
-
   }
 
   def r4 = Action.async {
@@ -270,10 +250,7 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
       val result = responseBody.toString
       Ok(result).as("text/html")
     }
-
-
   }
-
 
   def addUser() = Action.async { implicit request =>
     UserForm.bindFromRequest.fold(
@@ -298,10 +275,10 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
       request.session + ("identity" -> "YYY8888BBBBBBBBBBBYYY"))  )
   }
 
-
   def getsessions () = Action.async { implicit request =>
-    Future.successful(  request.session.get("identity").map { content =>
-      Ok("Hello " + content)
+    Future.successful(  request.session.get("roles").map { data =>
+      println(" Cipher is ====== "+data)
+      Ok("Hello " +  Cipher(data).decryptWith("playR") )
     }.getOrElse {Unauthorized("Oops, you are not connected")}  )
   }
 

@@ -1,22 +1,22 @@
 package controllers
 
 import javax.inject.Inject
-
 import models.{Report}
 import org.joda.time.DateTime
 import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
+import security.Cipher
 import services.ReportDAO
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
 
-class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
+class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
   def listReport(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
-    reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._1.map(
+    reportDAO.getOwnerminiReport(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._1.map(
       res => {
         if (res.length == 0) {
           val json: JsValue = Json.obj(
@@ -25,7 +25,7 @@ class Report2Controller   @Inject() (reportDAO: ReportDAO) extends Controller {
           Ok(json)
         }
         else {
-          val rows  = Await.result(reportDAO.getOwnerminiReport(session_owner_nickName,pageNo -1, pageSize)._2, Duration.Inf)
+          val rows  = Await.result(reportDAO.getOwnerminiReport(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._2, Duration.Inf)
           implicit val writer = new Writes[(Int, String, String, String, DateTime, DateTime, String)] {
             def writes(t: (Int, String, String, String,DateTime, DateTime, String)): JsValue = {
               Json.obj( "id" -> t._1,

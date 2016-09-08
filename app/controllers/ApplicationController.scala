@@ -7,7 +7,6 @@ import play.api.data.Forms._
 import play.api.mvc._
 import services.UserDAO
 import models.User,models.UserFormData
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -21,7 +20,6 @@ class ApplicationController   @Inject() (userDAO: UserDAO) extends Controller {
       "email" -> email
     )(UserFormData.apply)(UserFormData.unapply)
   )
-
 
   def index = Action.async { implicit request =>
     userDAO.listAllUsers map { users =>

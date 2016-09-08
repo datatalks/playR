@@ -78,7 +78,31 @@
 
 
 
+7 创建用户
+    url:   /adduser
+    params: {"owner_nickName": "", "owner_realName": "", "password": "", "email":""}
+    method: post
+    response: {data:{id: 12313},msg:'预览成功'}
+    error: {data: null, msg: '用户名重复(错误信息)'}
 
+8 已有用户列表
+    url:  /listuser
+    params: {}
+    response: {
+      data: [{
+         `id`: 131232,
+         `owner_nickName`: "",
+         `owner_realName`:  "",
+         `mobile`: "",
+         `email`: "fasfdasdf@163.com",
+         `memo`: "",
+         `status`:"",
+         `time`: ""
+      },{
+
+      }],
+      msg: '获取成功'
+    }
 
 
 
