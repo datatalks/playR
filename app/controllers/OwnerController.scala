@@ -19,15 +19,45 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
     jsonBody.map {
       data => {
         val owner_nickName = (data \ "owner_nickName").as[String]
+        val owner_realName = (data \ "owner_realName").as[String]
         val password = (data \ "password").as[String]
+        val mobile = (data \ "mobile").as[Long]
+        val email = (data \ "email").as[String]
+
         ownerDAO.exists(owner_nickName).flatMap  {
-          case false  =>  Future.successful( Ok(" 该用户名，已经被占用咯，请使用别的用户名的吧！！！"))
+          case false  =>
+            { val json: JsValue = Json.obj(
+              "data" -> "null",
+              "message" -> "用户名重复(错误信息)")
+              Future.successful( Ok(json))}
           case true => {
-            val newIdentity = { Owner(0,  owner_nickName,  "owner_realName", Cipher(password).encryptWith("playR"),12345678999L,"email", "memo", true, new DateTime()) }
-            println("new Owner is " + owner_nickName)
-            ownerDAO.addOwner(newIdentity).map(res => Ok(" new Owner info added successfully!!!") )}}
+            val newIdentity = { Owner(0,  owner_nickName, owner_realName, Cipher(password).encryptWith("playR"),mobile,email, "memo", true, new DateTime()) }
+            val json: JsValue = Json.obj(
+              "data" ->  Json.obj("owner_nickName" -> owner_nickName),
+              "message" -> "用户创建成功")
+            ownerDAO.addOwner(newIdentity).map(res => Ok(json))}}
       }
     }.getOrElse(Future.successful(Ok("Error8!!!")))
+  }
+
+  def listowner() = Action.async { implicit request =>
+
+    ownerDAO.listOwner map { data =>
+    {implicit val writer = new Writes[(Int, String, String, Long, String, String, Boolean, DateTime)] {
+        def writes(t: (Int, String, String, Long, String, String, Boolean, DateTime)): JsValue = {
+          Json.obj("id" -> t._1,
+            "owner_nickName" -> t._2,
+            "owner_realName" -> t._3,
+            "mobile" -> t._4,
+            "email" -> t._5,
+            "memo" -> t._6,
+            "status" -> t._7,
+            "time" -> t._8)}}
+      val jsonArrayOfOwners = Json.toJson(data)
+      val json: JsValue = Json.obj(
+        "data" -> jsonArrayOfOwners,
+        "message" -> "请求成功")
+      Ok(json)}}
   }
 
    //  直接通过表单提交过来的数据，同数据库中查询得到的数据进行比对，正确则跳转到相应的页面且设定相应的session！

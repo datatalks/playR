@@ -12,6 +12,7 @@ POST    /addowner                    controllers.OwnerController.AddOwner
 POST    /login                       controllers.OwnerController.LoginOwner
 GET     /logout                      controllers.OwnerController.LogoutOwner
 GET     /currentowner                controllers.OwnerController.getcurrentOwner
+GET     /listowner                   controllers.OwnerController.listowner
 
 POST    /preview                    controllers.Preview2Controller.preview
 POST    /previewR                   controllers.Preview2Controller.previewR
