@@ -26,8 +26,8 @@ class OwnerRoleDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
       db.run(ownerRoles.filter(_.id === id).delete)
   }
 
-  def getOwnerRole(owner_nickName: String): Future[Option[OwnerRole]] = {
-      db.run(ownerRoles.filter(_.owner_nickName === owner_nickName).result.headOption)
+  def getOwnerRole(owner_nickName: String): Future[Seq[(String)]] = {
+      db.run(ownerRoles.filter(_.owner_nickName === owner_nickName).map(data => data.role).result)
   }
 
   def checkOwnerRole(owner_nickName: String, role:String): Future[Option[OwnerRole]] = {
