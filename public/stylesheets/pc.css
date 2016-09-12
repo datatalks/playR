@@ -145,6 +145,13 @@ body {
   color: #fff;
   background-color: #008fbf;
 }
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+  background-color: #008fbf;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
 
 .sidebar-fold {
   margin: -20px -20px 0;
@@ -191,4 +198,12 @@ body {
   top: -509px;
   right: 6px;
   z-index: 100;
+}
+
+.form-validation .form-control.ng-dirty.ng-invalid {
+  border-color: #f05050;
+}
+.form-validation .form-control.ng-dirty.ng-valid,
+.form-validation .form-control.ng-dirty.ng-valid:focus {
+  border-color: #27c24c;
 }

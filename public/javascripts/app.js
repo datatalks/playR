@@ -2,7 +2,7 @@
 
 (function(angular) {
   'use strict';
-  angular.module('app', ['ngComponentRouter', 'new', 'reports', 'help'])
+  angular.module('app', ['ngComponentRouter', 'new', 'reports', 'help', 'users'])
 
   // .config(function($locationProvider) {
   //   $locationProvider.html5Mode(true);
@@ -20,6 +20,7 @@
       {path: '/', name: 'Index', component: 'index'},
       {path: '/new', name: 'New', component: 'new'},
       {path: '/reports', name: 'Reports', component: 'reports' },
+      {path: '/users/...', name: 'Users', component: 'users' },
       {path: '/help', name: 'Help', component: 'help' }
     ]
   })
@@ -27,12 +28,14 @@
     var ctrl = this;
 
     this.isActive = function (path) {
-      return $location.$$path == path;
+      if (path == '/') {
+        return $location.$$path == path;
+      }
+      return $location.$$path.indexOf(path) > -1;
     };
 
     this.foldornot = false;
     this.toggleSidebar = function (){
-      console.log(this.foldornot)
       this.foldornot = !this.foldornot;
     }
 
@@ -47,8 +50,87 @@
   }])
   .component('index', {
       template: ''
-      // templateUrl: '../template/index.html'
   });
+
+  angular.module('users', [])
+  .component('users', {
+    template: '<ng-outlet></ng-outlet>',
+    // templateUrl: '../template/users.html',
+    $routeConfig: [
+      {path: '/list', name: 'ListUser', component: 'listUser', useAsDefault: true },
+      {path: '/add', name: 'AddUser', component: 'addUser' }
+    ]
+  })
+  .service('userService', ['$http', function UserService($http) {
+    this.add = function (item){
+      return $http({
+        method: 'post',
+        url: '/addowner',
+        data: {
+          owner_nickName: item.owner_nickName,
+          owner_realName: item.owner_realName,
+          password: item.password,
+          mobile: item.mobile,
+          email: item.email
+        }
+      });
+    };
+
+    this.getList = function (){
+      return $http({
+        method: 'get',
+        url: '/listowner'
+      });
+    }
+  }])
+  .component('listUser', {
+    templateUrl: '../template/users.html'
+  })
+  .controller('usersCtrl', ['userService', function UsersCtrl ($userService){
+    var ctrl = this;
+
+    ctrl.list = [];
+    ctrl.alert = 0;
+
+    $userService.getList().then(function (response){
+      ctrl.list = response.data.data;
+    }, function (err) {
+      ctrl.alert = 1;
+      ctrl.rule = err.status;
+      ctrl.errMsg = err.statusText;
+    });
+  }])
+  .component('addUser', {
+    templateUrl: '../template/addUser.html',
+    bindings: { $router: '<' }
+  })
+  .controller('addUsersCtrl', ['userService', '$timeout', '$rootRouter', function AddUsersCtrl ($userService, $timeout, $rootRouter){
+    var ctrl = this;
+
+    ctrl.user = {};
+    ctrl.alert = 0;
+    ctrl.success = 0;
+
+    ctrl.save = function (evt) {
+      var $curBtn = $(evt.target);
+
+      $curBtn.button('loading');
+      $userService.add(ctrl.user).then(function (){
+        $curBtn.button('reset');
+        ctrl.success = 1;
+        ctrl.successMsg = '保存成功！正跳转至列表页...';
+
+        $timeout(function () {
+          $rootRouter.navigate(['Users']);
+        }, 3000);
+      }, function (e) {
+        ctrl.alert = 1;
+        ctrl.rule = e.status;
+        ctrl.errMsg = e.statusText;
+        $curBtn.button('reset');
+      })
+    }
+  }]);
 
   angular.module('new', [])
   .component('new', {
@@ -61,59 +143,43 @@
     ctrl.state = 1; // 未预览
 
     var editor = editormd("editor", {
-        height: 500,
-        watch : false,
-        saveHTMLToTextarea: true,
-        path : "../bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
-        toolbarIcons : function() {
-            return [
-                "undo", "redo", "|",
-                "bold", "del", "italic", "quote", "uppercase", "lowercase", "|",
-                "h1", "h2", "h3", "h4", "h5", "h6", "|",
-                "list-ul", "list-ol", "hr", "|",
-                "rmarkdown",
-                "rpreveiw"
-            ]
-            return editormd.toolbarModes['simple']; // full, simple, mini
-        },
-        toolbarIconsClass : {
-            rmarkdown : "rmarkdown"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
-        },
-        toolbarIconTexts : {
-            rmarkdown : "R"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
-        },
-        toolbarHandlers : {
-            rmarkdown : function(cm, icon, cursor, selection) {
+      height: 500,
+      watch : false,
+      path : "../bower_components/editor.md/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+      placeholder: "",
+      toolbarIcons : function() {
+          return [
+              "undo", "redo", "|",
+              "bold", "del", "italic", "quote", "uppercase", "lowercase", "|",
+              "h1", "h2", "h3", "h4", "h5", "h6", "|",
+              "list-ul", "list-ol", "hr", "|",
+              "rmarkdown"
+          ]
+          return editormd.toolbarModes['simple']; // full, simple, mini
+      },
+      toolbarIconsClass : {
+          rmarkdown : "rmarkdown"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
+      },
+      toolbarIconTexts : {
+          rmarkdown : "R"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
+      },
+      toolbarHandlers : {
+          rmarkdown : function(cm, icon, cursor, selection) {
 
-                //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
-                //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
-                var start = cursor.line === 1 &&  cursor.ch === 7;
+              // 替换选中文本，如果没有选中文本，则直接插入
+              cm.replaceSelection("\r\n```{r}" + selection + "\r\n\r\n```");
 
-                if (start){
-                  cm.setCursor(cursor.line + 2, 0);
-                }
-
-                // 替换选中文本，如果没有选中文本，则直接插入
-                cm.replaceSelection("\r\n```{r}" + selection + "\r\n\r\n```");
-
-                // 如果当前没有选中的文本，将光标移到要输入的位置
-                if(selection === "") {
-                  if (start){
-                    cm.setCursor(cursor.line + 4, cursor.ch);
-                  }else {
-                    cm.setCursor(cursor.line + 2, cursor.ch);
-                  }
-                }
-            }
-        },
-        lang : {
-            toolbar : {
-                rmarkdown : "Rmd"
-            }
-        },
-        onload : function() {
-          this.setCursor({line:1, ch:7});
-        }
+              // 如果当前没有选中的文本，将光标移到要输入的位置
+              if(selection === "") {
+                cm.setCursor(cursor.line + 2, cursor.ch);
+              }
+          }
+      },
+      lang : {
+          toolbar : {
+              rmarkdown : "Rmd"
+          }
+      }
     });
 
     //预览
@@ -171,11 +237,7 @@
     // 保存
     this.save = function (evt) {
       var $curBtn = $(evt.target);
-      var reportName = (function () {
-        var arr = editor.getMarkdown().match(/title:"([\S\s*]+)"/);
-
-        return arr != null ? arr[1]: '';
-      })();
+      var reportName = ctrl.reportName;
       var reportContent = editor.getMarkdown();
 
       ctrl.alert = 0;
@@ -184,7 +246,14 @@
       if (!reportName) {
         ctrl.alert = 1;
         ctrl.rule = '报告名称不能为空!';
-        ctrl.errMsg = '请在title的双引号内输入您的报告名';
+        ctrl.errMsg = '请输入您的报告名';
+        return;
+      }
+
+      if (!reportContent) {
+        ctrl.alert = 1;
+        ctrl.rule = '报告内容不能为空!';
+        ctrl.errMsg = '请输入您的报告内容';
         return;
       }
 

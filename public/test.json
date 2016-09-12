@@ -1,65 +1,55 @@
 {
     "data": [
         {
-            "id": 23,
-            "owner": "",
-            "reportName": "小凡的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472701943000,
-            "modify_time": 1472701943000,
-            "reportUrl": "reportUrl"
+            "id": 1,
+            "owner_nickName": "owner_nickName",
+            "owner_realName": "owner_realName",
+            "mobile": 123456,
+            "email": "email",
+            "memo": "memo",
+            "status": true,
+            "time": 1472630461000
         },
         {
-            "id": 24,
-            "owner": "",
-            "reportName": "我的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472798220000,
-            "modify_time": 1472798220000,
-            "reportUrl": "reportUrl"
+            "id": 2,
+            "owner_nickName": "xiaofan",
+            "owner_realName": "owner_realName",
+            "mobile": 123456,
+            "email": "email",
+            "memo": "memo",
+            "status": true,
+            "time": 1472636629000
         },
         {
-            "id": 25,
-            "owner": "",
-            "reportName": "我的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472798258000,
-            "modify_time": 1472798258000,
-            "reportUrl": "reportUrl"
+            "id": 3,
+            "owner_nickName": "zhangwei",
+            "owner_realName": "owner_realName",
+            "mobile": 125674448999,
+            "email": "email",
+            "memo": "memo",
+            "status": true,
+            "time": 1472638154000
         },
         {
-            "id": 26,
-            "owner": "",
-            "reportName": "我的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472806933000,
-            "modify_time": 1472806933000,
-            "reportUrl": "reportUrl"
+            "id": 4,
+            "owner_nickName": "zhangwei2",
+            "owner_realName": "owner_realName",
+            "mobile": 12345678999,
+            "email": "email",
+            "memo": "memo",
+            "status": true,
+            "time": 1472638202000
         },
         {
-            "id": 27,
-            "owner": "",
-            "reportName": "我的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472806947000,
-            "modify_time": 1472806947000,
-            "reportUrl": "reportUrl"
-        },
-        {
-            "id": 28,
-            "owner": "",
-            "reportName": "我的报告",
-            "execute_type": "execute_type",
-            "once2circle_last_executed_time": 1472806955000,
-            "modify_time": 1472806955000,
-            "reportUrl": "reportUrl"
+            "id": 5,
+            "owner_nickName": "xiaofan2",
+            "owner_realName": "owner_realName",
+            "mobile": 12345678999,
+            "email": "email",
+            "memo": "memo",
+            "status": true,
+            "time": 1472698809000
         }
     ],
-    "page":{
-      "currentPageNo": 1,
-      "pageSize": 20,
-      "totalCount": 65,
-      "totalPageCount": 4
-    },
     "message": "请求成功"
 }

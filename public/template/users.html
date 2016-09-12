@@ -1,0 +1,36 @@
+<h1 class="page-header">用户列表</h1>
+<div class="" ng-controller="usersCtrl as $ctrl">
+  <div class="alert alert-warning alert-dismissible" role="alert" ng-show="$ctrl.alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{$ctrl.rule}}</strong> {{$ctrl.errMsg}}
+  </div>
+  <p class="text-right">
+    <a ng-link="['AddUser']" class="btn btn-primary" ng-click="$ctrl.add($event)" data-loading-text="添加用户中，请稍候...">添加用户</a>
+  </p>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>用户名</th>
+          <th>姓名</th>
+          <th>手机</th>
+          <th>邮箱</th>
+          <th>时间</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in $ctrl.list track by $index">
+          <td>{{item.id}}</td>
+          <td>{{item.owner_nickName}}</td>
+          <td>{{item.owner_realName}}</td>
+          <td>{{item.mobile}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.time  | date:'yyyy-MM-dd'}}</td>
+          <td>{{item.memo}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
