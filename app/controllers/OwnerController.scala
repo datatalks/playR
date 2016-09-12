@@ -7,12 +7,13 @@ import org.joda.time.DateTime
 import play.api.libs.json.{Writes, JsValue, Json}
 import play.api.mvc._
 import security.Cipher
-import services.OwnerDAO
+import services.{JoinDAO, OwnerRoleDAO, OwnerDAO}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
+class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO, joinDAO:JoinDAO)  extends Controller {
   def AddOwner() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
@@ -80,7 +81,7 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
                      "data" -> owner_nickName,
                      "message" -> "登陆成功")
                  Future.successful( Ok(json2).
-                     withSession(request.session + ("owner_nickName" -> Cipher(owner_nickName).encryptWith("playR")) + ("roles" -> Cipher("accessOK").encryptWith("playR"))   )  )}}
+                     withSession(request.session + ("owner_nickName" -> owner_nickName) + ("roles" -> Cipher("accessOK").encryptWith("playR"))   )  )}}
              }
            }.getOrElse(Future.successful(Ok("Error8!!!")))
    }
@@ -92,31 +93,22 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO)  extends Controller {
     Future.successful(Ok(json).withNewSession)
   }
 
-
   def getcurrentOwner() =   Action.async {implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
-    ownerDAO.getcurrentOwner(session_owner_nickName).map(
-      res => {
-        if (res.length == 0) {
-          val json: JsValue = Json.obj(
-            "data" -> "null",
-            "message" -> "获取成功")
-          Ok(json)
-        }
-        else {
-          implicit val writer = new Writes[(Int, String, String)] {
-            def writes(t: (Int, String, String)): JsValue = {
-              Json.obj( "ownerid" -> t._1,
-                        "owner_nickName" -> t._2,
-                        "owner_realName" -> t._3 )}}
-          val jsonArrayOfRmds = Json.toJson(res)
-          val json: JsValue = Json.obj(
-            "data" -> jsonArrayOfRmds,
-            "message" -> "获取成功")
-          Ok(json)
-        }
-      })
-  }
+    val output  = Await.result(joinDAO.join4(session_owner_nickName), Duration.Inf)
+    val temp  = output groupBy(data => (data._1, data._2, data._3)) map { case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
+    val result = for(data <- temp.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"$"+_))
+    implicit val writer = new Writes[(Int, String, String, String)] {
+      def writes(t: (Int, String, String, String)): JsValue = {
+        Json.obj( "ownerid" -> t._1,
+          "owner_nickName" -> t._2,
+          "owner_realName" -> t._3,
+          "role" -> t._4)}}
+    val jsonArrays = Json.toJson(result)
+    val json: JsValue = Json.obj(
+      "data" -> jsonArrays,
+      "message" -> "获取成功")
+    Future.successful(Ok(json))}
 
 
  }

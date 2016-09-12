@@ -10,7 +10,8 @@
    url:   /currentowner
    params: 无
    method: GET
-   response:  {data:{ id: '1212', "owner_nickName": 'nickName', "owner_realName": "realName" },msg:'获取成功'
+   角色按照美元符号进行组合!
+{"data":[{"ownerid":2,"owner_nickName":"xiaofan","owner_realName":"owner_realName","role":"admin$test$fuwu"}],"message":"获取成功"}
 
 3、用户退出
    url: /logout
@@ -103,6 +104,9 @@
       }],
       message: '获取成功'
     }
+
+http://localhost:9000/currentowner
+{"data":[{"ownerid":2,"owner_nickName":"xiaofan","owner_realName":"owner_realName","role":"admin$test$fuwu"}],"message":"获取成功"}
 
 
 

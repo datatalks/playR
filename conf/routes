@@ -39,6 +39,7 @@ GET     /rmsessions                 controllers.TestController.rmsessions
 GET     /innerJoin1                  controllers.TestController.innerJoin1
 GET     /innerJoin2                  controllers.TestController.innerJoin2
 GET     /innerJoin3                  controllers.TestController.innerJoin3
+GET     /innerJoin4                  controllers.TestController.innerJoin4
 GET     /xiaofan1                   controllers.TestController.xiaofan1
 GET     /xiaofan2                   controllers.TestController.xiaofan2
 GET     /xiaofan3                   controllers.TestController.xiaofan3

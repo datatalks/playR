@@ -8,6 +8,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
 
+import scala.collection.parallel.mutable
 import scala.concurrent.Future
 
 class OwnerRoleDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
@@ -26,9 +27,13 @@ class OwnerRoleDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
       db.run(ownerRoles.filter(_.id === id).delete)
   }
 
-  def getOwnerRole(owner_nickName: String): Future[Seq[(String)]] = {
-      db.run(ownerRoles.filter(_.owner_nickName === owner_nickName).map(data => data.role).result)
+  def getOwnerRole(owner_nickName: String): Future[Seq[(String, String)]] = {
+      db.run(ownerRoles.filter(_.owner_nickName === owner_nickName).
+        map(data => (data.owner_nickName,data.role)).groupBy(_._1).map{
+        case (k, v) =>  (k, v.map(_._2).toString)
+      }.result)
   }
+
 
   def checkOwnerRole(owner_nickName: String, role:String): Future[Option[OwnerRole]] = {
       db.run(ownerRoles.filter(_.owner_nickName === owner_nickName).filter(_.role === role).result.headOption)

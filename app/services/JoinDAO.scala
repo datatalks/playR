@@ -10,7 +10,7 @@ import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
 
-class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, ownerDAO:OwnerDAO, reportDAO:ReportDAO) extends HasDatabaseConfigProvider[JdbcProfile] {
+class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, ownerDAO:OwnerDAO, reportDAO:ReportDAO, ownerRoleDAO:OwnerRoleDAO) extends HasDatabaseConfigProvider[JdbcProfile] {
   import driver.api._
 
   def join1 : Future[Seq[(Owner, Report)]] = {
@@ -30,6 +30,13 @@ class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, 
     db.run(joinQuery3.result)
   }
 
+
+  def join4(owner_nickName: String) : Future[Seq[(Int, String, String, String)]] = {
+
+    val query = (for {(a, b) <- ownerDAO.owners join ownerRoleDAO.ownerRoles  on (_.owner_nickName === _.owner_nickName)
+    } yield (a.id, a.owner_nickName,a.owner_realName, b.role)).filter(_._2 === owner_nickName)
+    db.run(query.result)
+  }
 
 
 }

@@ -8,7 +8,7 @@ import play.api.data.Forms._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import security.Cipher
-import services.{JoinDAO, UserDAO}
+import services.{OwnerRoleDAO, JoinDAO, UserDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -17,7 +17,7 @@ import play.api.libs.json._
 import scala.util.Try
 
 
-class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClient) extends Controller {
+class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
 
   def pinyin()= Action.async { implicit request =>
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)
@@ -34,9 +34,16 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
   }
 
   def getsessionvalue() = Action.async { implicit request =>
-    val session = request.session.get("owner_nickName").mkString
-    println("session ===" + session)
-    Future.successful(  Ok("session ===" + session )  )
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    val rerere = Cipher(session_owner_nickName).decryptWith("playR")
+    println("session ===" + rerere)
+
+
+    val res = Await.result(ownerRoleDAO.getOwnerRole(rerere), Duration.Inf)
+    println("res======" + res)
+
+
+    Future.successful(  Ok("session ===" + res )  )
   }
 
   val UserForm = Form(
@@ -72,7 +79,6 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
     Future.successful(Ok(result.toString))
   }
 
-
   //  对于表关联中使用异步Future得到的结果，通过两个map实现了异步结果的HTTP response!
   //  备注，对于常见的 Future 类型的结果返回错误如下：
   // Cannot write an instance of Seq[(String, String)] to HTTP response. Try to define a Writeable[Seq[(String, String)]]
@@ -81,6 +87,26 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ws:WSClie
         val t = ";"
         Ok(   res.map( x => x._1 + t + x._2 ).mkString   )
       }
+  }
+
+  def innerJoin4 =  Action.async {implicit request =>
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    val result  = Await.result(joinDAO.join4(session_owner_nickName), Duration.Inf)
+    val output = result groupBy(data => (data._1, data._2, data._3)) map {
+        case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
+    val finals = for(data <- output.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"$"+_))
+    println(finals)
+    implicit val writer = new Writes[(Int, String, String, String)] {
+      def writes(t: (Int, String, String, String)): JsValue = {
+        Json.obj( "ownerid" -> t._1,
+          "owner_nickName" -> t._2,
+          "owner_realName" -> t._3,
+          "role" -> t._4)}}
+    val jsonArrayOfRmds = Json.toJson(finals)
+    val json: JsValue = Json.obj(
+      "data" -> jsonArrayOfRmds,
+      "message" -> "获取成功")
+    Future.successful(Ok(json))
   }
 
 
