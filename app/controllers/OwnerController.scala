@@ -97,13 +97,13 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     val output  = Await.result(joinDAO.join4(session_owner_nickName), Duration.Inf)
     val temp  = output groupBy(data => (data._1, data._2, data._3)) map { case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
-    val result = for(data <- temp.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"$"+_))
+    val result = for(data <- temp.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"&"+_))
     implicit val writer = new Writes[(Int, String, String, String)] {
       def writes(t: (Int, String, String, String)): JsValue = {
         Json.obj( "ownerid" -> t._1,
           "owner_nickName" -> t._2,
           "owner_realName" -> t._3,
-          "role" -> t._4)}}
+          "role" -> t._4.split("_"))}}
     val jsonArrays = Json.toJson(result)
     val json: JsValue = Json.obj(
       "data" -> jsonArrays,
