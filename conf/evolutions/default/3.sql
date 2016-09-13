@@ -6,7 +6,7 @@ create table `owner` (
   `owner_nickName` TEXT NOT NULL,
   `owner_realName` TEXT NOT NULL,
   `password` TEXT NOT NULL,
-  `mobile` BIGINT NOT NULL,
+  `mobile` TEXT NOT NULL,
   `email` TEXT NOT NULL,
   `memo` TEXT NOT NULL,
   `status` Boolean NOT NULL,
@@ -15,4 +15,4 @@ create table `owner` (
 
 
 # --- !Downs
-drop table `identity`
+drop table `owner`

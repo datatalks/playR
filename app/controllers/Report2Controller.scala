@@ -52,7 +52,7 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {
-        val owner_nickName = session_owner_nickName
+        val owner_nickName = Cipher(session_owner_nickName).decryptWith("playR")
         val reportName = (data \ "reportName").as[String]
         val reportContent = (data \ "reportContent").as[String]
 

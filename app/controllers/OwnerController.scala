@@ -17,21 +17,22 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
   def AddOwner() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
+    println("jsonBody======" + jsonBody)
     jsonBody.map {
       data => {
         val owner_nickName = (data \ "owner_nickName").as[String]
         val owner_realName = (data \ "owner_realName").as[String]
         val password = (data \ "password").as[String]
-        val mobile = (data \ "mobile").as[Long]
+        val mobile = (data \ "mobile").as[String]
         val email = (data \ "email").as[String]
 
         ownerDAO.exists(owner_nickName).flatMap  {
-          case false  =>
+          case true  =>
             { val json: JsValue = Json.obj(
               "data" -> "null",
               "message" -> "用户名重复(错误信息)")
               Future.successful( Ok(json))}
-          case true => {
+          case false => {
             val newIdentity = { Owner(0,  owner_nickName, owner_realName, Cipher(password).encryptWith("playR"),mobile,email, "memo", true, new DateTime()) }
             val json: JsValue = Json.obj(
               "data" ->  Json.obj("owner_nickName" -> owner_nickName),
@@ -44,8 +45,8 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
   def listowner() = Action.async { implicit request =>
 
     ownerDAO.listOwner map { data =>
-    {implicit val writer = new Writes[(Int, String, String, Long, String, String, Boolean, DateTime)] {
-        def writes(t: (Int, String, String, Long, String, String, Boolean, DateTime)): JsValue = {
+    {implicit val writer = new Writes[(Int, String, String, String, String, String, Boolean, DateTime)] {
+        def writes(t: (Int, String, String, String, String, String, Boolean, DateTime)): JsValue = {
           Json.obj("id" -> t._1,
             "owner_nickName" -> t._2,
             "owner_realName" -> t._3,
@@ -70,7 +71,7 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
              data => {
                val owner_nickName = (data \ "owner_nickName").as[String]
                val password =  (data \ "password").as[String]
-               ownerDAO.checkOwner(owner_nickName, password).flatMap  {
+               ownerDAO.checkOwner(owner_nickName,  Cipher(password).encryptWith("playR")).flatMap  {
                  case None  =>
                    val json1: JsValue = Json.obj(
                      "data" -> "null",
@@ -81,8 +82,8 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
                      "data" -> owner_nickName,
                      "message" -> "登陆成功")
                  Future.successful( Ok(json2).
-                     withSession(request.session + ("owner_nickName" -> owner_nickName) + ("roles" -> Cipher("accessOK").encryptWith("playR"))   )  )}}
-             }
+                     withSession(request.session + ("owner_nickName" -> Cipher(owner_nickName).encryptWith("playR"))
+                       + ("roles" -> Cipher("accessOK").encryptWith("playR"))   ))}}}
            }.getOrElse(Future.successful(Ok("Error8!!!")))
    }
 

@@ -40,7 +40,7 @@ class OwnerDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       db.run(owners.filter(_.owner_nickName === owner_nickName).filter(_.password === password).result.headOption)
   }
 
-  def listOwner: Future[Seq[(Int, String , String, Long, String, String, Boolean, DateTime)]] = {
+  def listOwner: Future[Seq[(Int, String , String, String, String, String, Boolean, DateTime)]] = {
     val query = owners.map(data => ( data.id,data.owner_nickName,data.owner_realName, data.mobile, data.email, data.memo, data.status, data.time))
     db.run(query.result)
   }
@@ -54,7 +54,7 @@ class OwnerDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     def owner_nickName = column[String]("owner_nickName")
     def owner_realName = column[String]("owner_realName")
     def password = column[String]("password")
-    def mobile = column[Long]("mobile")
+    def mobile = column[String]("mobile")
     def email = column[String]("email")
     def memo = column[String]("memo")
     def status = column[Boolean]("status")
