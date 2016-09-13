@@ -1,55 +1,9 @@
 {
-    "data": [
-        {
-            "id": 1,
-            "owner_nickName": "owner_nickName",
-            "owner_realName": "owner_realName",
-            "mobile": 123456,
-            "email": "email",
-            "memo": "memo",
-            "status": true,
-            "time": 1472630461000
-        },
-        {
-            "id": 2,
-            "owner_nickName": "xiaofan",
-            "owner_realName": "owner_realName",
-            "mobile": 123456,
-            "email": "email",
-            "memo": "memo",
-            "status": true,
-            "time": 1472636629000
-        },
-        {
-            "id": 3,
-            "owner_nickName": "zhangwei",
-            "owner_realName": "owner_realName",
-            "mobile": 125674448999,
-            "email": "email",
-            "memo": "memo",
-            "status": true,
-            "time": 1472638154000
-        },
-        {
-            "id": 4,
-            "owner_nickName": "zhangwei2",
-            "owner_realName": "owner_realName",
-            "mobile": 12345678999,
-            "email": "email",
-            "memo": "memo",
-            "status": true,
-            "time": 1472638202000
-        },
-        {
-            "id": 5,
-            "owner_nickName": "xiaofan2",
-            "owner_realName": "owner_realName",
-            "mobile": 12345678999,
-            "email": "email",
-            "memo": "memo",
-            "status": true,
-            "time": 1472698809000
-        }
-    ],
+    "data": {
+        "id": 5,
+        "owner_nickName": "xiaofan2",
+        "owner_realName": "owner_realName",
+        "role": ["admin"]
+    },
     "message": "请求成功"
 }

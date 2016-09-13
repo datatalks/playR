@@ -27,6 +27,8 @@
   .controller('appCtrl', ['$http', '$location', '$rootRouter', function AppCtrl($http, $location, $rootRouter) {
     var ctrl = this;
 
+    ctrl.role = [];
+
     this.isActive = function (path) {
       if (path == '/') {
         return $location.$$path == path;
@@ -43,9 +45,11 @@
         method: 'get',
         url: '/currentowner'
     }).then(function (responses) {
-      if (responses.data.data.msg == '获取成功'){
-        ctrl.owner_realName = responses.data.owner_realName;
+      if (!!responses.data.data.role){
+        ctrl.role = responses.data.data.role;
       }
+    }, function () {
+      location.href = "./login.html";
     });
   }])
   .component('index', {

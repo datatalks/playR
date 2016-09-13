@@ -44,15 +44,15 @@
             <input type="password" id="password" class="form-control" ng-model="$ctrl.password" placeholder="密码" required>
           </p>
           <p class="has-error">
-            <span class="help-block">{{$ctrl.errMsg}}</span>
+            <span class="help-block" ng-bind="$ctrl.errMsg"></span>
           </p>
           <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
         </form>
       </div>
 
-      <p class="text-center">
+      <!-- <p class="text-center">
         <a>Create an account</a>
-      </p>
+      </p> -->
 
     </div> <!-- /container -->
     <script src="../javascripts/jquery-1.12.4.min.js"></script>
