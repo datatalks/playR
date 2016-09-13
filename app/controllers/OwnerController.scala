@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import models.{Owner}
 import org.joda.time.DateTime
-import play.api.libs.json.{Writes, JsValue, Json}
+import play.api.libs.json._
 import play.api.mvc._
 import security.Cipher
 import services.{JoinDAO, OwnerRoleDAO, OwnerDAO}
@@ -96,20 +96,22 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
 
   def getcurrentOwner() =   Action.async {implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
-    val output  = Await.result(joinDAO.join4(session_owner_nickName), Duration.Inf)
-    val temp  = output groupBy(data => (data._1, data._2, data._3)) map { case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
-    val result = for(data <- temp.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"&"+_))
-    implicit val writer = new Writes[(Int, String, String, String)] {
-      def writes(t: (Int, String, String, String)): JsValue = {
-        Json.obj( "ownerid" -> t._1,
-          "owner_nickName" -> t._2,
-          "owner_realName" -> t._3,
-          "role" -> t._4.split("_"))}}
-    val jsonArrays = Json.toJson(result)
-    val json: JsValue = Json.obj(
-      "data" -> jsonArrays,
-      "message" -> "获取成功")
-    Future.successful(Ok(json))}
+    val result  = Await.result(joinDAO.join4(Cipher(session_owner_nickName).decryptWith("playR")), Duration.Inf)
+    val output = result groupBy(data => (data._1, data._2, data._3)) map {
+      case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
+    val finals = for(data <- output.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"&"+_))
 
+    val json: JsValue = if (finals.length == 0) {Json.obj(
+        "data" -> "null",
+        "message" -> "获取成功")}
+    else {Json.obj(
+          "data" -> Json.obj("ownerid" -> JsNumber(finals(0)._1),
+                          "owner_nickName" -> JsString(finals(0)._2),
+                          "owner_realName" -> JsString(finals(0)._3),
+                          "role" -> finals(0)._4.toString.split("&")    ),
+          "message" -> "获取成功")
+    }
+    Future.successful(Ok(json))
+  }
 
  }

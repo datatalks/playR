@@ -91,23 +91,19 @@ class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ownerRole
 
   def innerJoin4 =  Action.async {implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
-    val result  = Await.result(joinDAO.join4(session_owner_nickName), Duration.Inf)
+    val result  = Await.result(joinDAO.join4(Cipher(session_owner_nickName).decryptWith("playR")), Duration.Inf)
     val output = result groupBy(data => (data._1, data._2, data._3)) map {
         case (k, v) => (k, v map {case (k1, k2, k3, v) => v} )}
     val finals = for(data <- output.toList) yield (data._1._1,data._1._2,data._1._3,data._2.reduceLeft(_+"&"+_))
-    println(finals)
-    implicit val writer = new Writes[(Int, String, String, String)] {
-      def writes(t: (Int, String, String, String)): JsValue = {
-        Json.obj( "ownerid" -> t._1,
-          "owner_nickName" -> t._2,
-          "owner_realName" -> t._3,
-          "role" -> t._4.split("&"))}}
-    val jsonArrayOfRmds = Json.toJson(finals)
+    println("finals====" + finals.toString )
     val json: JsValue = Json.obj(
-      "data" -> jsonArrayOfRmds,
-      "message" -> "获取成功")
-    Future.successful(Ok(json))
-  }
+              "data" -> Json.obj("ownerid" -> JsNumber(finals(0)._1),
+                                  "owner_nickName" -> JsString(finals(0)._2),
+                                  "owner_realName" -> JsString(finals(0)._3),
+                                  "role" -> finals(0)._4.toString.split("&")     ),
+              "message" -> "获取成功")
+
+    Future.successful(Ok(json))}
 
 
   def xiaofan1 = Action.async { implicit request =>
