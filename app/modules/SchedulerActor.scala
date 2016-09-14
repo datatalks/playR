@@ -23,7 +23,7 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, schedulerActorService: Sch
           println("暂时没有循环的任务需要执行!!!!!!")
         }
         else {
-          for (i <- res) yield  schedulerActorService.circle(i.owner_nickName, i.reportContent,i.random)
+          for (i <- res) yield  schedulerActorService.circle(i.owner_nickName, i.reportContent,i.reportUrl)
         }
       })
 

@@ -32,6 +32,11 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).result.headOption)
   }
 
+  def getreportContent(reportUrl: String): Future[Seq[String]] = {
+    db.run(reports.filter(_.reportUrl === reportUrl).map(data => data.reportContent).result)
+  }
+
+
   def getOwnerReport (owner: String): Future[Seq[Report]] = {
     val query = reports.filter(_.owner_nickName === owner)
     db.run(query.result)}
@@ -58,23 +63,19 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def owner_nickName = column[String]("owner_nickName")
     def reportName = column[String]("reportName")
     def reportContent = column[String]("reportContent")
-
     def execute_type = column[String]("execute_type")
-
     def once_scheduled_execute_time = column[org.joda.time.DateTime]("once_scheduled_execute_time")
     def circle_execute_interval_seconds = column[Int]("circle_execute_interval_seconds")
     def circle_next_scheduled_execute_time = column[org.joda.time.DateTime]("circle_next_scheduled_execute_time")
-
     def once2circle_last_executed_time = column[org.joda.time.DateTime]("once2circle_last_executed_time")
     def modify_time = column[org.joda.time.DateTime]("modify_time")
     def reportUrl = column[String]("reportUrl")
-    def random = column[String]("random")
     def status = column[Int]("status")
 
     override def * =
       (id, owner_nickName, reportName,reportContent, execute_type, once_scheduled_execute_time,
         circle_execute_interval_seconds, circle_next_scheduled_execute_time,
         once2circle_last_executed_time,
-        modify_time,reportUrl, random, status) <> (Report.tupled, Report.unapply _)
+        modify_time,reportUrl, status) <> (Report.tupled, Report.unapply _)
   }
 }

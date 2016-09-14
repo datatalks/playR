@@ -11,6 +11,7 @@ import services.ReportDAO
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
+import env.env
 
 
 class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
@@ -45,7 +46,6 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
       })
   }
 
-
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
@@ -55,16 +55,13 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
         val owner_nickName = Cipher(session_owner_nickName).decryptWith("playR")
         val reportName = (data \ "reportName").as[String]
         val reportContent = (data \ "reportContent").as[String]
-
+        val reportUrl = owner_nickName+"Report"+scala.util.Random.alphanumeric.take(10).mkString
         val newReport = Report(0, owner_nickName, reportName, reportContent, "execute_type",
-          new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), "reportUrl",
-          scala.util.Random.alphanumeric.take(10).mkString,1)
-
+            new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), reportUrl, 1)
         val json: JsValue = Json.obj(
           "data" -> "null",
           "message" -> "保存成功")
         reportDAO.addReport(newReport).map(res => Ok(json))
-
       }
     }.getOrElse(Future.successful(Ok("Error!!!")))
   }
@@ -72,20 +69,66 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
 
 
   def reportRhtml(fileName: String) = Action.async { implicit request =>
-
     println("request=====" + request.toString )
     println("request.headers======" + request.headers.toString)
     println("request.body=======" + request.body.toString )
-
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
     Logger.info(fileName + ".html has been responsed!!!")
     Future.successful(Ok(htmlContent).as(HTML))
   }
 
 
+  def report2Rhtml(reportUrl: String  ) = Action.async { implicit request =>
+//    val owner_nickName = reportUrl.split("Report")(0)
+//    val fileName = reportUrl.split("Report")(1)
+    val fileName = reportUrl
+    val ReportContent = Await.result(reportDAO.getreportContent(reportUrl), Duration.Inf)(0)
+    // 以下部分不论是前端提供,还是从数据库中获取都是同样的流程!!!
+    val path = "MarkDown/reportR/RMD/" + fileName
+    import scala.sys.process._
+    (s"mkdir -p -- $path ").!   //  Make directory if it doesn't exist!
+    scala.tools.nsc.io.File(path + "/" + fileName + ".Rmd").writeAll(ReportContent) // 删除了之前存在的内容!
+    val dir = env.dir
+    val Rfile_1delete_2append = dir + "/MarkDown/reportR/Rshell/" + fileName + ".R"
+    (s"rm -f $Rfile_1delete_2append").!
+    scala.io.Source.fromFile("reportR.R").getLines.
+      foreach { line => scala.tools.nsc.io.File("MarkDown/reportR/Rshell/" + fileName + ".R").
+        appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))
+      }
+    import scala.sys.process._
+    (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
+    val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
+    Logger.info(fileName + ".html has been responsed!!!")
+    Future.successful(Ok(htmlContent).as(HTML))
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   def getOwnerReport(owner : String) = Action.async { implicit request =>
     implicit val reportFormat = Json.format[Report]
+    Logger.info("xinyang++++++" + Cipher("xinyang").encryptWith("playR"))
+    Logger.info("xiaofan++++++" + Cipher("xiaofan").encryptWith("playR"))
+
     reportDAO.getOwnerReport(owner).map(
       res => {
         if (res.length == 0) {

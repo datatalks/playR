@@ -33,7 +33,7 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
               "message" -> "用户名重复(错误信息)")
               Future.successful( Ok(json))}
           case false => {
-            val newIdentity = { Owner(0,  owner_nickName, owner_realName, Cipher(password).encryptWith("playR"),mobile,email, "memo", true, new DateTime()) }
+            val newIdentity = { Owner(0,  owner_nickName, owner_realName, password, mobile,email, "memo", true, new DateTime()) }
             val json: JsValue = Json.obj(
               "data" ->  Json.obj("owner_nickName" -> owner_nickName),
               "message" -> "用户创建成功")
@@ -67,11 +67,12 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
      val body: AnyContent = request.body
      val jsonBody: Option[JsValue] = body.asJson
      println("XXXXXXX is "+ body.toString)
+
      jsonBody.map {
              data => {
                val owner_nickName = (data \ "owner_nickName").as[String]
                val password =  (data \ "password").as[String]
-               ownerDAO.checkOwner(owner_nickName,  Cipher(password).encryptWith("playR")).flatMap  {
+               ownerDAO.checkOwner(owner_nickName,  password).flatMap  {
                  case None  =>
                    val json1: JsValue = Json.obj(
                      "data" -> "null",
@@ -81,7 +82,7 @@ class OwnerController  @Inject() (ownerDAO: OwnerDAO, ownerRoleDAO: OwnerRoleDAO
                    val json2: JsValue = Json.obj(
                      "data" -> owner_nickName,
                      "message" -> "登陆成功")
-                 Future.successful( Ok(json2).
+                   Future.successful( Ok(json2).
                      withSession(request.session + ("owner_nickName" -> Cipher(owner_nickName).encryptWith("playR"))
                        + ("roles" -> Cipher("accessOK").encryptWith("playR"))   ))}}}
            }.getOrElse(Future.successful(Ok("Error8!!!")))

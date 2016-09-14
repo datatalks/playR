@@ -7,8 +7,8 @@ import env.env
  */
 class SchedulerActorService {
 
-  def circle( owner_nickName:String ,ReportContent: String , random: String  ) = {
-    val fileName = "REPORT_" + random
+  def circle( owner_nickName:String ,ReportContent: String , reportUrl: String  ) = {
+    val fileName = reportUrl
     // 以下部分不论是前端提供,还是从数据库中获取都是同样的流程!!!
     val path = "MarkDown/reportR/RMD/" + fileName
     import scala.sys.process._

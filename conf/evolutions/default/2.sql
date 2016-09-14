@@ -13,7 +13,6 @@ create table `report` (
   `once2circle_last_executed_time` Datetime NOT NULL,
   `modify_time` Datetime NOT NULL,
   `reportUrl` TEXT NOT NULL,
-  `random` TEXT NOT NULL,
   `status` INT NOT NULL
 )
 
