@@ -45,6 +45,10 @@
         method: 'get',
         url: '/currentowner'
     }).then(function (responses) {
+      if (responses.data.data == "null") {
+        location.href = "./login.html";
+        return;
+      }
       if (!!responses.data.data.role){
         ctrl.role = responses.data.data.role;
       }
