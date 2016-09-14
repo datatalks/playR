@@ -66,8 +66,6 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
     }.getOrElse(Future.successful(Ok("Error!!!")))
   }
 
-
-
   def reportRhtml(fileName: String) = Action.async { implicit request =>
     println("request=====" + request.toString )
     println("request.headers======" + request.headers.toString)
