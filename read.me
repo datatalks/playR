@@ -110,7 +110,7 @@ http://localhost:9000/currentowner
 
 
 
-    带完善的接口
+    待完善的接口
     ====
     更新报告reportContent接口
     设定报告更新类型接口(将来一次性运行,还是将来间隔固定时间循环更新运行)
@@ -123,6 +123,49 @@ http://localhost:9000/currentowner
     最后,关于报告中可能存在修改更新中,为了保证数据的运行时间的一致性,需要通过任务调度的状态,并且保存运行之后的相应结果
     应该可以通过一张报告任务调度表解决!!!
 
+tasklist
+========
+taskid
+report_id
+owner_nickName
+reportContent
+reportUrl
+scheduled_time
+executed_start_time
+executed_finish_time
 
 
 
+任务调度——周期性的定时(固定时间)
+新增和变动的情况——无解?  状态的判断!!!
+
+
+任务调度的三级控制流程:
+1. 定时的生成与更新即将发生的一段时间内的任务列表——五分钟,或者十分钟一次的动态的更新,插入,以及删除相应的任务列表
+2. 定时的获取即将发生的任务列表,且判断是否需要构造调度队列——获取当前时间的一个小时以内的任务,以及已经过去却由于任务挤压导致未执行的任务作为本次批量执行的任务列表(故,需要增加任务执行状态的字段!)
+3. 通过以上构造的调度队列,生成一次性的执行任务——且该任务生成之后,直接不用理会取消的问题!!! 由于以上已经是按照小时为单位考虑到了任务的更新和取消问题,故直接按照一次性任务直接执行即可!
+备注: 关于 schedule actor 的取消的模型!!!
+多任务执行  VS  单任务执行队列!!!(从稳定性的角度上来说,选择单任务的执行队列!!!)
+http://doc.akka.io/docs/akka/snapshot/scala/scheduler.html
+
+
+report =>  tasklist  =>  execution
+
+
+(execute_type, once_scheduled_execute_time, circle_execute_start_time,circle_execute_interval_seconds)
+match
+case once =>  if( once_scheduled_execute_time - NOW > 3600 seconds)  the_next_execute_time = once_scheduled_execute_time
+case circle => the_next_execute_time = circle_execute_start_time + {( NOW - circle_execute_start_time ) / circle_execute_interval_seconds} ROUNDUP * circle_execute_interval_seconds
+
+report  the_next_execute_time
+
+inser/update  tasklist!!!
+
+
+From tasklist to schedule List
+for (i <- takslist) schedule(tasklist.i 相关的属性列表——可以放时间,也可以不放时间则为一次性的执行列表)
+执行即可!!!!!!
+
+
+调整 report 表结构
+生成 testcontroller 的相关方法

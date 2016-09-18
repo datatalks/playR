@@ -32,9 +32,10 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).result.headOption)
   }
 
-  def getreportContent(reportUrl: String): Future[Seq[String]] = {
-    db.run(reports.filter(_.reportUrl === reportUrl).map(data => data.reportContent).result)
-  }
+//  因为将 reportURL 从 report 表中删除,故该方法则需要注销!
+//  def getreportContent(reportUrl: String): Future[Seq[String]] = {
+//    db.run(reports.filter(_.reportUrl === reportUrl).map(data => data.reportContent).result)
+//  }
 
 
   def getOwnerReport (owner: String): Future[Seq[Report]] = {
@@ -42,9 +43,9 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(query.result)}
 
 
-  def getOwnerminiReport(owner: String, pageNo:Int, pageSize:Int): (Future[Seq[(Int, String, String, String,DateTime, DateTime, String)]],Future[Int]) = {
+  def getOwnerminiReport(owner: String, pageNo:Int, pageSize:Int): (Future[Seq[(Int, String, String, String, DateTime)]],Future[Int]) = {
     val query = reports.filter(_.owner_nickName === owner).sortBy(data => (data.id.asc)).
-      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.once2circle_last_executed_time, data.modify_time, data.reportUrl )).
+      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type, data.modify_time )).
       drop(pageNo * pageSize).take(pageSize)
     val result =  db.run(query.result)
     val count = db.run(reports.filter(_.owner_nickName === owner).length.result)
@@ -65,17 +66,15 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def reportContent = column[String]("reportContent")
     def execute_type = column[String]("execute_type")
     def once_scheduled_execute_time = column[org.joda.time.DateTime]("once_scheduled_execute_time")
-    def circle_execute_interval_seconds = column[Int]("circle_execute_interval_seconds")
-    def circle_next_scheduled_execute_time = column[org.joda.time.DateTime]("circle_next_scheduled_execute_time")
-    def once2circle_last_executed_time = column[org.joda.time.DateTime]("once2circle_last_executed_time")
+    def circle_scheduled_start_time = column[org.joda.time.DateTime]("circle_scheduled_start_time")
+    def circle_scheduled_interval_seconds = column[Int]("circle_scheduled_interval_seconds")
+    def circle_scheduled_finish_time = column[org.joda.time.DateTime]("circle_scheduled_finish_time")
     def modify_time = column[org.joda.time.DateTime]("modify_time")
-    def reportUrl = column[String]("reportUrl")
     def status = column[Int]("status")
 
     override def * =
       (id, owner_nickName, reportName,reportContent, execute_type, once_scheduled_execute_time,
-        circle_execute_interval_seconds, circle_next_scheduled_execute_time,
-        once2circle_last_executed_time,
-        modify_time,reportUrl, status) <> (Report.tupled, Report.unapply _)
+        circle_scheduled_start_time,  circle_scheduled_interval_seconds,circle_scheduled_finish_time,
+        modify_time, status) <> (Report.tupled, Report.unapply _)
   }
 }

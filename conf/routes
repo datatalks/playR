@@ -23,7 +23,7 @@ POST    /report/add                     controllers.Report2Controller.addReport
 POST    /listOwnerReport                controllers.Report2Controller.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.Report2Controller.getOwnerReport(owner:String)
 GET     /report/list                    controllers.Report2Controller.listReport(pageNo:Int, pageSize:Int)
-GET     /reportR/:reportUrl          controllers.Report2Controller.report2Rhtml(reportUrl:String)
+#GET     /reportR/:reportUrl             controllers.Report2Controller.report2Rhtml(reportUrl:String)
 
 
 

@@ -8,7 +8,7 @@ import play.api.data.Forms._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import security.Cipher
-import services.{OwnerRoleDAO, JoinDAO, UserDAO}
+import services._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -17,7 +17,16 @@ import play.api.libs.json._
 import scala.util.Try
 
 
-class TestController   @Inject() (userDAO: UserDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
+class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, userDAO: UserDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
+
+  def task() = Action.async { implicit request =>
+
+
+
+
+    Future.successful(Ok( "XXXXXX" ))
+  }
+
 
   def pinyin()= Action.async { implicit request =>
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)

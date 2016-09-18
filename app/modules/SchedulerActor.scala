@@ -17,15 +17,16 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, schedulerActorService: Sch
   }
   def circle_schedule() = {
 
-    reportDAO.getOwnerReport("xiaofan").map(
-      res => {
-        if (res.length == 0) {
-          println("暂时没有循环的任务需要执行!!!!!!")
-        }
-        else {
-          for (i <- res) yield  schedulerActorService.circle(i.owner_nickName, i.reportContent,i.reportUrl)
-        }
-      })
+    println("由于 report 表中的 reportURL 字段的删除,故以下的方法注销!")
+//    reportDAO.getOwnerReport("xiaofan").map(
+//      res => {
+//        if (res.length == 0) {
+//          println("暂时没有循环的任务需要执行!!!!!!")
+//        }
+//        else {
+//          for (i <- res) yield  schedulerActorService.circle(i.owner_nickName, i.reportContent,i.reportUrl)
+//        }
+//      })
 
   }
 

@@ -33,7 +33,7 @@ class ReportController   @Inject() (reportDAO: ReportDAO) extends Controller {
         val reportContent = data("reportContent").mkString
 
         val newReport = Report(0, owner_nickName, reportName, reportContent, "execute_type",
-          new DateTime(), 123  , new DateTime(), new DateTime(), new DateTime(), "reportUrl",1)
+          new DateTime(),  new DateTime(), 123, new DateTime(), new DateTime(),  1)
 
         case class JasonResult(data: String, message: String)
         implicit val JasonResultWrites = new Writes[JasonResult] {
