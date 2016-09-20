@@ -2,7 +2,9 @@ package controllers
 
 import javax.inject.Inject
 import com.github.stuxuhai.jpinyin.{PinyinFormat, PinyinHelper}
-import models.{UserFormData, User}
+import env.env
+import models.{Tasklist, UserFormData, User}
+import org.joda.time.{Minutes, DateTime}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.ws.WSClient
@@ -21,11 +23,56 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
 
   def task() = Action.async { implicit request =>
 
-
-
-
-    Future.successful(Ok( "XXXXXX" ))
+    val reports =  Await.result(reportDAO.scheduleReport, Duration.Inf)
+    val now = new DateTime()
+    val iniTime = new DateTime("2014-09-01T0:0:0.0+08:00")
+    for (i <- reports) {
+      val from = math.ceil(Minutes.minutesBetween(i._7,now.minusHours(1)).getMinutes().toDouble / i._8).toInt
+      val to = math.floor(Minutes.minutesBetween(i._7,now.plusHours(1)).getMinutes().toDouble / i._8).toInt
+      val ts = for( j <- List.range(from, to+1)) yield (i._7.plusMinutes(j * i._8 ))
+      if(i._5 == "once" && i._6.isAfter(now.minusHours(1)) && i._6.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._6), Duration.Inf) ){
+        val t = Tasklist(0,i._1,i._2,scala.util.Random.alphanumeric.take(10).mkString, i._4,  i._6,iniTime,iniTime)
+        println("ttttttttt" + t)
+        tasklistDAO.addTask(t)}
+      else if(i._5=="circle" && ts.length > 0 ){
+        for(j <- ts){ if( !Await.result(tasklistDAO.exists(i._1,j), Duration.Inf) ){
+          val t = Tasklist(0,i._1,i._2,scala.util.Random.alphanumeric.take(10).mkString,i._4, j,iniTime,iniTime)
+          tasklistDAO.addTask(t)}}}}
+    Future.successful(Ok( reports.toString ))
   }
+
+  def taskkk() = Action.async { implicit request =>
+      tasklistDAO.scheduledTask().map( data =>
+                                         { for(i <- data) {
+                                           println("iiiiii===="+i.toString())
+                                           val fileName = i._2
+                                           val ReportContent = i._3
+                                           val path = "MarkDown/reportR/RMD/" + fileName
+                                           import scala.sys.process._
+                                           (s"mkdir -p -- $path ").!   //  Make directory if it doesn't exist!
+                                           scala.tools.nsc.io.File(path + "/" + fileName + ".Rmd").writeAll(ReportContent) // 删除了之前存在的内容!
+                                           val dir = env.dir
+                                           val Rfile_1delete_2append = dir + "/MarkDown/reportR/Rshell/" + fileName + ".R"
+                                           // 对于可能重复执行的报告模板,删除之前相应的.R文件
+                                           (s"rm -f $Rfile_1delete_2append").!
+                                           scala.io.Source.fromFile("reportR.R").getLines.
+                                             foreach { line => scala.tools.nsc.io.File("MarkDown/reportR/Rshell/" + fileName + ".R").
+                                               appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))}
+                                           println(new DateTime())
+                                           val HTML_folder_delete_for_update = dir + "/MarkDown/reportR/RMD/" + fileName + "/figure"
+                                           // 对于可能重复执行的报告模板,删除之前相应的 HTML 文件夹与文件
+                                           (s"rm -rf $HTML_folder_delete_for_update").!
+                                           tasklistDAO.upadte_start_time(i._1, new DateTime())
+                                           // 执行 RMD 对应的文件生成相应的 HTML 文件夹与文件
+                                           (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
+                                           tasklistDAO.upadte_finish_time(i._1, new DateTime())
+                                           println("========" + fileName.toString)
+                                         }})
+    Future.successful(Ok( "task to DO!" ))
+  }
+
+
+
 
 
   def pinyin()= Action.async { implicit request =>

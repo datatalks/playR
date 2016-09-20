@@ -3,6 +3,7 @@ package controllers
 import javax.inject.Inject
 import models.{Report}
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
@@ -47,12 +48,13 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {
+        val iniTime = DateTime.parse("01/01/1970 00:00:00", DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"))
         val owner_nickName = Cipher(session_owner_nickName).decryptWith("playR")
         val reportName = (data \ "reportName").as[String]
         val reportContent = (data \ "reportContent").as[String]
 //        val reportUrl = owner_nickName+"Report"+scala.util.Random.alphanumeric.take(10).mkString
         val newReport = Report(0, owner_nickName, reportName, reportContent, "execute_type",
-            new DateTime(),  new DateTime(), 123, new DateTime(), new DateTime(),  1)
+           iniTime,  new DateTime(), 123, new DateTime(), new DateTime(),  1)
         val json: JsValue = Json.obj(
           "data" -> "null",
           "message" -> "保存成功")
@@ -87,15 +89,12 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
 //    scala.io.Source.fromFile("reportR.R").getLines.
 //      foreach { line => scala.tools.nsc.io.File("MarkDown/reportR/Rshell/" + fileName + ".R").
 //        appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))
-//      }
+//    }
 //    import scala.sys.process._
 //    (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
 //    val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
 //    Logger.info(fileName + ".html has been responsed!!!")
 //    Future.successful(Ok(htmlContent).as(HTML))}
-
-
-
 
 
   def getOwnerReport(owner : String) = Action.async { implicit request =>

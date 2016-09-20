@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import com.github.tototoshi.slick.MySQLJodaSupport._
 import models.{Report, Owner}
+import org.joda.time.DateTime
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
@@ -37,6 +38,8 @@ class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, 
     } yield (a.id, a.owner_nickName,a.owner_realName, b.role)).filter(_._2 === owner_nickName)
     db.run(query.result)
   }
+
+
 
 
 }

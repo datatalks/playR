@@ -20,8 +20,7 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
   def addReport(report : Report): Future[String] = {
     Logger.info(s"logTest: 您输入的 RMD 内容是  $report")
     db.run(reports += report).map(res => "Rmd successfully added").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+      case ex: Exception => ex.getCause.getMessage}
   }
 
   def delete(id: Int): Future[Int] = {
@@ -52,14 +51,20 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     (result,count)
   }
 
+  def scheduleReport(): (Future[Seq[(Int, String, String, String,String, DateTime,DateTime,Int,DateTime)]]) = {
+    val query = reports.
+      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.reportContent, data.execute_type,
+        data.once_scheduled_execute_time,
+        data.circle_scheduled_start_time, data.circle_scheduled_interval_minutes, data.circle_scheduled_finish_time))
+    db.run(query.result)
+  }
+
 
   def listAll: Future[Seq[Report]] = {
     db.run(reports.result)
   }
 
-
   class ReportTableDef(tag: Tag) extends Table[Report](tag, "report") {
-
     def id = column[Int]("id", O.PrimaryKey,O.AutoInc)
     def owner_nickName = column[String]("owner_nickName")
     def reportName = column[String]("reportName")
@@ -67,14 +72,14 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def execute_type = column[String]("execute_type")
     def once_scheduled_execute_time = column[org.joda.time.DateTime]("once_scheduled_execute_time")
     def circle_scheduled_start_time = column[org.joda.time.DateTime]("circle_scheduled_start_time")
-    def circle_scheduled_interval_seconds = column[Int]("circle_scheduled_interval_seconds")
+    def circle_scheduled_interval_minutes = column[Int]("circle_scheduled_interval_minutes")
     def circle_scheduled_finish_time = column[org.joda.time.DateTime]("circle_scheduled_finish_time")
     def modify_time = column[org.joda.time.DateTime]("modify_time")
     def status = column[Int]("status")
 
     override def * =
       (id, owner_nickName, reportName,reportContent, execute_type, once_scheduled_execute_time,
-        circle_scheduled_start_time,  circle_scheduled_interval_seconds,circle_scheduled_finish_time,
+        circle_scheduled_start_time,  circle_scheduled_interval_minutes,circle_scheduled_finish_time,
         modify_time, status) <> (Report.tupled, Report.unapply _)
   }
 }
