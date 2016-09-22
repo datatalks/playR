@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class Scheduler @Inject() (val system: ActorSystem, @Named("scheduler-actor") val schedulerActor: ActorRef)(implicit ec: ExecutionContext)
 {
   system.scheduler.schedule(
-    6 seconds, 3600 seconds, schedulerActor, "report2task")
+    3 seconds, 3600 seconds, schedulerActor, "report2task")
   system.scheduler.schedule(
-    23 seconds, 3600 seconds, schedulerActor, "task2execution")
+    7 seconds, 3600 seconds, schedulerActor, "task2execution")
 }

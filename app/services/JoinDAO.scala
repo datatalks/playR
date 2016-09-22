@@ -11,7 +11,7 @@ import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
 
-class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, ownerDAO:OwnerDAO, reportDAO:ReportDAO, ownerRoleDAO:OwnerRoleDAO) extends HasDatabaseConfigProvider[JdbcProfile] {
+class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, tasklistDAO:TasklistDAO,ownerDAO:OwnerDAO, reportDAO:ReportDAO, ownerRoleDAO:OwnerRoleDAO) extends HasDatabaseConfigProvider[JdbcProfile] {
   import driver.api._
 
   def join1 : Future[Seq[(Owner, Report)]] = {
@@ -39,7 +39,12 @@ class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, 
     db.run(query.result)
   }
 
-
-
-
+  def scheduledTask(): Future[Seq[(Int,String,String)]] = {
+    val now = new DateTime()
+    val query = (for {(a, b) <- tasklistDAO.tasklist join reportDAO.reports  on (_.report_id === _.id)}
+                yield (a.taskid, a.owner_nickName,a.scheduled_execution_time,b.reportContent )).
+                filter( x =>(x._3 > now.minusHours(1) && x._3 < now.plusHours(1))).
+                map( x => (x._1, x._2, x._4))
+    db.run(query.result)
+  }
 }

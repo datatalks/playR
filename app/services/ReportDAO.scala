@@ -51,9 +51,9 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     (result,count)
   }
 
-  def scheduleReport(): (Future[Seq[(Int, String, String, String,String, DateTime,DateTime,Int,DateTime)]]) = {
+  def scheduleReport(): (Future[Seq[(Int, String, String, String, DateTime,DateTime,Int,DateTime)]]) = {
     val query = reports.
-      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.reportContent, data.execute_type,
+      map(data =>  (data.id ,data.owner_nickName, data.reportName, data.execute_type,
         data.once_scheduled_execute_time,
         data.circle_scheduled_start_time, data.circle_scheduled_interval_minutes, data.circle_scheduled_finish_time))
     db.run(query.result)

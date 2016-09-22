@@ -64,11 +64,7 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
   }
 
   def reportRhtml(fileName: String) = Action.async { implicit request =>
-    println("request=====" + request.toString )
-    println("request.headers======" + request.headers.toString)
-    println("request.body=======" + request.body.toString )
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
-    Logger.info(fileName + ".html has been responsed!!!")
     Future.successful(Ok(htmlContent).as(HTML))
   }
 

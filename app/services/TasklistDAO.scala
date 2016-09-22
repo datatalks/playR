@@ -33,11 +33,6 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     db.run(tasklist.filter(_.taskid === taskid).result.headOption)
   }
 
-  def scheduledTask(): Future[Seq[(Int,String,String)]] = {
-    val now = new DateTime()
-    db.run(tasklist.filter( x =>(x.scheduled_execution_time > now.minusHours(1) && x.scheduled_execution_time < now.plusHours(1))).
-      map(x => (x.taskid, x.owner_nickName, x.reportContent)).result)
-  }
 
   def upadte_start_time(taskid :Int , execution_start_time:DateTime) = {
     db.run(tasklist.filter(_.taskid === taskid).map(_.execution_start_time).update(execution_start_time))
@@ -61,12 +56,11 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     def taskid = column[Int]("taskid", O.PrimaryKey,O.AutoInc)
     def report_id = column[Int]("report_id")
     def owner_nickName = column[String]("owner_nickName")
-    def reportContent = column[String]("reportContent")
     def scheduled_execution_time = column[org.joda.time.DateTime]("scheduled_execution_time")
     def execution_start_time = column[org.joda.time.DateTime]("execution_start_time")
     def execution_finish_time = column[org.joda.time.DateTime]("execution_finish_time")
 
-    override def * = (taskid,report_id,owner_nickName,reportContent,
+    override def * = (taskid,report_id,owner_nickName,
         scheduled_execution_time, execution_start_time, execution_finish_time ) <> (Tasklist.tupled, Tasklist.unapply _)
   }
 }

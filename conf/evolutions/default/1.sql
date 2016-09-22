@@ -1,13 +1,18 @@
 # User schema
 
 # --- !Ups
-create table `user` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `first_name` TEXT NOT NULL,
-  `last_name` TEXT NOT NULL,
-  `mobile` BIGINT NOT NULL,
-  `email` TEXT NOT NULL
+create table `owner` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `owner_nickName` TEXT NOT NULL,
+  `owner_realName` TEXT NOT NULL,
+  `password` TEXT NOT NULL,
+  `mobile` TEXT NOT NULL,
+  `email` TEXT NOT NULL,
+  `memo` TEXT NOT NULL,
+  `status` Boolean NOT NULL,
+  `time` Datetime NOT NULL
 )
 
+
 # --- !Downs
-drop table `user`
+drop table `owner`

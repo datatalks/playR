@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 import com.github.stuxuhai.jpinyin.{PinyinFormat, PinyinHelper}
 import env.env
-import models.{Tasklist, UserFormData, User}
+import models.{Tasklist}
 import org.joda.time.{Minutes, DateTime}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -19,29 +19,28 @@ import play.api.libs.json._
 import scala.util.Try
 
 
-class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, userDAO: UserDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
+class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
 
   def task() = Action.async { implicit request =>
     val reports =  Await.result(reportDAO.scheduleReport, Duration.Inf)
     val iniTime = new DateTime("2014-09-01T0:0:0.0+08:00")
     for (i <- reports) {
       val now = new DateTime()
-      val report_filename = i._2 + "_Report_" +  scala.util.Random.alphanumeric.take(10).mkString
-      val from = math.ceil(Minutes.minutesBetween(i._7,now.minusHours(1)).getMinutes().toDouble / i._8).toInt
-      val to = math.floor(Minutes.minutesBetween(i._7,now.plusHours(1)).getMinutes().toDouble / i._8).toInt
-      val ts = for( j <- List.range(from, to+1)) yield (i._7.plusMinutes(j * i._8 ))
-      if(i._5 == "once" && i._6.isAfter(now.minusHours(1)) && i._6.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._6), Duration.Inf) ){
-        val t = Tasklist(0,i._1,i._2, i._4,  i._6,iniTime,iniTime)
+      val from = math.ceil(Minutes.minutesBetween(i._6,now.minusHours(1)).getMinutes().toDouble / i._7).toInt
+      val to = math.floor(Minutes.minutesBetween(i._6,now.plusHours(1)).getMinutes().toDouble / i._7).toInt
+      val ts = for( j <- List.range(from, to+1)) yield (i._6.plusMinutes(j * i._7 ))
+      if(i._4 == "once" && i._5.isAfter(now.minusHours(1)) && i._5.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._5), Duration.Inf) ){
+        val t = Tasklist(0,i._1,i._2, i._5,iniTime,iniTime)
         tasklistDAO.addTask(t)}
-      else if(i._5=="circle" && ts.length > 0 ){
+      else if(i._4=="circle" && ts.length > 0 ){
         for(j <- ts){ if( !Await.result(tasklistDAO.exists(i._1,j), Duration.Inf) ){
-          val t = Tasklist(0,i._1,i._2,i._4, j,iniTime,iniTime)
+          val t = Tasklist(0,i._1,i._2, j,iniTime,iniTime)
           tasklistDAO.addTask(t)}}}}
     Future.successful(Ok( reports.toString ))
   }
 
   def taskkk() = Action.async { implicit request =>
-      tasklistDAO.scheduledTask().map( data =>
+      joinDAO.scheduledTask().map( data =>
                                          { for(i <- data) {
                                            val fileName = i._2 +  "_ReportTask_" + i._1.toString
                                            val ReportContent = i._3
@@ -86,28 +85,8 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
   def getsessionvalue() = Action.async { implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     val rerere = Cipher(session_owner_nickName).decryptWith("playR")
-
-
     val res = Await.result(ownerRoleDAO.getOwnerRole(rerere), Duration.Inf)
-
-
-
     Future.successful(  Ok("session ===" + res )  )
-  }
-
-  val UserForm = Form(
-    mapping(
-      "firstName" -> nonEmptyText,
-      "lastName" -> nonEmptyText,
-      "mobile" -> longNumber,
-      "email" -> email
-    )(UserFormData.apply)(UserFormData.unapply)
-  )
-
-  def index = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      Ok(views.html.index(UserForm, users))
-    }
   }
 
 
@@ -151,69 +130,8 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
                                   "owner_realName" -> JsString(finals(0)._3),
                                   "role" -> finals(0)._4.toString.split("&")     ),
               "message" -> "获取成功")
-
     Future.successful(Ok(json))}
 
-
-  def xiaofan1 = Action.async { implicit request =>
-    userDAO.listAllUsersforTestig map { users =>
-      Ok(users.mkString)
-    }
-  }
-
-  def xiaofan2 = Action.async { implicit request =>
-    userDAO.listAllUsersforTestig map { users =>
-      Ok(users.toString)
-    }
-  }
-
-  def xiaofan3 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      val t = ";"
-      Ok(users.map(_.email).toString)
-    }
-  }
-
-
-  def xiaofan4 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      val t = ";"
-      Ok(users.map(x => (x.email, t, x.email, "!!!!!")).toString)
-    }
-  }
-
-  def xiaofan5 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      val t = ";"
-      Ok(users.map(x => (x.email + t + x.email + "!!!!!")).toString)
-    }
-  }
-
-  def xiaofan6 = Action.async { implicit request =>
-    userDAO.listAllUsers map { users =>
-      val t = ";"
-      Ok(users.map(x => (x.email + t + x.email + "中文中文中文")).mkString)
-    }
-  }
-
-  def json1 = Action {
-    val nieces = Seq("Aleka", "Christina", "Emily", "Hannah", "Molly")
-    Ok(Json.toJson(nieces))
-  }
-
-  def json2 = Action.async { implicit request => {
-
-    implicit val userWrites = new Writes[User] {
-      def writes(user: User) = Json.obj(
-        "id" -> user.id,
-        "firstname" -> user.firstName.toUpperCase,
-        "lastName" -> user.lastName,
-        "lastName" -> user.lastName,
-        "email888" -> user.email)
-    }
-    userDAO.listAllUsers map { users =>
-      Ok(Json.toJson(users))
-    }}}
 
   def json3 = Action {
     val name = "我是李爬爬"
@@ -238,7 +156,6 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
       "data" -> url,
       "message" -> "提交成功咯~~~"
     )
-
     val json3: JsValue = Json.obj(
       "data" -> Json.arr(
         Json.obj(
@@ -249,8 +166,6 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
       ),
       "message" -> "提交成功咯~~~"
     )
-
-
     Ok(json3)
   }
 
@@ -323,23 +238,7 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
     }
   }
 
-  def addUser() = Action.async { implicit request =>
-    UserForm.bindFromRequest.fold(
-      // if any error in submitted data
-      errorForm => Future.successful(Ok(views.html.index(errorForm, Seq.empty[User]))),
-      data => {
-        val newUser = User(0, data.firstName, data.lastName, data.mobile, data.email)
-        userDAO.addUser(newUser).map(res =>
-          Redirect(routes.ApplicationController.index())
-        )
-      })
-  }
 
-  def deleteUser(id: Long) = Action.async { implicit request =>
-    userDAO.deleteUser(id) map { res =>
-      Redirect(routes.ApplicationController.index())
-    }
-  }
 
   def setsessions () = Action.async { implicit request =>
     Future.successful(  Ok(" sessions are setted or updated!").withSession(
