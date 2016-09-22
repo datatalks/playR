@@ -17,7 +17,7 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, schedulerActorService: Sch
   }
   def circle_schedule() = {
 
-    println("由于 report 表中的 reportURL 字段的删除,故以下的方法注销!")
+    println(" scheduler info ......!")
 //    reportDAO.getOwnerReport("xiaofan").map(
 //      res => {
 //        if (res.length == 0) {

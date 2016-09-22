@@ -22,21 +22,20 @@ import scala.util.Try
 class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, userDAO: UserDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
 
   def task() = Action.async { implicit request =>
-
     val reports =  Await.result(reportDAO.scheduleReport, Duration.Inf)
-    val now = new DateTime()
     val iniTime = new DateTime("2014-09-01T0:0:0.0+08:00")
     for (i <- reports) {
+      val now = new DateTime()
+      val report_filename = i._2 + "_Report_" +  scala.util.Random.alphanumeric.take(10).mkString
       val from = math.ceil(Minutes.minutesBetween(i._7,now.minusHours(1)).getMinutes().toDouble / i._8).toInt
       val to = math.floor(Minutes.minutesBetween(i._7,now.plusHours(1)).getMinutes().toDouble / i._8).toInt
       val ts = for( j <- List.range(from, to+1)) yield (i._7.plusMinutes(j * i._8 ))
       if(i._5 == "once" && i._6.isAfter(now.minusHours(1)) && i._6.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._6), Duration.Inf) ){
-        val t = Tasklist(0,i._1,i._2,scala.util.Random.alphanumeric.take(10).mkString, i._4,  i._6,iniTime,iniTime)
-        println("ttttttttt" + t)
+        val t = Tasklist(0,i._1,i._2, i._4,  i._6,iniTime,iniTime)
         tasklistDAO.addTask(t)}
       else if(i._5=="circle" && ts.length > 0 ){
         for(j <- ts){ if( !Await.result(tasklistDAO.exists(i._1,j), Duration.Inf) ){
-          val t = Tasklist(0,i._1,i._2,scala.util.Random.alphanumeric.take(10).mkString,i._4, j,iniTime,iniTime)
+          val t = Tasklist(0,i._1,i._2,i._4, j,iniTime,iniTime)
           tasklistDAO.addTask(t)}}}}
     Future.successful(Ok( reports.toString ))
   }
@@ -44,9 +43,9 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
   def taskkk() = Action.async { implicit request =>
       tasklistDAO.scheduledTask().map( data =>
                                          { for(i <- data) {
-                                           println("iiiiii===="+i.toString())
-                                           val fileName = i._2
+                                           val fileName = i._2 +  "_ReportTask_" + i._1.toString
                                            val ReportContent = i._3
+                                           println("fffilename===" + fileName)
                                            val path = "MarkDown/reportR/RMD/" + fileName
                                            import scala.sys.process._
                                            (s"mkdir -p -- $path ").!   //  Make directory if it doesn't exist!
@@ -58,7 +57,6 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
                                            scala.io.Source.fromFile("reportR.R").getLines.
                                              foreach { line => scala.tools.nsc.io.File("MarkDown/reportR/Rshell/" + fileName + ".R").
                                                appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))}
-                                           println(new DateTime())
                                            val HTML_folder_delete_for_update = dir + "/MarkDown/reportR/RMD/" + fileName + "/figure"
                                            // 对于可能重复执行的报告模板,删除之前相应的 HTML 文件夹与文件
                                            (s"rm -rf $HTML_folder_delete_for_update").!
@@ -66,13 +64,9 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
                                            // 执行 RMD 对应的文件生成相应的 HTML 文件夹与文件
                                            (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
                                            tasklistDAO.upadte_finish_time(i._1, new DateTime())
-                                           println("========" + fileName.toString)
                                          }})
     Future.successful(Ok( "task to DO!" ))
   }
-
-
-
 
 
   def pinyin()= Action.async { implicit request =>
@@ -92,11 +86,10 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
   def getsessionvalue() = Action.async { implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     val rerere = Cipher(session_owner_nickName).decryptWith("playR")
-    println("session ===" + rerere)
 
 
     val res = Await.result(ownerRoleDAO.getOwnerRole(rerere), Duration.Inf)
-    println("res======" + res)
+
 
 
     Future.successful(  Ok("session ===" + res )  )
@@ -356,14 +349,27 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
   def getsessions () = Action.async { implicit request =>
     Future.successful(  request.session.get("roles").map { data =>
       println(" Cipher is ====== "+data)
-      Ok("Hello " +  Cipher(data).decryptWith("playR") )
+      Ok("Hello " +  "Cipher" )
     }.getOrElse {Unauthorized("Oops, you are not connected")}  )
   }
 
   def rmsessions () = Action.async { implicit request =>
+
+    val message:String = "1"
+    val key:String = "Key"
+
+    val encrypted = Cipher(message).simpleOffset(5)
+    println(encrypted)
+    val decrypted = Cipher(encrypted).simpleOffset(-5)
+    println(decrypted)
+
+    val encrypted2 = Cipher(message).encryptWith("XXXXXX")
+    println(encrypted2)
+    val decrypted2 = Cipher(encrypted2).decryptWith(key)
+    println(decrypted2)
+
     Future.successful(  Ok("Bye").withNewSession )
   }
-
 
 
 }
