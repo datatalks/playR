@@ -57,7 +57,7 @@
     });
   }])
   .component('index', {
-      template: ''
+      templateUrl: '../template/about.html'
   });
 
   angular.module('users', [])
