@@ -2,7 +2,7 @@
 
 (function(angular) {
   'use strict';
-  angular.module('app', ['ngComponentRouter', 'new', 'reports', 'help', 'users'])
+  angular.module('app', ['ui.bootstrap', 'ngComponentRouter', 'new', 'reports', 'help', 'users'])
 
   // .config(function($locationProvider) {
   //   $locationProvider.html5Mode(true);
@@ -144,11 +144,39 @@
   .component('new', {
     templateUrl: '../template/new.html'
   })
-  .controller('newCtrl', ['newService', '$timeout', '$rootRouter', function NewCtrl($newService, $timeout, $rootRouter) {
+  .controller('newCtrl', ['newService', '$timeout', '$rootRouter', '$scope', function NewCtrl($newService, $timeout, $rootRouter, $scope) {
     var ctrl = this;
 
     ctrl.alert = 0;
     ctrl.state = 1; // 未预览
+
+    // datepicker
+    $scope.popup1 = {
+      opened: false
+    };
+    $scope.popup2 = {
+      opened: false
+    };
+    $scope.popup3 = {
+      opened: false
+    };
+
+    $scope.dateOptions1 = {
+      minDate: new Date()
+    };
+
+    $scope.dateOptions2 = {
+      minDate: new Date()
+    };
+    $scope.dateOptions3 = {
+      minDate: new Date()
+    };
+
+    $scope.open = function(popup) {
+      popup.opened = true;
+    };
+
+
 
     var editor = editormd("editor", {
       height: 500,
@@ -321,11 +349,13 @@
 
     var getList = function () {
       $reportsService.getList(ctrl.pages.pageNo, ctrl.pages.pageSize).then(function (responses) {
-        ctrl.list = responses.data.data;
+        if (responses.data.data != "null") {
+          ctrl.list = responses.data.data;
 
-        ctrl.pages.pageSize = responses.data.page.pageSize;
-        ctrl.pages.pageNo = responses.data.page.currentPageNo || 1;
-        ctrl.pages.totalCount = responses.data.page.totalCount;
+          ctrl.pages.pageSize = responses.data.page.pageSize;
+          ctrl.pages.pageNo = responses.data.page.currentPageNo || 1;
+          ctrl.pages.totalCount = responses.data.page.totalCount;
+        }
       })
     };
     getList();

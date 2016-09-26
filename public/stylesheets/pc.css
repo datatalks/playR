@@ -4,9 +4,24 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
+  opacity: 1;
   padding-top: 46px;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  transition: opacity 1s;
 }
 
+.ng-cloak {
+  opacity: 0;
+}
+
+/*.ng-invalid {
+  border: 1px solid red !important;
+}*/
+
+.uib-datepicker-popup .btn {
+  border: none;
+}
 
 /*
  * Global add-ons
