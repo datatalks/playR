@@ -20,6 +20,7 @@ GET     /reportR/:fileName              controllers.Report2Controller.reportRhtm
 POST    /listOwnerReport                controllers.Report2Controller.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.Report2Controller.getOwnerReport(owner:String)
 GET     /report/list                    controllers.Report2Controller.listReport(pageNo:Int, pageSize:Int)
+GET     /report/list2                   controllers.Report2Controller.listReport2(pageNo:Int, pageSize:Int)
 #GET     /reportR/:reportUrl             controllers.Report2Controller.report2Rhtml(reportUrl:String)
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne
@@ -45,7 +46,7 @@ GET     /r4                         controllers.TestController.r4
 GET     /pinyin                     controllers.TestController.pinyin
 GET     /getsessionvalue            controllers.TestController.getsessionvalue
 GET     /task                       controllers.TestController.task
-GET     /taskkk                     controllers.TestController.taskkk
+GET     /join8                      controllers.TestController.join8
 
 
 # Map static resources from the /public folder to the /assets URL path

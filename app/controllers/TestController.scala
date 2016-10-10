@@ -68,6 +68,19 @@ class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO, 
   }
 
 
+  def join8()  = Action.async { implicit request =>
+    val res1 = joinDAO.reportList("xiaofan",12,12)
+
+    for (i <- res1._1)  print(i)
+    for (i <- res1._2)  print(i)
+    Future.successful(  Ok( "XXX" )  )
+  }
+
+
+
+
+
+
   def pinyin()= Action.async { implicit request =>
     val res1 = PinyinHelper.convertToPinyinString("李.成. 竹。。。 ", ",", PinyinFormat.WITHOUT_TONE)
     val res2 = res1.replaceAll(",",  "")

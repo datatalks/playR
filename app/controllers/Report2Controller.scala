@@ -8,14 +8,14 @@ import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
 import security.Cipher
-import services.ReportDAO
+import services.{JoinDAO, ReportDAO}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 import env.env
 
 
-class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
+class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) extends Controller {
   def listReport(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     reportDAO.getOwnerminiReport(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._1.map(
@@ -41,6 +41,40 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
             "page" -> Json.obj("currentPageNo" -> pageNo, "pageSize" -> pageSize, "totalCount" -> rows.toString, "totalPageCount" -> math.ceil(rows.toFloat/pageSize).toInt ),
             "message" -> "请求成功")
           Ok(json)}})}
+
+
+  def listReport2(pageNo:Int, pageSize:Int) = Action.async { implicit request =>
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    joinDAO.reportList(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._1.map(
+      res => {
+        if (res.length == 0) {
+          val json: JsValue = Json.obj(
+            "data" -> "null",
+            "message" -> "请求成功")
+          Ok(json)
+        }
+        else {
+          val rows  = Await.result(reportDAO.getOwnerminiReport(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._2, Duration.Inf)
+          implicit val writer = new Writes[(Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[Int] ,Option[DateTime])] {
+            def writes(t: (Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[Int] ,Option[DateTime])): JsValue = {
+              Json.obj( "report_id" -> t._1,
+                "owner_nickName" -> t._2,
+                "reportName" -> t._3,
+                "execute_type" -> t._4,
+                "once_scheduled_execute_time" -> t._5,
+                "circle_scheduled_start_time" -> t._6,
+                "circle_scheduled_interval_minutes" -> t._7,
+                "circle_scheduled_finish_time" -> t._8,
+                "report_last_execution_fileName" -> t._9,
+                "report_last_execution_time" -> t._10
+              )}}
+          val jsonArrays = Json.toJson(res)
+          val json: JsValue = Json.obj(
+            "data" -> jsonArrays,
+            "page" -> Json.obj("currentPageNo" -> pageNo, "pageSize" -> pageSize, "totalCount" -> rows.toString, "totalPageCount" -> math.ceil(rows.toFloat/pageSize).toInt ),
+            "message" -> "请求成功")
+          Ok(json)}})}
+
 
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
