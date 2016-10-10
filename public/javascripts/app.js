@@ -286,6 +286,13 @@
         return;
       }
 
+      if (!ctrl.execute_type) {
+        ctrl.alert = 1;
+        ctrl.rule = '报告执行类型不能为空!';
+        ctrl.errMsg = '请选择您的报告执行类型';
+        return;
+      }
+
       if (!reportContent) {
         ctrl.alert = 1;
         ctrl.rule = '报告内容不能为空!';
@@ -294,7 +301,7 @@
       }
 
       $curBtn.button('loading');
-      $newService.add(reportName, reportContent).then(function (response){
+      $newService.add(reportName, reportContent, ctrl.execute_type, ctrl).then(function (response){
         $curBtn.button('reset');
         ctrl.success = 1;
         ctrl.successMsg = '保存成功！正跳转至列表页...';
@@ -311,14 +318,24 @@
     }
   }])
   .service('newService', ['$http', function NewService($http) {
-    this.add = function (reportName, reportContent){
+    this.add = function (reportName, reportContent, execute_type, opts){
+      var postdata = {
+        reportName: reportName,
+        reportContent: reportContent,
+        execute_type : execute_type
+      };
+      if (execute_type == "once") {
+        postdata.once_scheduled_execute_time = opts.once_scheduled_execute_time;
+      } else {
+        postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
+        postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
+        postdata.circle_scheduled_interval_minutes = opts.circle_scheduled_interval_minutes;
+      }
+
       return $http({
         method: 'post',
         url: '/report/add',
-        data: {
-          reportName: reportName,
-          reportContent: reportContent
-        }
+        data: postdata
       });
     };
 
