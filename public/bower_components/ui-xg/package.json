@@ -1,0 +1,64 @@
+{
+  "name": "ui-xg",
+  "version": "2.0.2",
+  "description": "UI directives based on angular and bootstrap",
+  "main": "dist/js/ui-xg.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xgfe/ui-xg.git"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "postinstall": "bower install",
+    "start": "http-server -a localhost -p 8001 -c-1 ./logs"
+  },
+  "keywords": [
+    "UI",
+    "angular",
+    "angular directives",
+    "bootstrap"
+  ],
+  "author": "xgfe",
+  "license": "MIT",
+  "devDependencies": {
+    "angular": "1.2.29",
+    "angular-mocks": "1.2.29",
+    "angular-sanitize": "1.2.29",
+    "cz-conventional-changelog": "^1.2.0",
+    "ejs": "^2.4.1",
+    "eslint-plugin-angular": "^1.3.0",
+    "glob": "^6.0.3",
+    "gulp": "^3.9.0",
+    "gulp-angular-html2js": "0.0.1",
+    "gulp-clean-css": "^2.0.7",
+    "gulp-concat": "^2.6.0",
+    "gulp-conventional-changelog": "^1.1.0",
+    "gulp-eslint": "^1.1.1",
+    "gulp-insert": "^0.5.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-rimraf": "^0.2.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-uglify": "^1.5.1",
+    "highlight.js": "^9.1.0",
+    "jasmine-core": "^2.4.1",
+    "jquery": "^1.11.3",
+    "karma": "^0.13.16",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^1.0.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-junit-reporter": "^0.3.8",
+    "lint-plus": "^0.6.7",
+    "marked": "^0.3.5",
+    "run-sequence": "^1.2.2",
+    "xg-htmlhint": "0.0.9"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "node ./misc/hooks/pre-commit.js"
+    },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 (function(angular) {
   'use strict';
-  angular.module('app', ['ui.bootstrap', 'ngComponentRouter', 'new', 'reports', 'help', 'users'])
+  angular.module('app', ['ui.bootstrap', 'ui.xg', 'ngComponentRouter', 'new', 'reports', 'help', 'users'])
 
   // .config(function($locationProvider) {
   //   $locationProvider.html5Mode(true);
@@ -151,30 +151,7 @@
     ctrl.state = 1; // 未预览
 
     // datepicker
-    $scope.popup1 = {
-      opened: false
-    };
-    $scope.popup2 = {
-      opened: false
-    };
-    $scope.popup3 = {
-      opened: false
-    };
-
-    $scope.dateOptions1 = {
-      minDate: new Date()
-    };
-
-    $scope.dateOptions2 = {
-      minDate: new Date()
-    };
-    $scope.dateOptions3 = {
-      minDate: new Date()
-    };
-
-    $scope.open = function(popup) {
-      popup.opened = true;
-    };
+    ctrl.minDate = new Date();
 
 
 
