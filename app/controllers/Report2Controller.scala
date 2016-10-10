@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 import models.{Report}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.{ISODateTimeFormat, DateTimeFormat}
 import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
@@ -52,12 +52,22 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO) extends Controller {
         val owner_nickName = Cipher(session_owner_nickName).decryptWith("playR")
         val reportName = (data \ "reportName").as[String]
         val reportContent = (data \ "reportContent").as[String]
-//        val reportUrl = owner_nickName+"Report"+scala.util.Random.alphanumeric.take(10).mkString
-        val newReport = Report(0, owner_nickName, reportName, reportContent, "execute_type",
-           iniTime,  new DateTime(), 123, new DateTime(), new DateTime(),  1)
+        val execute_type = (data \ "execute_type").as[String]
+        val newReport = if( execute_type == "once")
+                            Report(0, owner_nickName, reportName, reportContent, "once",
+                              DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              iniTime, 0, iniTime, new DateTime(), 1)
+                        else
+                            Report(0, owner_nickName, reportName, reportContent, "circle", iniTime,
+                              DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              (data \ "circle_scheduled_interval_minutes").as[Int],
+                              DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              new DateTime(), 1)
+
         val json: JsValue = Json.obj(
           "data" -> "null",
           "message" -> "保存成功")
+
         reportDAO.addReport(newReport).map(res => Ok(json))
       }
     }.getOrElse(Future.successful(Ok("Error!!!")))
