@@ -55,8 +55,8 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
         }
         else {
           val rows  = Await.result(reportDAO.getOwnerminiReport(Cipher(session_owner_nickName).decryptWith("playR"),pageNo -1, pageSize)._2, Duration.Inf)
-          implicit val writer = new Writes[(Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[Int] ,Option[DateTime])] {
-            def writes(t: (Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[Int] ,Option[DateTime])): JsValue = {
+          implicit val writer = new Writes[(Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[String] ,Option[DateTime])] {
+            def writes(t: (Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[String] ,Option[DateTime])): JsValue = {
               Json.obj( "report_id" -> t._1,
                 "owner_nickName" -> t._2,
                 "reportName" -> t._3,

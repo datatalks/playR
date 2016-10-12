@@ -33,7 +33,6 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     db.run(tasklist.filter(_.taskid === taskid).result.headOption)
   }
 
-
   def upadte_start_time(taskid :Int , execution_start_time:DateTime) = {
     db.run(tasklist.filter(_.taskid === taskid).map(_.execution_start_time).update(execution_start_time))
   }
@@ -48,9 +47,6 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
 
 
-
-
-
   class TaskListTableDef(tag: Tag) extends Table[Tasklist](tag, "tasklist") {
 
     def taskid = column[Int]("taskid", O.PrimaryKey,O.AutoInc)
@@ -59,8 +55,9 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     def scheduled_execution_time = column[org.joda.time.DateTime]("scheduled_execution_time")
     def execution_start_time = column[org.joda.time.DateTime]("execution_start_time")
     def execution_finish_time = column[org.joda.time.DateTime]("execution_finish_time")
+    def reportfileName = column[String]("reportfileName")
 
     override def * = (taskid,report_id,owner_nickName,
-        scheduled_execution_time, execution_start_time, execution_finish_time ) <> (Tasklist.tupled, Tasklist.unapply _)
+        scheduled_execution_time, execution_start_time, execution_finish_time,reportfileName) <> (Tasklist.tupled, Tasklist.unapply _)
   }
 }
