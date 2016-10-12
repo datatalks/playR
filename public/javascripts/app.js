@@ -364,7 +364,7 @@
     this.getList = function (pageNo, pageSize){
       return $http({
           method: 'get',
-          url: '/report/list',
+          url: '/report/list2',
           params: {
             pageNo: pageNo,
             pageSize: pageSize

@@ -1,5 +1,5 @@
 <h1 class="page-header">Reports</h1>
-<div class="" ng-controller="reportsCtrl as $ctrl">
+<div ng-controller="reportsCtrl as $ctrl">
   <div class="table-responsive">
     <table class="table table-striped">
       <thead>
@@ -7,17 +7,26 @@
           <th>#</th>
           <th>报告名称</th>
           <th>执行周期类型</th>
-          <th>更新时间</th>
+          <th>时间</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in $ctrl.list track by $index">
-          <td>{{item.id}}</td>
+          <td>{{item.report_id}}</td>
           <td>{{item.reportName}}</td>
-          <td>{{item.execute_type}}</td>
-          <td>{{item.modify_time  | date:'yyyy-MM-dd'}}</td>
-          <td><a href="/reportR/{{item.reportUrl}}" target="_blank">查看</a></td>
+          <td>{{item.execute_type == 'once' ? '一次性执行' : '循环执行'}}</td>
+          <td>
+            <div ng-if="item.execute_type == 'once'">
+              执行时间: {{item.once_scheduled_execute_time  | date:'yyyy-MM-dd hh:mm:ss'}}
+            </div>
+            <div ng-if="item.execute_type == 'circle'">
+              更新时间: {{item.report_last_execution_time | date:'yyyy-MM-dd hh:mm:ss'}}<br>
+              循环时间: {{item.circle_scheduled_start_time  | date:'yyyy-MM-dd hh:mm:ss'}} ~ {{item.circle_scheduled_finish_time  | date:'yyyy-MM-dd hh:mm:ss'}}<br>
+              循环间隔: {{item.circle_scheduled_interval_minutes}}分钟
+            </div>
+          </td>
+          <td><a ng-if="!!item.report_last_execution_fileName" href="/reportR/{{item.report_last_execution_fileName}}" target="_blank">查看</a> </td>
         </tr>
       </tbody>
     </table>
