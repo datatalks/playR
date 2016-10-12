@@ -20,7 +20,7 @@
             <div ng-if="item.execute_type == 'once'">
               执行时间: {{item.once_scheduled_execute_time  | date:'yyyy-MM-dd hh:mm:ss'}}
             </div>
-            <div ng-if="item.execute_type == 'circle'">
+            <div ng-if="item.execute_type != 'once'">
               更新时间: {{item.report_last_execution_time | date:'yyyy-MM-dd hh:mm:ss'}}<br>
               循环时间: {{item.circle_scheduled_start_time  | date:'yyyy-MM-dd hh:mm:ss'}} ~ {{item.circle_scheduled_finish_time  | date:'yyyy-MM-dd hh:mm:ss'}}<br>
               循环间隔: {{item.circle_scheduled_interval_minutes}}分钟
