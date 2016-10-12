@@ -7,8 +7,7 @@ create table `tasklist` (
   `owner_nickName` TEXT NOT NULL,
   `scheduled_execution_time` Datetime NOT NULL,
   `execution_start_time` Datetime NOT NULL,
-  `execution_finish_time` Datetime NOT NULL,
-  `reportfileName` TEXT NOT NULL
+  `execution_finish_time` Datetime NOT NULL
 )
 
 # --- !Downs

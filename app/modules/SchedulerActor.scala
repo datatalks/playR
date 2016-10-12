@@ -31,13 +31,11 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, joinDAO:JoinDAO, tasklistD
       val to = math.floor(Minutes.minutesBetween(i._6,now.plusHours(1)).getMinutes().toDouble / i._7).toInt
       val ts = for( j <- List.range(from, to+1)) yield (i._6.plusMinutes(j * i._7 ))
       if(i._4 == "once" && i._5.isAfter(now.minusHours(1)) && i._5.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._5), Duration.Inf) ){
-        val reportfileName = i._2 +  "_ReportTask_" + i._1.toString
-        val t = Tasklist(0,i._1,i._2, i._5,iniTime,iniTime,reportfileName)
+        val t = Tasklist(0,i._1,i._2, i._5,iniTime,iniTime)
         tasklistDAO.addTask(t)}
       else if(i._4=="circle" && ts.length > 0 ){
         for(j <- ts){ if( !Await.result(tasklistDAO.exists(i._1,j), Duration.Inf) ){
-          val reportfileName = i._2 +  "_ReportTask_" + i._1.toString
-          val t = Tasklist(0,i._1,i._2, j,iniTime,iniTime, reportfileName)
+          val t = Tasklist(0,i._1,i._2, j,iniTime,iniTime)
           tasklistDAO.addTask(t)}}}}
   }
 

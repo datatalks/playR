@@ -55,9 +55,8 @@ class TasklistDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     def scheduled_execution_time = column[org.joda.time.DateTime]("scheduled_execution_time")
     def execution_start_time = column[org.joda.time.DateTime]("execution_start_time")
     def execution_finish_time = column[org.joda.time.DateTime]("execution_finish_time")
-    def reportfileName = column[String]("reportfileName")
 
     override def * = (taskid,report_id,owner_nickName,
-        scheduled_execution_time, execution_start_time, execution_finish_time,reportfileName) <> (Tasklist.tupled, Tasklist.unapply _)
+        scheduled_execution_time, execution_start_time, execution_finish_time) <> (Tasklist.tupled, Tasklist.unapply _)
   }
 }

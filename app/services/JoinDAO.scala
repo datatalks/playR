@@ -49,14 +49,17 @@ class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, 
   }
 
   // http://stackoverflow.com/questions/26816142/slick-query-with-multiple-joins-group-by-and-having  参考链接!!!
-  def reportList (owner: String, pageNo:Int, pageSize:Int): (Future[Seq[(Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[String] ,Option[DateTime])]],Future[Int]) = {
+
+  // group 有问题!!!!!!, 需要自定组装,且 filter执行时间!!!
+
+  def reportList (owner: String, pageNo:Int, pageSize:Int): (Future[Seq[(Int, String, String, String,DateTime,DateTime,Int,DateTime, Option[Int] ,Option[DateTime])]],Future[Int]) = {
+    val iniTime = new DateTime("2014-09-01T0:0:0.0+08:00")
     val leftOuterJoin =(for {(t,r) <- tasklistDAO.tasklist joinRight reportDAO.reports on (_.report_id === _.id)}
       yield (r.id,r.owner_nickName,r.reportName,r.execute_type,r.once_scheduled_execute_time,
              r.circle_scheduled_start_time,r.circle_scheduled_interval_minutes, r.circle_scheduled_finish_time,
-             t.map(_.reportfileName), t.map(_.execution_finish_time))).groupBy({
+             t.map(_.taskid), t.map(_.execution_finish_time))).groupBy({
       case (k1, k2, k3, k4, k5, k6, k7, k8,v1,v2) => (k1, k2, k3, k4, k5, k6, k7, k8)
     }).map({ case (k, v) => (k._1,k._2,k._3,k._4,k._5,k._6,k._7,k._8, v.map(_._9).max,v.map(_._10).max )})
-
     val result = db.run(leftOuterJoin.result)
     val count = db.run(reportDAO.reports.filter(_.owner_nickName === owner).length.result)
     (result,count)
