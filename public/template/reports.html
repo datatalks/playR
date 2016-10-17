@@ -8,6 +8,7 @@
           <th>报告名称</th>
           <th>执行周期类型</th>
           <th>时间</th>
+          <th>状态</th>
           <th>操作</th>
         </tr>
       </thead>
@@ -26,7 +27,10 @@
               循环间隔: {{item.circle_scheduled_interval_minutes}}分钟
             </div>
           </td>
-          <td><a ng-if="!!item.report_last_execution_fileName" href="/reportR/{{item.report_last_execution_fileName}}" target="_blank">查看</a> </td>
+          <td>
+              <span class="label" ng-class="item.taskid? 'label-info':'label-success'">{{item.taskid ? '待执行':'已执行'}}</span>
+          </td>
+          <td><a ng-if="!!item.taskid" href="/reportR/{{item.owner_nickName+'_ReportTask_'+item.taskid}}" target="_blank">查看</a> <!--a ng-link="['new', {report: item}]">修改</a--></td>
         </tr>
       </tbody>
     </table>

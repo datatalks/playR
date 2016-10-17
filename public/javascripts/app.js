@@ -153,7 +153,9 @@
     // datepicker
     ctrl.minDate = new Date();
 
-
+    // this.$routerOnActivate = function(next) {
+    //     console.log(next.params);
+    // }
 
     var editor = editormd("editor", {
       height: 500,
