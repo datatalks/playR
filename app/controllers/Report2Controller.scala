@@ -65,7 +65,7 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
                 "circle_scheduled_start_time" -> t._6,
                 "circle_scheduled_interval_minutes" -> t._7,
                 "circle_scheduled_finish_time" -> t._8,
-                "report_last_execution_fileName" -> t._9,
+                "taskid" -> t._9,
                 "report_last_execution_time" -> t._10
               )}}
           val jsonArrays = Json.toJson(res)
