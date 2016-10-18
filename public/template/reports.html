@@ -28,7 +28,7 @@
             </div>
           </td>
           <td>
-              <span class="label" ng-class="item.taskid? 'label-info':'label-success'">{{item.taskid ? '待执行':'已执行'}}</span>
+              <span class="label" ng-class="!item.taskid? 'label-info':'label-success'">{{!item.taskid ? '待执行':'已执行'}}</span>
           </td>
           <td><a ng-if="!!item.taskid" href="/reportR/{{item.owner_nickName+'_ReportTask_'+item.taskid}}" target="_blank">查看</a> <!--a ng-link="['new', {report: item}]">修改</a--></td>
         </tr>
