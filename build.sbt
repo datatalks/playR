@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   "be.objectify" %% "deadbolt-scala" % "2.5.0",
   "com.github.stuxuhai" % "jpinyin" % "1.1.7",
   "com.typesafe.netty" % "netty-reactive-streams-http" % "1.0.6",
-  "org.jsoup" % "jsoup" % "1.7.2"
+  "org.jsoup" % "jsoup" % "1.7.2",
+  "com.typesafe.play" %% "play-mailer" % "5.0.0"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
