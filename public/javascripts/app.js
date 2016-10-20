@@ -142,20 +142,76 @@
 
   angular.module('new', [])
   .component('new', {
-    templateUrl: '../template/new.html'
+    templateUrl: '../template/new.html',
+    controllerAs: '$ctrl',
+    controller: NewComp
   })
-  .controller('newCtrl', ['newService', '$timeout', '$rootRouter', '$scope', function NewCtrl($newService, $timeout, $rootRouter, $scope) {
+  .service('newService', ['$http', function NewService($http) {
+    this.save = function (reportName, reportContent, execute_type, opts){
+      var postdata = {
+        reportName: reportName,
+        reportContent: reportContent,
+        execute_type : execute_type
+      };
+      var postUrl = '/report/add';
+
+      if (opts.id) {
+        postUrl = '/report/update/' + opts.id;
+      }
+      if (execute_type == "once") {
+        postdata.once_scheduled_execute_time = opts.once_scheduled_execute_time;
+      } else {
+        postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
+        postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
+        postdata.circle_scheduled_interval_minutes = opts.circle_scheduled_interval_minutes;
+      }
+
+      return $http({
+        method: 'post',
+        url: postUrl,
+        data: postdata
+      });
+    };
+
+    this.getReport = function (id) {
+        return $http({
+            method: 'get',
+            url: '/report/' + id
+        });
+    }
+
+    this.preview = function (reportContent){
+      return $http({
+        method: 'post',
+        url: '/preview',
+        data: {
+          reportContent: reportContent
+        }
+      });
+    }
+  }]);
+
+  function NewComp(newService, $timeout, $rootRouter) {
     var ctrl = this;
 
     ctrl.alert = 0;
     ctrl.state = 1; // 未预览
 
+    ctrl.report = {};
+
     // datepicker
     ctrl.minDate = new Date();
 
-    // this.$routerOnActivate = function(next) {
-    //     console.log(next.params);
-    // }
+    // for edit
+    this.$routerOnActivate = function (next){
+        var reportId = next.params.id;
+
+        if (!!reportId) {
+            newService.getReport(reportId).then(function(responses) {
+                ctrl.report = responses.data[0];
+            });
+        }
+    }
 
     var editor = editormd("editor", {
       height: 500,
@@ -212,7 +268,7 @@
       ctrl.alert = 0;
 
       $curBtn.button('loading');
-      $newService.preview(reportContent).then(function (response){
+      newService.preview(reportContent).then(function (response){
         $curBtn.button('reset');
 
         ctrl.state = 0;
@@ -252,7 +308,7 @@
     // 保存
     this.save = function (evt) {
       var $curBtn = $(evt.target);
-      var reportName = ctrl.reportName;
+      var reportName = ctrl.report.reportName;
       var reportContent = editor.getMarkdown();
 
       ctrl.alert = 0;
@@ -265,7 +321,7 @@
         return;
       }
 
-      if (!ctrl.execute_type) {
+      if (!ctrl.report.execute_type) {
         ctrl.alert = 1;
         ctrl.rule = '报告执行类型不能为空!';
         ctrl.errMsg = '请选择您的报告执行类型';
@@ -280,7 +336,7 @@
       }
 
       $curBtn.button('loading');
-      $newService.add(reportName, reportContent, ctrl.execute_type, ctrl).then(function (response){
+      newService.save(reportName, reportContent, ctrl.report.execute_type, ctrl.report).then(function (response){
         $curBtn.button('reset');
         ctrl.success = 1;
         ctrl.successMsg = '保存成功！正跳转至列表页...';
@@ -295,39 +351,7 @@
         $curBtn.button('reset');
       });
     }
-  }])
-  .service('newService', ['$http', function NewService($http) {
-    this.add = function (reportName, reportContent, execute_type, opts){
-      var postdata = {
-        reportName: reportName,
-        reportContent: reportContent,
-        execute_type : execute_type
-      };
-      if (execute_type == "once") {
-        postdata.once_scheduled_execute_time = opts.once_scheduled_execute_time;
-      } else {
-        postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
-        postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
-        postdata.circle_scheduled_interval_minutes = opts.circle_scheduled_interval_minutes;
-      }
-
-      return $http({
-        method: 'post',
-        url: '/report/add',
-        data: postdata
-      });
-    };
-
-    this.preview = function (reportContent){
-      return $http({
-        method: 'post',
-        url: '/preview',
-        data: {
-          reportContent: reportContent
-        }
-      });
-    }
-  }]);
+  }
 
   angular.module('reports', ['ui.xg.pager'])
   .component('reports', {
