@@ -5,8 +5,9 @@ import com.github.stuxuhai.jpinyin.{PinyinFormat, PinyinHelper}
 import env.env
 import models.{Tasklist}
 import org.joda.time.{Minutes, DateTime}
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.libs.mailer._
+import java.io.File
+import org.apache.commons.mail.EmailAttachment
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import security.Cipher
@@ -19,7 +20,32 @@ import play.api.libs.json._
 import scala.util.Try
 
 
-class TestController   @Inject() (tasklistDAO:TasklistDAO, reportDAO:ReportDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
+class TestController   @Inject() (mailerClient: MailerClient, tasklistDAO:TasklistDAO, reportDAO:ReportDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
+
+
+  def mail() = Action.async { implicit request =>
+
+    val cid = "1234"
+    val email = Email(
+      "Simple email",
+      "<itisbi@163.com>",
+      Seq("<lixiaofan@cofco.com>","<81819688@qq.com>"),
+      // adds attachment
+      attachments = Seq(
+        AttachmentFile("logback2.xml", new File("/Users/datatalks/DT/Dev/playR/conf/logback2.xml"))
+      ),
+      // sends text, HTML or both...
+      bodyText = Some("A text message"),
+      bodyHtml = Some("<html><body>这是关于邮件的 * 2! 另外添加了一个附件!!!</body></html>")
+    )
+    mailerClient.send(email)
+
+
+
+
+
+    Future.successful(Ok( "thisi is the mail testing" ))
+  }
 
   def task() = Action.async { implicit request =>
     val reports =  Await.result(reportDAO.scheduleReport, Duration.Inf)

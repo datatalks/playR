@@ -107,6 +107,40 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
     }.getOrElse(Future.successful(Ok("Error!!!")))
   }
 
+  def updateReport(id : Int) = Action.async { implicit request =>
+    val body: AnyContent = request.body
+    val jsonBody: Option[JsValue] = body.asJson
+    val session_owner_nickName = request.session.get("owner_nickName").mkString
+    jsonBody.map {
+      data => {
+        val iniTime = DateTime.parse("01/01/1970 00:00:00", DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"))
+        val owner_nickName = Cipher(session_owner_nickName).decryptWith("playR")
+        val reportName = (data \ "reportName").as[String]
+        val reportContent = (data \ "reportContent").as[String]
+        val execute_type = (data \ "execute_type").as[String]
+        val newReport = if( execute_type == "once")
+          Report(0, owner_nickName, reportName, reportContent, "once",
+            DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            iniTime, 0, iniTime, new DateTime(), 1)
+        else
+          Report(0, owner_nickName, reportName, reportContent, "circle", iniTime,
+            DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            (data \ "circle_scheduled_interval_minutes").as[Int],
+            DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            new DateTime(), 1)
+
+        val json: JsValue = Json.obj(
+          "data" -> "null",
+          "message" -> "保存成功")
+
+        reportDAO.updateReport(id ,newReport).map(res => Ok(json))
+      }
+    }.getOrElse(Future.successful(Ok("Error!!!")))
+  }
+
+
+
+
   def reportRhtml(fileName: String) = Action.async { implicit request =>
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
     Future.successful(Ok(htmlContent).as(HTML))
