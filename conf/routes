@@ -17,6 +17,7 @@ GET     /previewR/:fileName         controllers.Preview2Controller.previewRhtml(
 
 POST    /report/add                     controllers.Report2Controller.addReport
 POST    /report/update/:id              controllers.Report2Controller.updateReport(id : Int)
+GET     /report/:id                     controllers.Report2Controller.getReport(id : Int)
 GET     /reportR/:fileName              controllers.Report2Controller.reportRhtml(fileName: String)
 POST    /listOwnerReport                controllers.Report2Controller.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.Report2Controller.getOwnerReport(owner:String)

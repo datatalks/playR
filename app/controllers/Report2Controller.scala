@@ -139,6 +139,28 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   }
 
 
+  def getReport(id : Int) = Action.async { implicit request =>
+          val rows  = Await.result(reportDAO.get(id), Duration.Inf)
+          implicit val writer = new Writes[(Int, String, String, String, String, DateTime,DateTime,Int,DateTime,DateTime,Int)] {
+            def writes(t: (Int, String, String, String, String, DateTime,DateTime,Int,DateTime,DateTime,Int)): JsValue = {
+              Json.obj( "id" -> t._1,
+                "owner_nickName" -> t._2,
+                "reportName" -> t._3,
+                "reportContent" -> t._4,
+                "execute_type" -> t._5,
+                "once_scheduled_execute_time" -> t._6,
+                "circle_scheduled_start_time" -> t._7,
+                "circle_scheduled_interval_minutes" -> t._8,
+                "circle_scheduled_finish_time" -> t._9,
+                "modify_time" -> t._10,
+                "status" -> t._11)}}
+          val json = Json.toJson(rows)
+    Future.successful(Ok(json))
+  }
+
+
+
+
 
 
   def reportRhtml(fileName: String) = Action.async { implicit request =>
