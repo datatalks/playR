@@ -26,8 +26,8 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(reports.filter(_.id === id).delete)
   }
 
-  def get(id: Int): Future[Seq[(Int, String, String, String, String, DateTime,DateTime,Int,DateTime,DateTime,Int)]] = {
-    val query = reports.filter(_.id === id).map(data => (data.id, data.owner_nickName, data.reportName, data.reportContent, data.execute_type, data.once_scheduled_execute_time, data.circle_scheduled_start_time, data.circle_scheduled_interval_minutes, data.circle_scheduled_finish_time, data.modify_time, data.status))
+  def get(id: Int): Future[Seq[Report]] = {
+    val query = reports.filter(_.id === id)
     db.run(query.result)
   }
 
