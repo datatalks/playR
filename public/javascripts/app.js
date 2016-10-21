@@ -208,7 +208,7 @@
 
         if (!!reportId) {
             newService.getReport(reportId).then(function(responses) {
-                ctrl.report = responses.data[0];
+                ctrl.report = responses.data.data[0];
             });
         }
     }
