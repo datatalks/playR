@@ -16,14 +16,13 @@ POST    /previewR                   controllers.Preview2Controller.previewR
 GET     /previewR/:fileName         controllers.Preview2Controller.previewRhtml(fileName:String)
 
 POST    /report/add                     controllers.Report2Controller.addReport
-POST    /report/update/:id              controllers.Report2Controller.updateReport(id : Int)
-GET     /report/:id                     controllers.Report2Controller.getReport(id : Int)
 GET     /reportR/:fileName              controllers.Report2Controller.reportRhtml(fileName: String)
 POST    /listOwnerReport                controllers.Report2Controller.listOwnerReport
 GET     /getOwnerReport/:owner          controllers.Report2Controller.getOwnerReport(owner:String)
 GET     /report/list                    controllers.Report2Controller.listReport(pageNo:Int, pageSize:Int)
 GET     /report/list2                   controllers.Report2Controller.listReport2(pageNo:Int, pageSize:Int)
-
+POST    /report/update/:id              controllers.Report2Controller.updateReport(id : Int)
+GET     /report/:id                     controllers.Report2Controller.getReport(id : Int)
 #GET     /reportR/:reportUrl             controllers.Report2Controller.report2Rhtml(reportUrl:String)
 
 GET     /restrict1                  @controllers.RestrictController.restrictOne

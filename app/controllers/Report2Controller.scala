@@ -139,11 +139,21 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   }
 
   def getReport(id : Int) = Action.async { implicit request =>
-          val rows  = Await.result(reportDAO.get(id), Duration.Inf)
-          implicit val writer = Json.format[Report]
-          val json = Json.toJson(rows.toList)
-    Future.successful(Ok(json))
-  }
+   reportDAO.get(id).map(res =>  {
+                           val temp = res.toList
+                           if (temp.length == 0) {
+                             val json: JsValue = Json.obj(
+                               "data" -> "null",
+                               "message" -> "error")
+                             Ok(json)
+                           }
+                           else {
+                             implicit val writer = Json.format[Report]
+                             val jsonArray = Json.toJson(temp.toList)
+                             val json: JsValue = Json.obj(
+                               "data" -> jsonArray,
+                               "message" -> "success")
+                             Ok(json)}})}
 
   def reportRhtml(fileName: String) = Action.async { implicit request =>
     val htmlContent = scala.io.Source.fromFile(s"MarkDown/reportR/RMD/$fileName/$fileName.html").mkString
