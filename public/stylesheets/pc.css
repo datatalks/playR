@@ -222,3 +222,8 @@ body {
 .form-validation .form-control.ng-dirty.ng-valid:focus {
   border-color: #27c24c;
 }
+
+.form-horizontal .form-group.mlr0 {
+  margin-left: 0;
+  margin-right: 0;
+}

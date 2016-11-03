@@ -163,7 +163,7 @@
       } else {
         postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
         postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
-        postdata.circle_scheduled_interval_minutes = opts.circle_scheduled_interval_minutes;
+        postdata.circle_scheduled_interval_minutes =  (opts.circle_scheduled_interval_day*24 + opts.circle_scheduled_interval_hour)*60 + opts.circle_scheduled_interval_minute;
       }
 
       return $http({
@@ -208,7 +208,14 @@
 
         if (!!reportId) {
             newService.getReport(reportId).then(function(responses) {
-                ctrl.report = responses.data.data[0];
+                var report = responses.data.data[0];
+
+                ctrl.report = report;
+                var minutes = moment.duration(report.circle_scheduled_interval_minutes, "minutes");
+
+                ctrl.report.circle_scheduled_interval_day = minutes.days();
+                ctrl.report.circle_scheduled_interval_hour = minutes.hours();
+                ctrl.report.circle_scheduled_interval_minute = minutes.minutes();
             });
         }
     }
