@@ -163,7 +163,7 @@
       } else {
         postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
         postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
-        postdata.circle_scheduled_interval_minutes =  (opts.circle_scheduled_interval_day*24 + opts.circle_scheduled_interval_hour)*60 + opts.circle_scheduled_interval_minute;
+        postdata.circle_scheduled_interval_minutes =  ((opts.circle_scheduled_interval_day || 0)*24 + (opts.circle_scheduled_interval_hour || 0))*60 + (opts.circle_scheduled_interval_minute || 0);
       }
 
       return $http({
