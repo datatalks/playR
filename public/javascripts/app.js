@@ -189,7 +189,31 @@
         }
       });
     }
-  }]);
+  }])
+  .filter('formatMinute', function () {
+    return function(input, uppercase) {
+      var str = '';
+      var timeObj = moment.duration(input, 'minutes');
+      console.log(input)
+
+      if (input >= 1440){
+        str += Math.floor(timeObj.asDays());
+        str += "天";
+      }
+
+      if (timeObj.hours() > 0){
+        str += timeObj.hours();
+        str += "小时";
+      }
+
+      if (timeObj.minutes() > 0){
+        str += timeObj.minutes();
+        str += "分钟";
+      }
+
+      return str;
+    }
+  });
 
   function NewComp(newService, $timeout, $rootRouter) {
     var ctrl = this;
