@@ -79,9 +79,6 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
-    println("------------------------------------")
-    println(jsonBody)
-    println("------------------------------------")
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {
@@ -113,9 +110,6 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   def updateReport(id : Int) = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
-    println("------------------------------------")
-    println(jsonBody)
-    println("------------------------------------")
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {

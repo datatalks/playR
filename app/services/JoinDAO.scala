@@ -59,7 +59,7 @@ class JoinDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, 
              r.circle_scheduled_start_time,r.circle_scheduled_interval_minutes, r.circle_scheduled_finish_time,
              t.map(_.taskid), t.map(_.execution_finish_time))).groupBy({
       case (k1, k2, k3, k4, k5, k6, k7, k8,v1,v2) => (k1, k2, k3, k4, k5, k6, k7, k8)
-    }).map({ case (k, v) => (k._1,k._2,k._3,k._4,k._5,k._6,k._7,k._8, v.map(_._9).max,v.map(_._10).max )})
+    }).map({ case (k, v) => (k._1,k._2,k._3,k._4,k._5,k._6,k._7,k._8, v.map(_._9).max,v.map(_._10).max )}).drop(pageNo * pageSize).take(pageSize)
     val result = db.run(leftOuterJoin.result)
     val count = db.run(reportDAO.reports.filter(_.owner_nickName === owner).length.result)
     (result,count)
