@@ -153,13 +153,15 @@
         reportContent: reportContent,
         execute_type : execute_type
       };
+      var dateSpec = 'YYYY-MM-DD HH:mm:ss';
       var postUrl = '/report/add';
 
+
       if (execute_type == "once") {
-        postdata.once_scheduled_execute_time = moment(opts.once_scheduled_execute_time).format();
+        postdata.once_scheduled_execute_time = moment(opts.once_scheduled_execute_time).format(dateSpec);
       } else {
-        postdata.circle_scheduled_start_time = moment(opts.circle_scheduled_start_time).format();
-        postdata.circle_scheduled_finish_time = moment(opts.circle_scheduled_finish_time).format();
+        postdata.circle_scheduled_start_time = moment(opts.circle_scheduled_start_time).format(dateSpec);
+        postdata.circle_scheduled_finish_time = moment(opts.circle_scheduled_finish_time).format(dateSpec);
         postdata.circle_scheduled_interval_minutes =  ((opts.circle_scheduled_interval_day || 0)*24 + (opts.circle_scheduled_interval_hour || 0))*60 + (opts.circle_scheduled_interval_minute || 0);
       }
 
