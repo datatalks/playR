@@ -57,11 +57,9 @@ class ReportDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     db.run(query.result)
   }
 
-  def updateReport(id :Int, report: Report ): Future[Option[Report]] = {
-    val query = reports.filter(_.id === id).update(report).map {
-      case 0 => None
-      case _ => Some(report)
-    }
+  def updateReport(id :Int, report: Report ): Future[Int] = {
+    val query = reports.filter(_.id === id).map(x => (x.owner_nickName,x.reportName,x.reportContent,x.execute_type,x.once_scheduled_execute_time, x.circle_scheduled_start_time,x.circle_scheduled_interval_minutes,x.circle_scheduled_finish_time,x.modify_time,x.status)).
+                update(report.owner_nickName,report.reportName,report.reportContent,report.execute_type,report.once_scheduled_execute_time, report.circle_scheduled_start_time,report.circle_scheduled_interval_minutes,report.circle_scheduled_finish_time,report.modify_time,report.status)
     db.run(query)
   }
 

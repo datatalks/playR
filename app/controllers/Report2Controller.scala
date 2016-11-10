@@ -79,6 +79,9 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   def addReport() = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
+    println("------------------------------------")
+    println(jsonBody)
+    println("------------------------------------")
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {
@@ -89,13 +92,13 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
         val execute_type = (data \ "execute_type").as[String]
         val newReport = if( execute_type == "once")
                             Report(0, owner_nickName, reportName, reportContent, "once",
-                              DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
                               iniTime, 0, iniTime, new DateTime(), 1)
                         else
                             Report(0, owner_nickName, reportName, reportContent, "circle", iniTime,
-                              DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
                               (data \ "circle_scheduled_interval_minutes").as[Int],
-                              DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+                              DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
                               new DateTime(), 1)
 
         val json: JsValue = Json.obj(
@@ -110,6 +113,9 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
   def updateReport(id : Int) = Action.async { implicit request =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
+    println("------------------------------------")
+    println(jsonBody)
+    println("------------------------------------")
     val session_owner_nickName = request.session.get("owner_nickName").mkString
     jsonBody.map {
       data => {
@@ -120,13 +126,13 @@ class Report2Controller  @Inject() (reportDAO: ReportDAO, joinDAO: JoinDAO) exte
         val execute_type = (data \ "execute_type").as[String]
         val newReport = if( execute_type == "once")
           Report(0, owner_nickName, reportName, reportContent, "once",
-            DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            DateTime.parse((data \ "once_scheduled_execute_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
             iniTime, 0, iniTime, new DateTime(), 1)
         else
           Report(0, owner_nickName, reportName, reportContent, "circle", iniTime,
-            DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            DateTime.parse((data \ "circle_scheduled_start_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
             (data \ "circle_scheduled_interval_minutes").as[Int],
-            DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC()),
+            DateTime.parse((data \ "circle_scheduled_finish_time").as[String], DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
             new DateTime(), 1)
 
         val json: JsValue = Json.obj(
