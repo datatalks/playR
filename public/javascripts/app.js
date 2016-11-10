@@ -155,15 +155,16 @@
       };
       var postUrl = '/report/add';
 
+      if (execute_type == "once") {
+        postdata.once_scheduled_execute_time = moment(opts.once_scheduled_execute_time).format();
+      } else {
+        postdata.circle_scheduled_start_time = moment(opts.circle_scheduled_start_time).format();
+        postdata.circle_scheduled_finish_time = moment(opts.circle_scheduled_finish_time).format();
+        postdata.circle_scheduled_interval_minutes =  ((opts.circle_scheduled_interval_day || 0)*24 + (opts.circle_scheduled_interval_hour || 0))*60 + (opts.circle_scheduled_interval_minute || 0);
+      }
+
       if (opts.id) {
         postUrl = '/report/update/' + opts.id;
-      }
-      if (execute_type == "once") {
-        postdata.once_scheduled_execute_time = opts.once_scheduled_execute_time;
-      } else {
-        postdata.circle_scheduled_start_time = opts.circle_scheduled_start_time;
-        postdata.circle_scheduled_finish_time = opts.circle_scheduled_finish_time;
-        postdata.circle_scheduled_interval_minutes =  ((opts.circle_scheduled_interval_day || 0)*24 + (opts.circle_scheduled_interval_hour || 0))*60 + (opts.circle_scheduled_interval_minute || 0);
       }
 
       return $http({
@@ -194,7 +195,6 @@
     return function(input, uppercase) {
       var str = '';
       var timeObj = moment.duration(input, 'minutes');
-      console.log(input)
 
       if (input >= 1440){
         str += Math.floor(timeObj.asDays());
