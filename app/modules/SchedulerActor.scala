@@ -45,7 +45,6 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, joinDAO:JoinDAO, tasklistD
             { for(i <- data) {
                               val fileName = i._2 +  "_ReportTask_" + i._1.toString
                               val ReportContent = i._3
-                              println("fffilename===" + fileName)
                               val path = "MarkDown/reportR/RMD/" + fileName
                               import scala.sys.process._
                               (s"mkdir -p -- $path ").!   //  Make directory if it doesn't exist!
@@ -62,7 +61,7 @@ class SchedulerActor @Inject() (reportDAO: ReportDAO, joinDAO:JoinDAO, tasklistD
                               (s"rm -rf $HTML_folder_delete_for_update").!
                               tasklistDAO.upadte_start_time(i._1, new DateTime())
                               // 执行 RMD 对应的文件生成相应的 HTML 文件夹与文件
-                              (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
+                              (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R   Rout/$fileName.Rout").!
                               tasklistDAO.upadte_finish_time(i._1, new DateTime())}})
   }
 

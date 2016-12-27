@@ -5,6 +5,10 @@ GET    /weixin                      controllers.WeixinController2.checkToken(sig
 POST   /weixin                      controllers.WeixinController2.xmlreponse
 POST   /weixin2                     controllers.WeixinController2.xmlreponse
 
+
+GET     /java                       controllers.JavaController.test
+
+
 POST    /addowner                    controllers.OwnerController.AddOwner
 POST    /login                       controllers.OwnerController.LoginOwner
 GET     /logout                      controllers.OwnerController.LogoutOwner
@@ -51,6 +55,7 @@ GET     /task                       controllers.TestController.task
 GET     /join8                      controllers.TestController.join8
 GET     /mail                       controllers.TestController.mail
 
+GET     /yunyin                     controllers.YuyinController.yunyin
 
 
 # Map static resources from the /public folder to the /assets URL path

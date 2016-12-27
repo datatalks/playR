@@ -20,6 +20,9 @@ import play.api.libs.json._
 import scala.util.Try
 
 
+
+
+
 class TestController   @Inject() (mailerClient: MailerClient, tasklistDAO:TasklistDAO, reportDAO:ReportDAO,  joinDAO: JoinDAO, ownerRoleDAO: OwnerRoleDAO,ws:WSClient) extends Controller {
 
 
@@ -56,8 +59,8 @@ class TestController   @Inject() (mailerClient: MailerClient, tasklistDAO:Taskli
       val to = math.floor(Minutes.minutesBetween(i._6,now.plusHours(1)).getMinutes().toDouble / i._7).toInt
       val ts = for( j <- List.range(from, to+1)) yield (i._6.plusMinutes(j * i._7 ))
       if(i._4 == "once" && i._5.isAfter(now.minusHours(1)) && i._5.isBefore(now.plusHours(1)) && !Await.result(tasklistDAO.exists(i._1,i._5), Duration.Inf) ){
-        val t = Tasklist(0,i._1,i._2, i._5,iniTime,iniTime)
-        tasklistDAO.addTask(t)}
+                  val t = Tasklist(0,i._1,i._2, i._5,iniTime,iniTime)
+                  tasklistDAO.addTask(t)}
       else if(i._4=="circle" && ts.length > 0 ){
         for(j <- ts){ if( !Await.result(tasklistDAO.exists(i._1,j), Duration.Inf) ){
           val t = Tasklist(0,i._1,i._2, j,iniTime,iniTime)
@@ -280,6 +283,8 @@ class TestController   @Inject() (mailerClient: MailerClient, tasklistDAO:Taskli
 
 
   def setsessions () = Action.async { implicit request =>
+
+    Logger.info("this is the logging!!!!!!")
     Future.successful(  Ok(" sessions are setted or updated!").withSession(
       request.session + ("identity" -> "YYY8888BBBBBBBBBBBYYY"))  )
   }

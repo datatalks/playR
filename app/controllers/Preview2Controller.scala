@@ -27,10 +27,9 @@ class Preview2Controller @Inject() (actionBuilder: ActionBuilders) extends Contr
           foreach {line => scala.tools.nsc.io.File("MarkDown/previewR/Rshell/" + fileName + ".R").
             appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))}
         import scala.sys.process._
-        (s"R CMD BATCH MarkDown/previewR/Rshell/$fileName.R").!
+        (s"R CMD BATCH MarkDown/previewR/Rshell/$fileName.R   Rout/$fileName.Rout").!
         val host = env.host
         val url = "http://" + host + "/previewR" + "/" + fileName
-        println("XXXXXX" + url)
         val htmlContent = scala.io.Source.fromFile(s"MarkDown/previewR/RMD/$fileName/$fileName.html").mkString
         //  使用 XML 解析 HTML显得力不从心,故进而使用 jsoup 直接处理!!!
         val htmlContentBody = Jsoup.parse(htmlContent).body().toString

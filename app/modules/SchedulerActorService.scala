@@ -22,8 +22,7 @@ class SchedulerActorService {
         appendAll(line.replace("$fileR", fileName).replace("$dirR", dir) + sys.props("line.separator"))
       }
     import scala.sys.process._
-    (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R").!
-    println("Report 被光荣的运行了一次!!!!!!")
+    (s"R CMD BATCH MarkDown/reportR/Rshell/$fileName.R   Rout/$fileName.Rout").!
 
   }
 }

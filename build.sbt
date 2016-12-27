@@ -6,6 +6,15 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.7"
 
+
+unmanagedJars in Compile ++= {
+  val base = baseDirectory.value
+  val baseDirectories = (base / "bnls-service-sdk" / "com")
+  val customJars = (baseDirectories ** "*.jar")
+  customJars.classpath
+}
+
+
 libraryDependencies ++= Seq(
   cache,
   ws,
@@ -21,10 +30,14 @@ libraryDependencies ++= Seq(
   "com.github.stuxuhai" % "jpinyin" % "1.1.7",
   "com.typesafe.netty" % "netty-reactive-streams-http" % "1.0.6",
   "org.jsoup" % "jsoup" % "1.7.2",
-  "com.typesafe.play" %% "play-mailer" % "5.0.0"
+  "com.typesafe.play" %% "play-mailer" % "5.0.0",
+  "com.typesafe.play.modules" %% "play-modules-redis" % "2.5.0", //  增加 redis 的相关支持!
+  "com.alibaba" % "nls-service-sdk" % "1.0" from "file:///Users/datatalks/DT/Dev/playR/locallib/nls-service-sdk.jar"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+
+resolvers += "google-sedis-fix" at "http://pk11-scratch.googlecode.com/svn/trunk"// 提供 redis jar 下载的链接!
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
